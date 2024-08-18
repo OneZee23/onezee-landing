@@ -26,6 +26,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 - [x] Add base ReactJS application
 - [x] Add TypeScript support
+- [x] Add header links
 - [ ] Add some more body sections with text information
     - [ ] Greetings
     - [ ] Skills and Interests

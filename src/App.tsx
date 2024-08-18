@@ -8,7 +8,20 @@ const Greetings: React.FC = () => {
         many experience in integration blockchain technology to applications.
       </p>
       <p>
-        ...
+        I have extensive experience in developing backend system for telegram-based messenger app and integrating
+        Blockchains and DeFi platforms for <a href="https://www.imem.app/">iMeMessenger</a>.
+        Notably, I have integrated <b>Bitcoin</b>, <b>EVM (Ethereum, Binance Smart Chain, Polygon and many others
+        evm-based + L2 networks)</b>, <b>Tron</b>, <b>TON (The Open Network)</b> and <b>Solana</b>.
+        DeFi protocols: <b>Uniswap</b>, <b>PancakeSwap</b>, <b>Symbiosis</b>, <b>1Inch</b>, <b>SunSwap</b> and other
+        DEX's.
+        I have also conducted security audits for projects, including arbitrage algorithms and staking platform.
+      </p>
+      <p>
+        I also recently started try to compile contracts with Rust in Solana blockchain.
+      </p>
+      <p>
+        Alongside my role at iMeMessenger, I continue to develop as NodeJS Backend Blockchain developer, focusing on
+        blockchain products and Telegram APIs.
       </p>
     </section>
   );

@@ -1,26 +1,45 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+const Greetings: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section>
+      <p>
+        Hello! My name is Nikita. I am a developer with a
+        many experience in integration blockchain technology to applications.
+      </p>
+      <p>
+        ...
+      </p>
+    </section>
   );
 }
+
+const App: React.FC = () => {
+  return (
+    <div>
+      <header>
+        <h1>Nikita Shevelev | Backend Blockchain Developer</h1>
+        <p>
+          <a href="https://t.me/onezee23">Telegram</a> |
+          <a href="mailto:onezeecsgo@icloud.com"> Email</a>
+        </p>
+        <p>
+          <a href="https://github.com/onezee23">GitHub</a> |
+          <a href="https://gitlab.com/OneZee"> GitLab</a>
+        </p>
+        <p>
+          <a href="https://t.me/onezee23">CV</a> |
+          <a href="https://www.youtube.com/c/onezee"> YouTube</a>
+        </p>
+      </header>
+      <main>
+        <Greetings></Greetings>
+      </main>
+      <footer>
+        <p>For more information {'-->'} type me a message!</p>
+      </footer>
+    </div>
+  );
+};
 
 export default App;

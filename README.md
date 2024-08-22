@@ -28,8 +28,8 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 - [x] Add TypeScript support
 - [x] Add header links
 - [ ] Add some more body sections with text information
-    - [ ] Greetings
-    - [ ] Skills and Interests
+    - [x] Greetings
+    - [x] Skills and Interests
     - [ ] Work Experience
     - [ ] Recent activity
 - [ ] Add Cover Letter to the header with hyperlink

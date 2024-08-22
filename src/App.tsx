@@ -4,7 +4,8 @@ const Greetings: React.FC = () => {
   return (
     <section>
       <p>
-        Hello! My name is Nikita. I am a developer with extensive experience in integrating blockchain technology into applications.
+        Hello! My name is Nikita. I am a developer with extensive experience in integrating blockchain technology into
+        applications.
       </p>
       <p>
         I have extensive experience in developing backend systems for a Telegram-based messenger app and integrating
@@ -22,6 +23,29 @@ const Greetings: React.FC = () => {
         Alongside my role at iMeMessenger, I continue to develop as a NodeJS Backend Blockchain developer, focusing on
         blockchain products and Telegram APIs.
       </p>
+    </section>
+  );
+}
+
+const SkillsSummary: React.FC = () => {
+  return (
+    <section>
+      <a className="header-link" href="#skills"
+      ><h2 id="skills_summary">Skills summary</h2></a
+      >
+      <ul>
+        <li>
+          Programming Languages:<br/>
+          Skilled JS, TypeScript, Solidity<br/>
+          Familiarity with C++, Python and little MatLab, VBA.
+        </li>
+        <li>Tech skills: Linux, SQL, Git, Docker, Grafana, K8s</li>
+        <li>Languages: English (B1 by Cambridge PET Exam), Russian (Native)</li>
+        <li>
+          Interests: Blockchain, Distributed Systems, Microservice Orchestration,
+          Robust, beautiful and maintainable backend.
+        </li>
+      </ul>
     </section>
   );
 }
@@ -46,7 +70,8 @@ const App: React.FC = () => {
           </p>
         </header>
         <main>
-          <Greetings />
+          <Greetings/>
+          <SkillsSummary/>
         </main>
         <footer>
           <p>For more information {'-->'} type me a message!</p>

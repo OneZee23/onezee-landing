@@ -33,3 +33,4 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
     - [ ] Work Experience
     - [ ] Recent activity
 - [ ] Add Cover Letter to the header with hyperlink
+- [ ] Deploy

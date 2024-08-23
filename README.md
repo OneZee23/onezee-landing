@@ -27,10 +27,10 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 - [x] Add base ReactJS application
 - [x] Add TypeScript support
 - [x] Add header links
-- [ ] Add some more body sections with text information
+- [x] Add some more body sections with text information
     - [x] Greetings
     - [x] Skills and Interests
-    - [ ] Work Experience
-    - [ ] Recent activity
+    - [x] Work Experience
+    - [x] Recent activity
 - [ ] Add Cover Letter to the header with hyperlink
 - [ ] Deploy

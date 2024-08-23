@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/onezee-landing/static/css/main.2935be64.css",
+    "main.js": "/onezee-landing/static/js/main.a27d95dd.js",
+    "index.html": "/onezee-landing/index.html",
+    "main.2935be64.css.map": "/onezee-landing/static/css/main.2935be64.css.map",
+    "main.a27d95dd.js.map": "/onezee-landing/static/js/main.a27d95dd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2935be64.css",
+    "static/js/main.a27d95dd.js"
+  ]
+}

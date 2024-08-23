@@ -31,6 +31,6 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
     - [x] Greetings
     - [x] Skills and Interests
     - [x] Work Experience
-    - [x] Recent activity
+    - [x] Public activity
 - [ ] Add Cover Letter to the header with hyperlink
 - [ ] Deploy

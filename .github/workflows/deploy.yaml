@@ -8,7 +8,7 @@ on:
 
 env:
   WERF_SECRET_KEY: ${{ secrets.WERF_SECRET_KEY }}
-  WERF_REPO: ghcr.io/${{ github.repository_owner }}/onezee-landing
+  WERF_REPO: ghcr.io/onezee23/onezee-landing
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: onezee23
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and publish
@@ -55,7 +55,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: onezee23
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup kubectl

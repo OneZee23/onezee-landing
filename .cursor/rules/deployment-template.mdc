@@ -178,11 +178,12 @@ secretConfig:
 
 ## .helm/templates/deployment.yaml Key Points
 
-- Use `imagePullSecrets` for private registry
-- Use `envFrom` with both `configMapRef` and `secretRef`
+- Use `imagePullSecrets` conditionally - only if `secret/dockerconfig` file exists (for private registries)
+- Use `envFrom` with both `configMapRef` and `secretRef` (if needed)
 - Include health check probes
 - Set resource limits
 - Use `checksum/config` annotation for redeploy on config change
+- For public GHCR repositories, dockerconfig is not needed
 
 ## .helm/templates/configuration.yaml Structure
 
@@ -207,44 +208,89 @@ on:
 
 env:
   WERF_SECRET_KEY: ${{ secrets.WERF_SECRET_KEY }}
-  WERF_REPO: ghcr.io/<username>/<repo-name>
+  # IMPORTANT: Use lowercase username for GHCR (Docker registry requires lowercase)
+  WERF_REPO: ghcr.io/<lowercase-username>/<repo-name>
 
 jobs:
   build:
-    - Checkout
-    - Install werf
-    - Login to GHCR
-    - werf build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write  # Required for pushing to GHCR
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install werf
+        uses: werf/actions/install@v1.2
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: <lowercase-username>  # Must be lowercase!
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and publish
+        run: werf build --repo $WERF_REPO
 
   deploy-prod:
     needs: [build]
-    environment: prod
-    - Checkout
-    - Install werf
-    - Login to GHCR
-    - Create kubeconfig from secret
-    - werf converge --values .helm/values-prod.yaml --secret-values .helm/secret-values-prod.yaml
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read  # Required for pulling from GHCR
+    env:
+      INGRESS_HOST: ${{ secrets.INGRESS_HOST || vars.INGRESS_HOST || 'default-domain.com' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install werf
+        uses: werf/actions/install@v1.2
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: <lowercase-username>  # Must be lowercase!
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+      - name: Setup kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_PROD }}" | base64 -d > ~/.kube/config
+      - name: Deploy to Kubernetes
+        run: |
+          werf converge \
+            --repo $WERF_REPO \
+            --namespace <namespace-name> \
+            --values .helm/values-prod.yaml \
+            --secret-values .helm/secret-values-prod.yaml \
+            --set ingress.host=${{ env.INGRESS_HOST }}
 ```
 
 ## Required GitHub Secrets
 
 - `WERF_SECRET_KEY` - from `.werf_secret_key` file
 - `KUBECONFIG_PROD` - base64 encoded kubeconfig: `cat ~/.kube/config-timeweb | base64`
+- `INGRESS_HOST` (optional) - domain name, defaults to value in values-prod.yaml if not set
 
 ## Setup Steps
 
 1. Generate werf secret key: `werf helm secret generate-secret-key > .werf_secret_key`
 2. Encrypt secrets: `werf helm secret values edit .helm/secret-values-prod.yaml`
-3. Encrypt dockerconfig: `werf helm secret file encrypt /tmp/dockerconfig > .helm/secret/dockerconfig`
+3. Encrypt dockerconfig (only for private registries): `werf helm secret file encrypt /tmp/dockerconfig > .helm/secret/dockerconfig`
+   - For public GHCR repositories, skip this step - templates handle missing dockerconfig gracefully
 4. Create namespace: `kubectl create namespace <namespace-name>`
 5. Add GitHub Secrets
 6. Push to master - automatic deploy
 
 ## Important Notes
 
+- **GHCR username must be lowercase**: Docker registry requires lowercase usernames. Use lowercase username in `WERF_REPO` and `username` field, even if GitHub username has uppercase letters
+- **Permissions**: Add `permissions` block to jobs - `packages: write` for build job, `packages: read` for deploy job
+- **Dockerconfig is optional**: For public repositories, `secret/dockerconfig` is not needed. Templates handle this automatically
 - All secret values must be quoted (strings only in env vars)
 - Use multiline `|` syntax for multi-line values
 - Health check endpoint must exist in application
 - Service port is 80 (maps to app port via Service)
 - Ingress paths should match application routes
 - Database permissions must be granted manually after DB creation
+- `INGRESS_HOST` can be set via GitHub Secret/Variable or will use default from values-prod.yaml

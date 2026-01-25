@@ -2,7 +2,7 @@
   "name": "onezee",
   "version": "1.0.1",
   "private": true,
-  "homepage": "https://OneZee23.github.io/onezee-landing",
+  "homepage": ".",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/react": "^13.4.0",

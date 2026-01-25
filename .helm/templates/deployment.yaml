@@ -18,8 +18,11 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/configuration.yaml") . | sha256sum }}
     spec:
       {{- if .Values.werf.image.app }}
+      {{- $dockerconfig := $.Files.Get "secret/dockerconfig" }}
+      {{- if $dockerconfig }}
       imagePullSecrets:
         - name: {{ .Release.Name }}-dockerconfig
+      {{- end }}
       {{- end }}
       containers:
         - name: app

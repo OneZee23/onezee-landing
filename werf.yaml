@@ -1,0 +1,7 @@
+configVersion: 1
+project: onezee-landing
+---
+image: app
+dockerfile: Dockerfile
+context: .
+

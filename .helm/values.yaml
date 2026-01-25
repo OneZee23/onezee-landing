@@ -1,0 +1,54 @@
+app:
+  port: 80  # nginx port
+
+replication:
+  minReplicas: 1
+  maxReplicas: 2
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+probes:
+  startup:
+    path: /health/check
+    initialDelaySeconds: 0
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 30
+  liveness:
+    path: /health/check
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  readiness:
+    path: /health/check
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 3
+
+service:
+  port: 80
+
+ingress:
+  enabled: true
+  host: ""
+  paths:
+    - /
+  tls:
+    enabled: false
+  annotations: {}
+
+namespace: onezee-landing
+
+werf:
+  env: prod
+  image:
+    app: <will be set by werf>
+

@@ -1,0 +1,71 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+env:
+  WERF_SECRET_KEY: ${{ secrets.WERF_SECRET_KEY }}
+  WERF_REPO: ghcr.io/onezee23/onezee-landing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install werf
+        uses: werf/actions/install@v1.2
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and publish
+        run: |
+          werf build --repo $WERF_REPO
+
+  deploy-prod:
+    needs: [build]
+    runs-on: ubuntu-latest
+    # Optional: uncomment to enable environment protection (requires creating 'prod' environment in repo settings)
+    # environment: prod
+    env:
+      INGRESS_HOST: ${{ secrets.INGRESS_HOST || vars.INGRESS_HOST || 'onezee.ru' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install werf
+        uses: werf/actions/install@v1.2
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Setup kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_PROD }}" | base64 -d > ~/.kube/config
+
+      - name: Deploy to Kubernetes
+        run: |
+          werf converge \
+            --repo $WERF_REPO \
+            --namespace onezee-landing \
+            --values .helm/values-prod.yaml \
+            --secret-values .helm/secret-values-prod.yaml \
+            --set ingress.host=${{ env.INGRESS_HOST }}
+

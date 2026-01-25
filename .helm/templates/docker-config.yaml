@@ -1,0 +1,11 @@
+{{- if .Values.werf.image.app }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-dockerconfig
+  namespace: {{ .Values.namespace }}
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ .Files.Get "secret/dockerconfig" | b64enc }}
+{{- end }}
+

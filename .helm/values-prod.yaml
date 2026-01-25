@@ -1,0 +1,24 @@
+replication:
+  minReplicas: 1
+  maxReplicas: 1
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+ingress:
+  # Host is set via GitHub Secret/Variable INGRESS_HOST in CI/CD
+  # Can be overridden with: --set ingress.host=your-domain.com
+  host: ""
+  tls:
+    enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+namespace: onezee-landing
+

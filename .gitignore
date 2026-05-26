@@ -27,3 +27,9 @@ yarn-error.log*
 # werf
 .werf_secret_key
 .helm/secret-values-*.yaml.dec
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example

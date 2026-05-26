@@ -35,7 +35,7 @@ export const heroSub =
   "Senior backend engineer, 5+ years. My current role is winding down — I'm after the next senior backend role: EU, remote, or a CIS product team. Open to talk.";
 
 export const socials: SiteLink[] = [
-  { kind: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/in/nikita-shevelev-9a1620208/' },
+  { kind: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/in/nikita-shevelev-onezee/' },
   { kind: 'github', label: 'GitHub', url: 'https://github.com/OneZee23' },
   { kind: 'telegram', label: 'Telegram', url: 'https://t.me/onezee_co' },
   { kind: 'habr', label: 'Habr', url: 'https://habr.com/ru/users/OneZee/' },

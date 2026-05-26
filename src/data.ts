@@ -47,8 +47,11 @@ export const socials: SiteLink[] = [
 export const now: string[] = [
   'Looking for my next senior backend role — EU (Blue Card eligible), remote, or a CIS product team.',
   'Running build-in-public sprints to grow my own apps.',
-  'Pushing my English from B1 toward B2.',
+  'Pushing my English toward B2 — and starting to learn German for the EU move.',
 ];
+
+// Downloadable CV (lives at public/cv.pdf → served at /cv.pdf)
+export const resumeUrl = '/cv.pdf';
 
 export interface ShipItem {
   year: string;

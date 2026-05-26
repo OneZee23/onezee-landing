@@ -110,6 +110,16 @@ a {
   font-size: 0.82rem;
   color: var(--muted);
 }
+.ilink--cv {
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 5px 13px;
+  color: var(--accent);
+  font-weight: 600;
+}
+.ilink--cv svg { color: var(--accent); }
+.ilink--cv span { border-bottom: none; }
+.ilink--cv:hover { background: var(--accent-soft); color: var(--accent); }
 .ilink__arrow {
   margin-left: -0.15rem;
 }

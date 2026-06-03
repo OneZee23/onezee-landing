@@ -10,12 +10,15 @@ interface Props {
   type?: 'website' | 'article';
   publishedTime?: Date;
   tags?: string[];
+  lang?: 'ru' | 'en';
   noindex?: boolean;
 }
+
+const { lang = 'en' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <BaseHead {...Astro.props} />
   </head>

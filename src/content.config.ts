@@ -27,6 +27,8 @@ const posts = defineCollection({
     // `day` may exceed `total` (overtime, e.g. 34/30).
     day: z.number().optional(),
     total: z.number().optional(),
+    // Post language. Telegram posts are detected automatically (Cyrillic → ru).
+    lang: z.enum(['ru', 'en']).default('ru'),
     draft: z.boolean().default(false),
   }),
 });

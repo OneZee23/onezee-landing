@@ -1,7 +1,7 @@
 ---
-title: "Shipping the watchOS app — TripTrack devlog #3"
+title: "Прикрутил watchOS к TripTrack"
 date: 2026-04-02
-excerpt: "Bringing TripTrack to the wrist: a tiny watchOS companion that starts a drive with one tap, plus the Live Activity on the phone."
+excerpt: "Завёл крошечный watchOS-компаньон: одна кнопка — старт поездки, плюс Live Activity на телефоне."
 series: "TripTrack"
 day: 3
 total: 30
@@ -9,14 +9,15 @@ tags: ["swift", "watchos"]
 draft: false
 ---
 
-Third entry in the TripTrack build log. This week the app grew a wrist.
+Третий день марафона — и у приложения выросли часы.
 
-The watchOS companion does exactly one thing well: start and stop a drive
-without pulling out your phone. Everything else — the map, the stats, the
-contribution calendar — stays on the phone, where there's room for it.
+watchOS-компаньон делает ровно одно дело хорошо: стартует и останавливает
+поездку без телефона. Всё остальное — карта, статистика, календарь поездок —
+остаётся на телефоне, где для этого есть место.
 
-The fun part was the Live Activity: tap "start" on the watch, and the Dynamic
-Island on the phone lights up with live speed and distance. Two devices, one
-trip, no servers in between — just a shared app group and a lot of small details.
+Самым кайфовым было прикрутить **Live Activity**: жмёшь «старт» на часах, и на
+телефоне в Dynamic Island загорается живая скорость и расстояние. Два устройства,
+одна поездка, и никаких серверов между ними — только общий app group и куча
+мелких деталей.
 
-(This is a demo post showing how a project series is grouped — delete it.)
+(Демо-пост: показывает, как выглядит русский день-сезона с прогрессом. Удали его.)

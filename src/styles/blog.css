@@ -163,6 +163,17 @@
   color: var(--muted);
   white-space: nowrap;
 }
+.lang-tag {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.04rem 0.34rem;
+  vertical-align: middle;
+}
 
 /* ---------- Proof-of-work progress bar ---------- */
 .pow {

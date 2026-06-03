@@ -25,6 +25,8 @@ const fmt = (d: Date) =>
     <p class="prose">
       Short and long-form notes on backend, web3 and the messy reality of shipping indie apps.
       Posts I tag <code>#site</code> in my <a href={TELEGRAM_CHANNEL_URL} target="_blank" rel="noreferrer noopener">Telegram channel</a> land here automatically.
+      Most are in Russian — that's my channel's language; each post is marked
+      <span class="lang-tag">RU</span> or <span class="lang-tag">EN</span>.
     </p>
 
     {posts.length === 0 && (
@@ -46,6 +48,7 @@ const fmt = (d: Date) =>
                     <span class="postcard__day">День {p.data.day}/{p.data.total}</span>
                   )}
                   <time class="postcard__date" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+                  <span class="lang-tag">{p.data.lang}</span>
                 </div>
                 <h2 class="postcard__title">{p.data.title}</h2>
                 {p.data.excerpt && <p class="postcard__excerpt">{p.data.excerpt}</p>}

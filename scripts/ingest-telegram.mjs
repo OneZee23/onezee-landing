@@ -116,6 +116,7 @@ function frontmatter(post, slug, cover) {
     seriesName ? `series: ${JSON.stringify(seriesName)}` : null,
     progress && Number.isFinite(progress.day) ? `day: ${progress.day}` : null,
     progress && Number.isFinite(progress.total) ? `total: ${progress.total}` : null,
+    `lang: ${JSON.stringify(/[Ѐ-ӿ]/.test(`${post.title} ${post.markdown}`) ? 'ru' : 'en')}`,
     `telegramId: ${post.id}`,
     `telegramUrl: ${JSON.stringify(post.telegramUrl)}`,
     `tags: [${tags.map((t) => JSON.stringify(t)).join(', ')}]`,

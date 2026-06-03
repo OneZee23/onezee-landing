@@ -3,6 +3,7 @@ title: "The blog is live — posts now come from Telegram"
 date: 2026-06-03
 excerpt: "onezee.dev now pulls the posts I tag #site from my Telegram channel and publishes them here as real, indexable pages."
 tags: ["meta", "build-in-public"]
+lang: "en"
 draft: false
 ---
 

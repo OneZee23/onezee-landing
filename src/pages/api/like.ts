@@ -12,6 +12,12 @@ const DEDUP_TTL_SECONDS = 60 * 60 * 24 * 365; // one like per IP per year
 // Slug shape we generate for posts; also the only thing we accept as an id.
 const VALID_ID = /^[a-z0-9][a-z0-9-]{0,80}$/i;
 
+// In-memory fallback when REDIS_URL is unset (local dev, or a Redis-less deploy).
+// Per-process and non-persistent — fine for dev; set REDIS_URL in production so
+// counts persist and are shared across restarts.
+const memLikes = new Map<string, number>();
+const memDedup = new Map<string, Set<string>>();
+
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
     status,
@@ -30,8 +36,9 @@ export const GET: APIRoute = async ({ url }) => {
   if (!VALID_ID.test(postId)) return json({ error: 'invalid postId' }, 400);
 
   const redis = getRedis();
-  if (!redis) return json({ postId, likes: 0, enabled: false });
-
+  if (!redis) {
+    return json({ postId, likes: memLikes.get(postId) ?? 0, enabled: true });
+  }
   try {
     const raw = await redis.get(likeKey(postId));
     return json({ postId, likes: Number(raw) || 0, enabled: true });
@@ -50,11 +57,26 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const postId = typeof body.postId === 'string' ? body.postId : '';
   if (!VALID_ID.test(postId)) return json({ error: 'invalid postId' }, 400);
 
+  const ipHash = ipHashOf(request, clientAddress);
   const redis = getRedis();
-  if (!redis) return json({ postId, likes: 0, enabled: false });
+
+  if (!redis) {
+    // In-memory: idempotent per (post, ip) for the life of the process.
+    let seen = memDedup.get(postId);
+    if (!seen) {
+      seen = new Set<string>();
+      memDedup.set(postId, seen);
+    }
+    let counted = false;
+    if (!seen.has(ipHash)) {
+      seen.add(ipHash);
+      memLikes.set(postId, (memLikes.get(postId) ?? 0) + 1);
+      counted = true;
+    }
+    return json({ postId, likes: memLikes.get(postId) ?? 0, enabled: true, counted });
+  }
 
   try {
-    const ipHash = ipHashOf(request, clientAddress);
     // Idempotent: one increment per (post, ip) via SET NX. Re-likes are no-ops.
     const fresh = await redis.set(dedupKey(postId, ipHash), '1', 'EX', DEDUP_TTL_SECONDS, 'NX');
     const likes = fresh === 'OK'

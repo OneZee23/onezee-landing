@@ -21,5 +21,25 @@ interface Props {
   </head>
   <body>
     <slot />
+
+    {/* Scroll-reveal as a tiny, framework-independent enhancement.
+        Guarantees content becomes visible even if the observer never fires. */}
+    <script is:inline>
+      (function () {
+        var els = document.querySelectorAll('.reveal');
+        if (!els.length) return;
+        var show = function (el) { el.classList.add('is-visible'); };
+        var showAll = function () { els.forEach(show); };
+        if (!('IntersectionObserver' in window)) { showAll(); return; }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+        els.forEach(function (el) { io.observe(el); });
+        // Safety net: never leave content hidden.
+        setTimeout(showAll, 3000);
+      })();
+    </script>
   </body>
 </html>

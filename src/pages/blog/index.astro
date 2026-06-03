@@ -40,7 +40,10 @@ const fmt = (d: Date) =>
                 <img class="postcard__cover" src={p.data.cover} alt="" loading="lazy" width="92" height="92" />
               )}
               <div class="postcard__body">
-                <time class="postcard__date" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+                <div class="postcard__meta">
+                  {p.data.series && <span class="series-badge">{p.data.series}</span>}
+                  <time class="postcard__date" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+                </div>
                 <h2 class="postcard__title">{p.data.title}</h2>
                 {p.data.excerpt && <p class="postcard__excerpt">{p.data.excerpt}</p>}
               </div>

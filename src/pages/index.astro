@@ -6,6 +6,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import App from '../App';
 ---
 
+{/* Rendered to static HTML (no hydration) — content is always in the DOM for
+    SEO and is never hidden behind a JS island. The fade-in is handled by the
+    reveal script in BaseLayout. */}
 <BaseLayout>
-  <App client:load />
+  <App />
 </BaseLayout>

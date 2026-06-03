@@ -20,6 +20,9 @@ const posts = defineCollection({
     // Permalink back to the original Telegram post.
     telegramUrl: z.string().url().optional(),
     tags: z.array(z.string()).default([]),
+    // Project / dev-series this post belongs to (e.g. "TripTrack"). Optional —
+    // ungrouped posts are standalone "notes". Set via a project hashtag in TG.
+    series: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

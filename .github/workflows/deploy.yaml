@@ -45,7 +45,7 @@ jobs:
     # Optional: uncomment to enable environment protection (requires creating 'prod' environment in repo settings)
     # environment: prod
     env:
-      INGRESS_HOST: ${{ secrets.INGRESS_HOST || vars.INGRESS_HOST || 'onezee.ru' }}
+      INGRESS_HOST: ${{ secrets.INGRESS_HOST || vars.INGRESS_HOST || 'onezee.dev' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

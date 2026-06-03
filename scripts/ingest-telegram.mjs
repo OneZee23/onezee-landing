@@ -78,14 +78,36 @@ function extractTags(markdown) {
   return [...found].slice(0, 6);
 }
 
+// Map a project hashtag in a post to a human-readable series name.
+// Edit this as you add projects; posts without any of these tags stay ungrouped.
+const SERIES_TAGS = {
+  triptrack: 'TripTrack',
+  teachtrack: 'TeachTrack',
+  lifetrack: 'LifeTrack',
+  fraggram: 'Fraggram',
+  onezee: 'onezee.dev',
+};
+
+function detectSeries(markdown) {
+  const re = /#([A-Za-z][A-Za-z0-9_]*)/g;
+  let m;
+  while ((m = re.exec(markdown)) !== null) {
+    const key = m[1].toLowerCase();
+    if (SERIES_TAGS[key]) return { key, name: SERIES_TAGS[key] };
+  }
+  return null;
+}
+
 function frontmatter(post, slug, cover) {
-  const tags = extractTags(post.markdown);
+  const series = detectSeries(post.markdown);
+  const tags = extractTags(post.markdown).filter((t) => !series || t !== series.key);
   const lines = [
     '---',
     `title: ${JSON.stringify(post.title)}`,
     `date: ${JSON.stringify(post.date || new Date().toISOString())}`,
     post.excerpt ? `excerpt: ${JSON.stringify(post.excerpt)}` : null,
     cover ? `cover: ${JSON.stringify(cover)}` : null,
+    series ? `series: ${JSON.stringify(series.name)}` : null,
     `telegramId: ${post.id}`,
     `telegramUrl: ${JSON.stringify(post.telegramUrl)}`,
     `tags: [${tags.map((t) => JSON.stringify(t)).join(', ')}]`,

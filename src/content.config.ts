@@ -23,6 +23,10 @@ const posts = defineCollection({
     // Project / dev-series this post belongs to (e.g. "TripTrack"). Optional —
     // ungrouped posts are standalone "notes". Set via a project hashtag in TG.
     series: z.string().optional(),
+    // Proof-of-work progress (e.g. day 5 of a 30-day sprint).
+    // `day` may exceed `total` (overtime, e.g. 34/30).
+    day: z.number().optional(),
+    total: z.number().optional(),
     draft: z.boolean().default(false),
   }),
 });

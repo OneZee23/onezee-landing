@@ -179,6 +179,26 @@ export function extractMessages(html = '') {
   return messages;
 }
 
+/**
+ * Parse the proof-of-work progress signature, e.g.
+ *   "PoW TeachTrack — день 1/30", "TripTrack — день 9/30", "Day 5/30".
+ * Returns { series, day, total } (series may be null), or null if absent.
+ * Note: day can exceed total (overtime, e.g. 34/30) — kept as-is.
+ */
+export function parseProgress(text = '') {
+  const withSeries = text.match(
+    /(?:pow\s+)?([A-Za-z][A-Za-z0-9]*)\s*[—–-]\s*(?:день|day)\s+(\d+)\s*\/\s*(\d+)/i,
+  );
+  if (withSeries) {
+    return { series: withSeries[1], day: Number(withSeries[2]), total: Number(withSeries[3]) };
+  }
+  const bare = text.match(/(?:день|day)\s+(\d+)\s*\/\s*(\d+)/i);
+  if (bare) {
+    return { series: null, day: Number(bare[1]), total: Number(bare[2]) };
+  }
+  return null;
+}
+
 /** High-level: messages from a page that carry the routing tag, as content objects. */
 export function postsFromHtml(html, { siteTag = '#site' } = {}) {
   return extractMessages(html)
@@ -196,6 +216,7 @@ export function postsFromHtml(html, { siteTag = '#site' } = {}) {
         photos: msg.photos,
         markdown,
         excerpt: makeExcerpt(markdown),
+        progress: parseProgress(msg.textPlain),
       };
     });
 }

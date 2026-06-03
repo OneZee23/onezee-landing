@@ -9,6 +9,7 @@ import {
   slugify,
   htmlToMarkdown,
   makeExcerpt,
+  parseProgress,
 } from './lib/telegram.mjs';
 
 // A representative slice of t.me/s/<channel> markup: one tagged post (with a
@@ -102,6 +103,15 @@ check('deriveTitle truncates long lines on a word boundary', () => {
   const t = deriveTitle(long);
   assert.ok(t.length <= 102);
   assert.ok(t.endsWith('…'));
+});
+
+check('parseProgress reads the proof-of-work signature', () => {
+  assert.deepEqual(parseProgress('PoW TeachTrack — день 1/30'), { series: 'TeachTrack', day: 1, total: 30 });
+  assert.deepEqual(parseProgress('TripTrack — день 9/30'), { series: 'TripTrack', day: 9, total: 30 });
+  assert.deepEqual(parseProgress('Day 5/30'), { series: null, day: 5, total: 30 });
+  // overtime is preserved
+  assert.deepEqual(parseProgress('PoW TeachTrack — день 34/30'), { series: 'TeachTrack', day: 34, total: 30 });
+  assert.equal(parseProgress('just a normal post, no counter'), null);
 });
 
 console.log(`\n${passed} checks passed ✅`);

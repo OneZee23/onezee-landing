@@ -99,15 +99,23 @@ function detectSeries(markdown) {
 }
 
 function frontmatter(post, slug, cover) {
-  const series = detectSeries(post.markdown);
-  const tags = extractTags(post.markdown).filter((t) => !series || t !== series.key);
+  const hashtagSeries = detectSeries(post.markdown);
+  const progress = post.progress; // { series, day, total } | null from the PoW signature
+  // Prefer the project name from the PoW signature, normalised through SERIES_TAGS.
+  const seriesName =
+    (progress && progress.series && (SERIES_TAGS[progress.series.toLowerCase()] || progress.series)) ||
+    (hashtagSeries && hashtagSeries.name) ||
+    null;
+  const tags = extractTags(post.markdown).filter((t) => !hashtagSeries || t !== hashtagSeries.key);
   const lines = [
     '---',
     `title: ${JSON.stringify(post.title)}`,
     `date: ${JSON.stringify(post.date || new Date().toISOString())}`,
     post.excerpt ? `excerpt: ${JSON.stringify(post.excerpt)}` : null,
     cover ? `cover: ${JSON.stringify(cover)}` : null,
-    series ? `series: ${JSON.stringify(series.name)}` : null,
+    seriesName ? `series: ${JSON.stringify(seriesName)}` : null,
+    progress && Number.isFinite(progress.day) ? `day: ${progress.day}` : null,
+    progress && Number.isFinite(progress.total) ? `total: ${progress.total}` : null,
     `telegramId: ${post.id}`,
     `telegramUrl: ${JSON.stringify(post.telegramUrl)}`,
     `tags: [${tags.map((t) => JSON.stringify(t)).join(', ')}]`,

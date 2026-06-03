@@ -3,6 +3,8 @@ title: "Shipping the watchOS app — TripTrack devlog #3"
 date: 2026-04-02
 excerpt: "Bringing TripTrack to the wrist: a tiny watchOS companion that starts a drive with one tap, plus the Live Activity on the phone."
 series: "TripTrack"
+day: 3
+total: 30
 tags: ["swift", "watchos"]
 draft: false
 ---

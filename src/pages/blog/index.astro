@@ -42,6 +42,9 @@ const fmt = (d: Date) =>
               <div class="postcard__body">
                 <div class="postcard__meta">
                   {p.data.series && <span class="series-badge">{p.data.series}</span>}
+                  {p.data.day != null && p.data.total != null && (
+                    <span class="postcard__day">День {p.data.day}/{p.data.total}</span>
+                  )}
                   <time class="postcard__date" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
                 </div>
                 <h2 class="postcard__title">{p.data.title}</h2>

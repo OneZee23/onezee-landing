@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Icon } from '../../components/Icon';
+import { externalWriting, mentions } from '../../data';
+import { TELEGRAM_CHANNEL_URL } from '../../consts';
+import '../../styles/blog.css';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+
+<BaseLayout
+  title="Blog — Nikita Shevelev"
+  description="Notes on backend, web3 and shipping indie apps — posted from my Telegram channel."
+>
+  <div class="blogwrap">
+    <a class="bloghead__back" href="/">← onezee.dev</a>
+    <p class="eyebrow">Writing</p>
+    <h1 class="blogtitle">Notes from the channel</h1>
+    <p class="prose">
+      Short and long-form notes on backend, web3 and the messy reality of shipping indie apps.
+      Posts I tag <code>#site</code> in my <a href={TELEGRAM_CHANNEL_URL} target="_blank" rel="noreferrer noopener">Telegram channel</a> land here automatically.
+    </p>
+
+    {posts.length === 0 && (
+      <p class="prose" style="margin-top:2rem;color:var(--faint)">No posts yet — the first one is coming soon.</p>
+    )}
+
+    {posts.length > 0 && (
+      <ul class="postlist" role="list">
+        {posts.map((p) => (
+          <li class="postcard">
+            <a class="postcard__link" href={`/blog/${p.id}`}>
+              {p.data.cover && (
+                <img class="postcard__cover" src={p.data.cover} alt="" loading="lazy" width="92" height="92" />
+              )}
+              <div class="postcard__body">
+                <time class="postcard__date" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+                <h2 class="postcard__title">{p.data.title}</h2>
+                {p.data.excerpt && <p class="postcard__excerpt">{p.data.excerpt}</p>}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {externalWriting.length > 0 && (
+      <section class="blogsection">
+        <p class="eyebrow">Elsewhere I write</p>
+        <div class="linkrow">
+          {externalWriting.map((w) => (
+            <a class="ilink" href={w.url} target="_blank" rel="noreferrer noopener">
+              <Icon name={w.kind} size={16} />
+              <span>{w.label}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {mentions.length > 0 && (
+      <section class="blogsection">
+        <p class="eyebrow">Interviews &amp; mentions</p>
+        <ul class="mentionlist" role="list">
+          {mentions.map((m) => (
+            <li>
+              <span class="mentionlist__outlet">{m.outlet}</span>
+              <br />
+              <a class="ilink" href={m.url} target="_blank" rel="noreferrer noopener">
+                <span>{m.label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</BaseLayout>

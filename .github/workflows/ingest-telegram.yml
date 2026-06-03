@@ -1,0 +1,72 @@
+name: Ingest Telegram posts
+
+# Reads the public Telegram channel, turns #site-tagged posts into blog content,
+# commits them, and triggers a deploy. Runs on a schedule (default branch only)
+# and on demand. Use the manual run with "backfill" to import the whole history.
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+    inputs:
+      backfill:
+        description: 'Walk the whole channel history (one-time backfill)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write
+
+# Never let two ingest runs race (they'd double-commit).
+concurrency:
+  group: ingest-telegram
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Use PUSH_TOKEN (a PAT) if set so the content commit can trigger the
+          # deploy via push; otherwise fall back to the built-in token and rely
+          # on the explicit "Trigger deploy" step below.
+          token: ${{ secrets.PUSH_TOKEN || github.token }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify parser
+        run: node scripts/test-parse.mjs
+
+      - name: Ingest posts
+        env:
+          TELEGRAM_CHANNEL: onezee_co
+          SITE_TAG: '#site'
+          BACKFILL: ${{ (github.event_name == 'workflow_dispatch' && inputs.backfill) && '1' || '' }}
+        run: node scripts/ingest-telegram.mjs
+
+      - name: Commit & push new posts
+        id: commit
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No new posts."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "onezee-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A
+          git commit -m "content: ingest Telegram posts"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger deploy
+        if: steps.commit.outputs.changed == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yaml --ref "${{ github.ref_name }}"

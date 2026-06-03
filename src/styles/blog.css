@@ -1,0 +1,266 @@
+/* ============================================================
+   Blog — inherits the site's tokens from index.css (:root vars).
+   Same warm-dark editorial language as the landing.
+   ============================================================ */
+
+.blogwrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(2.5rem, 8vh, 4.5rem) 1.5rem clamp(3rem, 9vh, 6rem);
+}
+
+.bloghead__back {
+  display: inline-block;
+  margin-bottom: 2rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.bloghead__back:hover {
+  color: var(--accent);
+}
+
+.blogtitle {
+  margin: 0.2rem 0 0.6rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+/* ---------- Post list ---------- */
+.postlist {
+  list-style: none;
+  margin: 2.5rem 0 0;
+  padding: 0;
+}
+.postcard {
+  border-top: 1px solid var(--line);
+}
+.postcard__link {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 1.3rem;
+  align-items: start;
+  padding: 1.6rem 0;
+  color: var(--text);
+}
+.postcard:first-child .postcard__link {
+  padding-top: 0.4rem;
+}
+.postcard__cover {
+  width: 92px;
+  height: 92px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+}
+.postcard__link:only-child,
+.postcard__link:not(:has(.postcard__cover)) .postcard__body {
+  grid-column: 1 / -1;
+}
+.postcard__date {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--faint);
+}
+.postcard__title {
+  margin: 0.35rem 0 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.45rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  transition: color 0.15s ease;
+}
+.postcard__link:hover .postcard__title {
+  color: var(--accent);
+}
+.postcard__excerpt {
+  margin: 0.5rem 0 0;
+  max-width: 56ch;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+/* ---------- Aggregator sections (Habr / mentions) ---------- */
+.blogsection {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+.linkrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+}
+.mentionlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mentionlist li {
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+.mentionlist li:first-child {
+  border-top: none;
+}
+.mentionlist__outlet {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   Single post
+   ============================================================ */
+.post {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 8vh, 4.5rem) 1.5rem clamp(3rem, 9vh, 6rem);
+}
+.post__date {
+  display: block;
+  margin-top: 1.6rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--faint);
+}
+.post__title {
+  margin: 0.5rem 0 1.5rem;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 4.6vw, 2.9rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+}
+.post__cover {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid var(--line-strong);
+  margin-bottom: 2rem;
+}
+
+/* ---------- Rendered markdown ---------- */
+.prose-article {
+  color: var(--text);
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+.prose-article > * {
+  margin: 0 0 1.25rem;
+}
+.prose-article h2,
+.prose-article h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 2.2rem 0 0.9rem;
+  line-height: 1.2;
+}
+.prose-article h2 { font-size: 1.6rem; }
+.prose-article h3 { font-size: 1.3rem; }
+.prose-article a {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent-soft);
+}
+.prose-article a:hover {
+  border-color: var(--accent);
+}
+.prose-article img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+}
+.prose-article ul,
+.prose-article ol {
+  padding-left: 1.3rem;
+  color: var(--muted);
+}
+.prose-article li {
+  margin-bottom: 0.5rem;
+}
+.prose-article blockquote {
+  margin: 1.5rem 0;
+  padding: 0.4rem 0 0.4rem 1.2rem;
+  border-left: 2px solid var(--accent);
+  color: var(--muted);
+  font-style: italic;
+}
+.prose-article code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 0.1em 0.4em;
+}
+.prose-article pre {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+}
+.prose-article pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* ---------- Footer + like ---------- */
+.post__footer {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: 3rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--line);
+}
+.like {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.like:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.like__heart {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+.like--on {
+  color: var(--accent);
+  border-color: var(--accent-soft);
+  background: var(--accent-soft);
+  cursor: default;
+}
+
+@media (max-width: 520px) {
+  .postcard__link {
+    grid-template-columns: 64px 1fr;
+    gap: 1rem;
+  }
+  .postcard__cover {
+    width: 64px;
+    height: 64px;
+  }
+}

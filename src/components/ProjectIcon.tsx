@@ -17,7 +17,7 @@ export const ProjectIcon: React.FC<ProjectIconProps> = ({ src, name, href }) => 
     ) : (
       <img
         className="proj-icon"
-        src={`${process.env.PUBLIC_URL}${src}`}
+        src={src}
         alt=""
         width={44}
         height={44}

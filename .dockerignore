@@ -8,10 +8,13 @@ npm-debug.log
 .env.test.local
 .env.production.local
 build
+dist
+.astro
 coverage
 .idea
+.vscode
 .DS_Store
 *.log
 .cursor
 .werf_secret_key
-
+docs

@@ -5,6 +5,8 @@ on:
     branches:
       - master
       - main
+  # Allow the ingestion workflow (and you) to trigger a deploy on demand.
+  workflow_dispatch:
 
 env:
   WERF_SECRET_KEY: ${{ secrets.WERF_SECRET_KEY }}

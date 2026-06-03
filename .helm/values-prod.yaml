@@ -5,10 +5,10 @@ replication:
 resources:
   requests:
     cpu: 100m
-    memory: 128Mi
+    memory: 192Mi
   limits:
     cpu: 500m
-    memory: 256Mi
+    memory: 512Mi
 
 ingress:
   # Host is set via GitHub Secret/Variable INGRESS_HOST in CI/CD

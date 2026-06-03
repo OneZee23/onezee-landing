@@ -158,6 +158,23 @@ export const writing: SiteLink[] = [
   { kind: 'telegram', label: 'Telegram channel', url: 'https://t.me/onezee_co' },
 ];
 
+// Articles published elsewhere — shown on /blog under "Elsewhere I write".
+export const externalWriting: SiteLink[] = [
+  { kind: 'habr', label: 'Habr — OneZee', url: 'https://habr.com/ru/users/OneZee/' },
+  // Add more as you publish, e.g.:
+  // { kind: 'site', label: 'dev.to — onezee', url: 'https://dev.to/onezee' },
+];
+
+// Interviews / press / mentions of my work — shown on /blog under "Interviews & mentions".
+export interface Mention {
+  label: string; // what it is, e.g. "Interview about building TripTrack"
+  outlet: string; // where, e.g. "Some Podcast"
+  url: string;
+}
+export const mentions: Mention[] = [
+  // { label: 'How I shipped TripTrack solo', outlet: 'Indie Hackers', url: 'https://...' },
+];
+
 // Old channel, kept as a relic of the past.
 export const legacyYoutube = 'https://www.youtube.com/c/onezee';
 export const languages = 'Russian (native) · English (B1, improving to B2)';

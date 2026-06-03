@@ -1,0 +1,11 @@
+---
+// Homepage. The existing React landing renders inside the Astro shell:
+// server-rendered to HTML at build (good for SEO), then hydrated on the
+// client so the scroll-reveal animations and image fallbacks keep working.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import App from '../App';
+---
+
+<BaseLayout>
+  <App client:load />
+</BaseLayout>

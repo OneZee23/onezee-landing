@@ -1,5 +1,11 @@
 app:
-  port: 80  # nginx port
+  port: 4321  # Astro Node server (HOST=0.0.0.0 PORT=4321)
+  # Connection string for the likes counter. Leave empty to run without likes
+  # (the like button hides itself). Set this in .helm/secret-values-prod.yaml
+  # (werf-encrypted) so it isn't committed in plaintext, e.g.
+  #   app:
+  #     redisUrl: "redis://:password@my-redis:6379"
+  redisUrl: ""
 
 replication:
   minReplicas: 1
@@ -7,11 +13,11 @@ replication:
 
 resources:
   requests:
-    cpu: 50m
-    memory: 64Mi
+    cpu: 100m
+    memory: 160Mi
   limits:
-    cpu: 200m
-    memory: 128Mi
+    cpu: 500m
+    memory: 384Mi
 
 probes:
   startup:

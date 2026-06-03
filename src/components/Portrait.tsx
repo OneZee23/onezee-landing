@@ -7,7 +7,7 @@ import { profile } from '../data';
  */
 export const Portrait: React.FC = () => {
   const [failed, setFailed] = useState(false);
-  const src = `${process.env.PUBLIC_URL}${profile.photo}`;
+  const src = profile.photo;
 
   if (failed) {
     return (

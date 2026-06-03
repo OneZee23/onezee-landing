@@ -1,0 +1,25 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+// Global styles (the original landing stylesheet — reused verbatim).
+import '../index.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: Date;
+  tags?: string[];
+  noindex?: boolean;
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead {...Astro.props} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

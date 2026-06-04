@@ -1,17 +1,18 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
 import { Icon } from '../../components/Icon';
 import { externalWriting, mentions } from '../../data';
-import { TELEGRAM_CHANNEL_URL } from '../../consts';
+import { TELEGRAM_CHANNEL_URL, seriesSlug } from '../../consts';
 import '../../styles/blog.css';
 
 const all = (await getCollection('posts', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
-// "Chapters": each series (a project sprint) groups its days together; posts
-// without a series fall into a final "Заметки" chapter.
+// Collapsible "chapters": each project (series) groups its posts (newest first);
+// chapters are ordered by most-recent activity; ungrouped posts go to "Заметки".
 type Post = (typeof all)[number];
 const bySeries = new Map<string, Post[]>();
 for (const p of all) {
@@ -21,23 +22,18 @@ for (const p of all) {
 
 interface Group {
   title: string;
+  slug: string | null; // topic-page slug (null for the "Заметки" bucket)
   posts: Post[];
   latest: number;
 }
 const groups: Group[] = [];
 for (const [key, posts] of bySeries) {
   if (key === '__notes__') continue;
-  // Within a series read forward: day 1 → N (then by date).
-  const ordered = [...posts].sort(
-    (a, b) => (a.data.day ?? 0) - (b.data.day ?? 0) || a.data.date.valueOf() - b.data.date.valueOf(),
-  );
-  groups.push({ title: key, posts: ordered, latest: Math.max(...posts.map((p) => p.data.date.valueOf())) });
+  groups.push({ title: key, slug: seriesSlug(key), posts, latest: posts[0].data.date.valueOf() });
 }
-groups.sort((a, b) => b.latest - a.latest); // newest series first
+groups.sort((a, b) => b.latest - a.latest);
 const notes = bySeries.get('__notes__');
-if (notes?.length) groups.push({ title: 'Заметки', posts: notes, latest: 0 });
-
-const fmt = (d: Date) => d.toLocaleDateString('ru-RU', { year: 'numeric', month: 'short', day: 'numeric' });
+if (notes?.length) groups.push({ title: 'Заметки', slug: null, posts: notes, latest: 0 });
 ---
 
 <BaseLayout
@@ -52,7 +48,7 @@ const fmt = (d: Date) => d.toLocaleDateString('ru-RU', { year: 'numeric', month:
     <p class="prose">
       О бэкенде, web3 и суровой реальности инди-разработки. Посты, помеченные
       <code>#site</code> в моём <a href={TELEGRAM_CHANNEL_URL} target="_blank" rel="noreferrer noopener">Telegram-канале</a>, попадают сюда автоматически.
-      Большинство — на русском; каждый пост помечен <span class="lang-tag">RU</span> или <span class="lang-tag">EN</span>.
+      Сгруппированы по проектам (можно свернуть); внутри — по дате. Каждый пост помечен <span class="lang-tag">RU</span> или <span class="lang-tag">EN</span>.
     </p>
 
     {all.length === 0 && (
@@ -60,31 +56,20 @@ const fmt = (d: Date) => d.toLocaleDateString('ru-RU', { year: 'numeric', month:
     )}
 
     {groups.map((g) => (
-      <section class="blog-season">
-        <h2 class="blog-season__title">{g.title}</h2>
-        <ul class="postlist" role="list">
-          {g.posts.map((p) => (
-            <li class="postcard">
-              <a class="postcard__link" href={`/blog/${p.id}`}>
-                {p.data.cover && (
-                  <img class="postcard__cover" src={p.data.cover} alt="" loading="lazy" width="92" height="92" />
-                )}
-                <div class="postcard__body">
-                  <div class="postcard__meta">
-                    {p.data.day != null && p.data.total != null && (
-                      <span class="postcard__day">День {p.data.day}/{p.data.total}</span>
-                    )}
-                    <time class="postcard__date" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
-                    <span class="lang-tag">{p.data.lang}</span>
-                  </div>
-                  <h3 class="postcard__title">{p.data.title}</h3>
-                  {p.data.excerpt && <p class="postcard__excerpt">{p.data.excerpt}</p>}
-                </div>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <details class="blog-season" open>
+        <summary class="blog-season__head">
+          <span class="blog-season__title">{g.title}</span>
+          <span class="blog-season__count">{g.posts.length}</span>
+        </summary>
+        <div class="blog-season__body">
+          {g.slug && (
+            <a class="blog-season__all" href={`/blog/series/${g.slug}`}>Все посты {g.title} →</a>
+          )}
+          <ul class="postlist" role="list">
+            {g.posts.map((p) => <PostCard post={p} />)}
+          </ul>
+        </div>
+      </details>
     ))}
 
     {externalWriting.length > 0 && (

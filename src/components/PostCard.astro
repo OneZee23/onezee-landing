@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+const { post } = Astro.props;
+const { title, date, excerpt, cover, day, total, lang } = post.data;
+const fmt = (d: Date) => d.toLocaleDateString('ru-RU', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+
+<li class="postcard">
+  <a class="postcard__link" href={`/blog/${post.id}`}>
+    {cover && <img class="postcard__cover" src={cover} alt="" loading="lazy" width="92" height="92" />}
+    <div class="postcard__body">
+      <div class="postcard__meta">
+        {day != null && total != null && <span class="postcard__day">День {day}/{total}</span>}
+        <time class="postcard__date" datetime={date.toISOString()}>{fmt(date)}</time>
+        <span class="lang-tag">{lang}</span>
+      </div>
+      <h3 class="postcard__title">{title}</h3>
+      {excerpt && <p class="postcard__excerpt">{excerpt}</p>}
+    </div>
+  </a>
+</li>

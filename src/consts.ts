@@ -14,3 +14,7 @@ export const TELEGRAM_CHANNEL_URL = `https://t.me/${TELEGRAM_CHANNEL}`;
 
 // Default social share image (lives in public/).
 export const DEFAULT_OG_IMAGE = '/logo192.jpg';
+
+/** URL slug for a series/project name → used by /blog/series/<slug>. */
+export const seriesSlug = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');

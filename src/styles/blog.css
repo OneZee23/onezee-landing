@@ -29,25 +29,64 @@
   letter-spacing: -0.015em;
 }
 
-/* ---------- Season / project chapter ---------- */
+/* ---------- Season / project chapter (collapsible <details>) ---------- */
 .blog-season {
-  margin-top: 2.75rem;
+  margin-top: 2.25rem;
 }
-.blog-season:first-of-type {
-  margin-top: 2rem;
-}
-.blog-season__title {
-  margin: 0 0 0.4rem;
+.blog-season__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  cursor: pointer;
+  list-style: none;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--line);
+}
+.blog-season__head::-webkit-details-marker {
+  display: none;
+}
+.blog-season__head::after {
+  content: '▸';
+  margin-left: auto;
+  align-self: center;
+  color: var(--faint);
+  font-size: 0.8rem;
+  transition: color 0.15s ease;
+}
+.blog-season[open] .blog-season__head::after {
+  content: '▾';
+}
+.blog-season__head:hover::after {
+  color: var(--accent);
+}
+.blog-season__title {
   font-family: var(--serif);
   font-weight: 500;
-  font-size: 1.65rem;
+  font-size: 1.6rem;
   letter-spacing: -0.01em;
   color: var(--text);
+  transition: color 0.15s ease;
 }
-.blog-season .postlist {
-  margin-top: 0.4rem;
+.blog-season__head:hover .blog-season__title {
+  color: var(--accent);
+}
+.blog-season__count {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--faint);
+}
+.blog-season__all {
+  display: inline-block;
+  margin: 0.7rem 0 0.1rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.blog-season__all:hover {
+  color: var(--accent);
+}
+.blog-season__body .postlist {
+  margin-top: 0.3rem;
 }
 
 /* ---------- Post list ---------- */

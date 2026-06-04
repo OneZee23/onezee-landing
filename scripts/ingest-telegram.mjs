@@ -18,6 +18,9 @@ const CONTENT_DIR = process.env.CONTENT_DIR || 'src/content/posts';
 const PUBLIC_DIR = process.env.PUBLIC_DIR || 'public';
 const IMAGE_SUBDIR = 'posts'; // → public/posts/<id>/<n>.<ext>, served at /posts/<id>/<n>.<ext>
 const BACKFILL = /^(1|true|yes)$/i.test(process.env.BACKFILL || '');
+// Bulk mode: also import posts that carry a PoW signature ("день N/30"), even
+// without #site — for a one-time import of the whole devlog.
+const INCLUDE_POW = /^(1|true|yes)$/i.test(process.env.IMPORT_ALL_POW || '');
 const MAX_PAGES = Number(process.env.MAX_PAGES || (BACKFILL ? 60 : 1));
 const UA = 'Mozilla/5.0 (compatible; onezee-blog-ingest/1.0; +https://onezee.dev)';
 
@@ -126,28 +129,59 @@ function frontmatter(post, cover) {
   return lines.filter((l) => l !== null).join('\n');
 }
 
+function videoCard(post, src) {
+  return (
+    `<a class="post-video" href="${post.telegramUrl}" target="_blank" rel="noreferrer noopener">` +
+    `<img src="${src}" alt="" loading="lazy" />` +
+    `<span class="post-video__play" aria-hidden="true"></span></a>`
+  );
+}
+
 async function writePost(post, slug) {
-  const imagePaths = [];
-  for (let i = 0; i < post.photos.length; i++) {
-    const ext = extOf(post.photos[i]);
+  // Download all media (photos + video thumbnails) into public/posts/<id>/.
+  const downloaded = [];
+  for (let i = 0; i < post.media.length; i++) {
+    const { url, kind } = post.media[i];
+    const ext = extOf(url);
     const rel = `/${IMAGE_SUBDIR}/${post.id}/${i}${ext}`;
     const dest = path.join(PUBLIC_DIR, IMAGE_SUBDIR, String(post.id), `${i}${ext}`);
     try {
-      await downloadImage(post.photos[i], dest);
-      imagePaths.push(rel);
+      await downloadImage(url, dest);
+      downloaded.push({ path: rel, kind });
     } catch (err) {
-      console.warn(`    image skipped (${post.photos[i]}): ${err.message}`);
+      console.warn(`    media skipped (${url}): ${err.message}`);
     }
   }
-  const cover = imagePaths[0];
-  const extraImages = imagePaths.slice(1).map((p) => `\n\n![](${p})`).join('');
-  const body = `${frontmatter(post, cover)}\n\n${post.markdown}${extraImages}\n`;
+
+  const photos = downloaded.filter((m) => m.kind === 'photo');
+  const videos = downloaded.filter((m) => m.kind === 'video');
+  const cover = photos[0]?.path; // first photo → cover (top hero + og:image)
+
+  // Remaining photos: single → plain image; many → a gallery grid.
+  let extras = '';
+  const rest = photos.slice(1);
+  if (rest.length === 1) {
+    extras += `\n\n![](${rest[0].path})`;
+  } else if (rest.length > 1) {
+    extras +=
+      '\n\n<div class="post-gallery">\n' +
+      rest.map((p) => `  <img src="${p.path}" alt="" loading="lazy" />`).join('\n') +
+      '\n</div>';
+  }
+  // Videos: thumbnail + ▶ overlay that opens the original (t.me/s gives no file).
+  if (videos.length) {
+    extras += '\n\n' + videos.map((v) => videoCard(post, v.path)).join('\n');
+  }
+
+  const body = `${frontmatter(post, cover)}\n\n${post.markdown}${extras}\n`;
   await fs.writeFile(path.join(CONTENT_DIR, `${slug}.md`), body, 'utf8');
-  console.log(`  + ${slug}.md  (tg#${post.id}, ${imagePaths.length} image(s))`);
+  console.log(`  + ${slug}.md  (tg#${post.id}, ${photos.length} photo(s), ${videos.length} video(s))`);
 }
 
 async function main() {
-  console.log(`Ingesting #${SITE_TAG} posts from t.me/s/${CHANNEL}${BACKFILL ? ' (backfill)' : ''}`);
+  console.log(
+    `Ingesting from t.me/s/${CHANNEL} — tag ${SITE_TAG}${INCLUDE_POW ? ' + all PoW posts' : ''}${BACKFILL ? ' (backfill)' : ''}`,
+  );
   await fs.mkdir(CONTENT_DIR, { recursive: true });
 
   const { ids: existingIds, slugs: existingSlugs } = await readExisting();
@@ -158,7 +192,7 @@ async function main() {
     const html = await fetchPage(before);
     const msgs = extractMessages(html);
     if (msgs.length === 0) break;
-    for (const p of postsFromHtml(html, { siteTag: SITE_TAG })) {
+    for (const p of postsFromHtml(html, { siteTag: SITE_TAG, includePow: INCLUDE_POW })) {
       if (!collected.has(p.id)) collected.set(p.id, p);
     }
     if (!BACKFILL) break; // incremental: newest page is enough

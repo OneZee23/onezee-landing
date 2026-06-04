@@ -12,6 +12,10 @@ on:
         description: 'Walk the whole channel history (one-time backfill)'
         type: boolean
         default: false
+      import_all:
+        description: 'Bulk: also import all PoW posts (день N/30) without needing #site'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -47,6 +51,7 @@ jobs:
           TELEGRAM_CHANNEL: onezee_co
           SITE_TAG: '#site'
           BACKFILL: ${{ (github.event_name == 'workflow_dispatch' && inputs.backfill) && '1' || '' }}
+          IMPORT_ALL_POW: ${{ (github.event_name == 'workflow_dispatch' && inputs.import_all) && '1' || '' }}
         run: node scripts/ingest-telegram.mjs
 
       - name: Commit & push new posts

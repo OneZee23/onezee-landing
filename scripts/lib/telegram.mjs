@@ -184,20 +184,21 @@ export function extractMessages(html = '') {
     const dateMatch = chunk.match(/<time[^>]*datetime="([^"]+)"/i);
     const datetime = dateMatch ? dateMatch[1] : null;
 
-    // Photos live in the message bubble, before its footer. Bounding the search
+    // Media lives in the message bubble, before its footer. Bounding the search
     // to the pre-footer region keeps the last message from picking up page-footer
-    // / recommended-channel thumbnails that follow it in the HTML.
+    // / recommended-channel thumbnails that follow it in the HTML. We capture the
+    // kind so videos can render a play overlay (the thumbnail is all t.me/s gives).
     const footerIdx = chunk.search(/tgme_widget_message_footer/i);
-    const photoRegion = footerIdx >= 0 ? chunk.slice(0, footerIdx) : chunk;
-    const photos = [];
-    const photoRe =
-      /tgme_widget_message_(?:photo|video_thumb)_wrap[^>]*style="[^"]*background-image:url\(['"]?([^'")]+)['"]?\)/gi;
+    const mediaRegion = footerIdx >= 0 ? chunk.slice(0, footerIdx) : chunk;
+    const media = [];
+    const mediaRe =
+      /tgme_widget_message_(photo|video_thumb)_wrap[^>]*style="[^"]*background-image:url\(['"]?([^'")]+)['"]?\)/gi;
     let p;
-    while ((p = photoRe.exec(photoRegion)) !== null) {
-      photos.push(decodeEntities(p[1]));
+    while ((p = mediaRe.exec(mediaRegion)) !== null) {
+      media.push({ url: decodeEntities(p[2]), kind: p[1] === 'video_thumb' ? 'video' : 'photo' });
     }
 
-    messages.push({ id, channel, dataPost, datetime, textHtml, textPlain, photos });
+    messages.push({ id, channel, dataPost, datetime, textHtml, textPlain, media });
   }
   return messages;
 }
@@ -224,10 +225,19 @@ export function parseProgress(text = '') {
   return null;
 }
 
-/** High-level: messages from a page that carry the routing tag, as content objects. */
-export function postsFromHtml(html, { siteTag = '#site' } = {}) {
+/**
+ * High-level: page messages as content objects.
+ * Kept when the message carries the routing tag (#site) — or, when includePow
+ * is set, when it carries a proof-of-work signature ("день N/30"), so the whole
+ * devlog can be bulk-imported without tagging each post.
+ */
+export function postsFromHtml(html, { siteTag = '#site', includePow = false } = {}) {
   return extractMessages(html)
-    .filter((msg) => msg.textPlain && hasSiteTag(msg.textPlain, siteTag))
+    .filter((msg) => {
+      if (!msg.textPlain) return false;
+      if (hasSiteTag(msg.textPlain, siteTag)) return true;
+      return includePow && parseProgress(msg.textPlain) != null;
+    })
     .map((msg) => {
       const title = deriveTitle(msg.textPlain, { siteTag });
       const markdown = htmlToMarkdown(msg.textHtml, { siteTag });
@@ -238,7 +248,7 @@ export function postsFromHtml(html, { siteTag = '#site' } = {}) {
         slug: buildSlug(title, msg.id),
         date: msg.datetime,
         telegramUrl: `https://t.me/${msg.channel}/${msg.id}`,
-        photos: msg.photos,
+        media: msg.media,
         markdown,
         excerpt: makeExcerpt(markdown),
         progress: parseProgress(msg.textPlain),

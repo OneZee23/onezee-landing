@@ -48,10 +48,10 @@ check('extractMessages finds both posts with correct ids', () => {
   assert.equal(msgs[0].channel, 'onezee_co');
 });
 
-check('photo background-image is extracted', () => {
+check('media is extracted with its kind (photo)', () => {
   const msgs = extractMessages(FIXTURE);
-  assert.deepEqual(msgs[0].photos, ['https://cdn.cdn-telegram.org/file/abc.jpg']);
-  assert.deepEqual(msgs[1].photos, []);
+  assert.deepEqual(msgs[0].media, [{ url: 'https://cdn.cdn-telegram.org/file/abc.jpg', kind: 'photo' }]);
+  assert.deepEqual(msgs[1].media, []);
 });
 
 check('datetime is extracted', () => {
@@ -132,7 +132,19 @@ check('page thumbnails after the last message are not used as its photos', () =>
     <div class="tgme_widget_message_footer"><time datetime="2026-06-02T00:00:00+00:00"></time></div>
   </div>
   <div class="tgme_widget_message_photo_wrap" style="background-image:url('https://cdn/footer-ad.jpg')"></div>`;
-  assert.deepEqual(extractMessages(html)[0].photos, [], 'footer thumbnail must not leak');
+  assert.deepEqual(extractMessages(html)[0].media, [], 'footer thumbnail must not leak');
+});
+
+check('includePow imports PoW posts without #site (bulk mode)', () => {
+  const html = `<div class="tgme_widget_message js-widget_message" data-post="onezee_co/99">
+    <div class="tgme_widget_message_text js-message_text">Что-то построил сегодня<br/>PoW TeachTrack — день 5/30</div>
+    <div class="tgme_widget_message_footer"><time datetime="2026-05-01T00:00:00+00:00"></time></div>
+  </div>`;
+  assert.equal(postsFromHtml(html).length, 0, 'no #site + no includePow → skipped');
+  const posts = postsFromHtml(html, { includePow: true });
+  assert.equal(posts.length, 1, 'includePow → imported');
+  assert.equal(posts[0].progress.series, 'TeachTrack');
+  assert.equal(posts[0].progress.day, 5);
 });
 
 console.log(`\n${passed} checks passed ✅`);

@@ -29,6 +29,27 @@
   letter-spacing: -0.015em;
 }
 
+/* ---------- Season / project chapter ---------- */
+.blog-season {
+  margin-top: 2.75rem;
+}
+.blog-season:first-of-type {
+  margin-top: 2rem;
+}
+.blog-season__title {
+  margin: 0 0 0.4rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.65rem;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.blog-season .postlist {
+  margin-top: 0.4rem;
+}
+
 /* ---------- Post list ---------- */
 .postlist {
   list-style: none;
@@ -378,9 +399,8 @@
 .post__nav-dir {
   display: block;
   font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
   color: var(--faint);
   margin-bottom: 0.2rem;
 }

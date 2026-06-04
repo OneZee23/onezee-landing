@@ -6,62 +6,90 @@ import { externalWriting, mentions } from '../../data';
 import { TELEGRAM_CHANNEL_URL } from '../../consts';
 import '../../styles/blog.css';
 
-const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+const all = (await getCollection('posts', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
-const fmt = (d: Date) =>
-  d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+// "Chapters": each series (a project sprint) groups its days together; posts
+// without a series fall into a final "Заметки" chapter.
+type Post = (typeof all)[number];
+const bySeries = new Map<string, Post[]>();
+for (const p of all) {
+  const key = p.data.series ?? '__notes__';
+  (bySeries.get(key) ?? bySeries.set(key, []).get(key)!).push(p);
+}
+
+interface Group {
+  title: string;
+  posts: Post[];
+  latest: number;
+}
+const groups: Group[] = [];
+for (const [key, posts] of bySeries) {
+  if (key === '__notes__') continue;
+  // Within a series read forward: day 1 → N (then by date).
+  const ordered = [...posts].sort(
+    (a, b) => (a.data.day ?? 0) - (b.data.day ?? 0) || a.data.date.valueOf() - b.data.date.valueOf(),
+  );
+  groups.push({ title: key, posts: ordered, latest: Math.max(...posts.map((p) => p.data.date.valueOf())) });
+}
+groups.sort((a, b) => b.latest - a.latest); // newest series first
+const notes = bySeries.get('__notes__');
+if (notes?.length) groups.push({ title: 'Заметки', posts: notes, latest: 0 });
+
+const fmt = (d: Date) => d.toLocaleDateString('ru-RU', { year: 'numeric', month: 'short', day: 'numeric' });
 ---
 
 <BaseLayout
-  title="Blog — Nikita Shevelev"
-  description="Notes on backend, web3 and shipping indie apps — posted from my Telegram channel."
+  lang="ru"
+  title="Блог — Никита Шевелев"
+  description="Заметки о бэкенде, web3 и инди-разработке — из моего Telegram-канала."
 >
   <div class="blogwrap">
     <a class="bloghead__back" href="/">← onezee.dev</a>
-    <p class="eyebrow">Writing</p>
-    <h1 class="blogtitle">Notes from the channel</h1>
+    <p class="eyebrow">Дневник</p>
+    <h1 class="blogtitle">Заметки из канала</h1>
     <p class="prose">
-      Short and long-form notes on backend, web3 and the messy reality of shipping indie apps.
-      Posts I tag <code>#site</code> in my <a href={TELEGRAM_CHANNEL_URL} target="_blank" rel="noreferrer noopener">Telegram channel</a> land here automatically.
-      Most are in Russian — that's my channel's language; each post is marked
-      <span class="lang-tag">RU</span> or <span class="lang-tag">EN</span>.
+      О бэкенде, web3 и суровой реальности инди-разработки. Посты, помеченные
+      <code>#site</code> в моём <a href={TELEGRAM_CHANNEL_URL} target="_blank" rel="noreferrer noopener">Telegram-канале</a>, попадают сюда автоматически.
+      Большинство — на русском; каждый пост помечен <span class="lang-tag">RU</span> или <span class="lang-tag">EN</span>.
     </p>
 
-    {posts.length === 0 && (
-      <p class="prose" style="margin-top:2rem;color:var(--faint)">No posts yet — the first one is coming soon.</p>
+    {all.length === 0 && (
+      <p class="prose" style="margin-top:2rem;color:var(--faint)">Пока пусто — первый пост скоро будет.</p>
     )}
 
-    {posts.length > 0 && (
-      <ul class="postlist" role="list">
-        {posts.map((p) => (
-          <li class="postcard">
-            <a class="postcard__link" href={`/blog/${p.id}`}>
-              {p.data.cover && (
-                <img class="postcard__cover" src={p.data.cover} alt="" loading="lazy" width="92" height="92" />
-              )}
-              <div class="postcard__body">
-                <div class="postcard__meta">
-                  {p.data.series && <span class="series-badge">{p.data.series}</span>}
-                  {p.data.day != null && p.data.total != null && (
-                    <span class="postcard__day">День {p.data.day}/{p.data.total}</span>
-                  )}
-                  <time class="postcard__date" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
-                  <span class="lang-tag">{p.data.lang}</span>
+    {groups.map((g) => (
+      <section class="blog-season">
+        <h2 class="blog-season__title">{g.title}</h2>
+        <ul class="postlist" role="list">
+          {g.posts.map((p) => (
+            <li class="postcard">
+              <a class="postcard__link" href={`/blog/${p.id}`}>
+                {p.data.cover && (
+                  <img class="postcard__cover" src={p.data.cover} alt="" loading="lazy" width="92" height="92" />
+                )}
+                <div class="postcard__body">
+                  <div class="postcard__meta">
+                    {p.data.day != null && p.data.total != null && (
+                      <span class="postcard__day">День {p.data.day}/{p.data.total}</span>
+                    )}
+                    <time class="postcard__date" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+                    <span class="lang-tag">{p.data.lang}</span>
+                  </div>
+                  <h3 class="postcard__title">{p.data.title}</h3>
+                  {p.data.excerpt && <p class="postcard__excerpt">{p.data.excerpt}</p>}
                 </div>
-                <h2 class="postcard__title">{p.data.title}</h2>
-                {p.data.excerpt && <p class="postcard__excerpt">{p.data.excerpt}</p>}
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
-    )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
 
     {externalWriting.length > 0 && (
       <section class="blogsection">
-        <p class="eyebrow">Elsewhere I write</p>
+        <p class="eyebrow">Где ещё пишу</p>
         <div class="linkrow">
           {externalWriting.map((w) => (
             <a class="ilink" href={w.url} target="_blank" rel="noreferrer noopener">
@@ -75,15 +103,13 @@ const fmt = (d: Date) =>
 
     {mentions.length > 0 && (
       <section class="blogsection">
-        <p class="eyebrow">Interviews &amp; mentions</p>
+        <p class="eyebrow">Интервью и упоминания</p>
         <ul class="mentionlist" role="list">
           {mentions.map((m) => (
             <li>
               <span class="mentionlist__outlet">{m.outlet}</span>
               <br />
-              <a class="ilink" href={m.url} target="_blank" rel="noreferrer noopener">
-                <span>{m.label}</span>
-              </a>
+              <a class="ilink" href={m.url} target="_blank" rel="noreferrer noopener"><span>{m.label}</span></a>
             </li>
           ))}
         </ul>

@@ -593,7 +593,6 @@
   color: var(--accent);
   border-color: var(--accent-soft);
   background: var(--accent-soft);
-  cursor: default;
 }
 .like--on .like__heart svg {
   transform: scale(1.12);

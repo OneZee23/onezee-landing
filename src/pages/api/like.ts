@@ -91,3 +91,44 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return json({ postId, likes: 0, enabled: false });
   }
 };
+
+// Un-like: remove this client's like and decrement (floored at 0).
+export const DELETE: APIRoute = async ({ request, clientAddress }) => {
+  let body: { postId?: unknown } = {};
+  try {
+    body = await request.json();
+  } catch {
+    /* handled below */
+  }
+  const postId = typeof body.postId === 'string' ? body.postId : '';
+  if (!VALID_ID.test(postId)) return json({ error: 'invalid postId' }, 400);
+
+  const ipHash = ipHashOf(request, clientAddress);
+  const redis = getRedis();
+
+  if (!redis) {
+    const seen = memDedup.get(postId);
+    let likes = memLikes.get(postId) ?? 0;
+    if (seen?.has(ipHash)) {
+      seen.delete(ipHash);
+      likes = Math.max(0, likes - 1);
+      memLikes.set(postId, likes);
+    }
+    return json({ postId, likes, enabled: true });
+  }
+
+  try {
+    const removed = await redis.del(dedupKey(postId, ipHash));
+    let likes = Number(await redis.get(likeKey(postId))) || 0;
+    if (removed) {
+      likes = await redis.decr(likeKey(postId));
+      if (likes < 0) {
+        await redis.set(likeKey(postId), '0');
+        likes = 0;
+      }
+    }
+    return json({ postId, likes, enabled: true });
+  } catch {
+    return json({ postId, likes: 0, enabled: false });
+  }
+};

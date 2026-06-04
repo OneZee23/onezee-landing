@@ -34,19 +34,21 @@ export default function LikeButton({ postId }: { postId: string }): React.ReactE
   }, [postId]);
 
   const onClick = useCallback(async () => {
-    if (busy || liked) return;
+    if (busy) return;
     setBusy(true);
+    const next = !liked; // toggle: like or un-like
     // Optimistic update.
-    setLikes((n) => n + 1);
-    setLiked(true);
+    setLiked(next);
+    setLikes((n) => Math.max(0, n + (next ? 1 : -1)));
     try {
-      localStorage.setItem(`liked:${postId}`, '1');
+      if (next) localStorage.setItem(`liked:${postId}`, '1');
+      else localStorage.removeItem(`liked:${postId}`);
     } catch {
       /* ignore */
     }
     try {
       const res = await fetch('/api/like', {
-        method: 'POST',
+        method: next ? 'POST' : 'DELETE',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ postId }),
       });
@@ -67,9 +69,9 @@ export default function LikeButton({ postId }: { postId: string }): React.ReactE
       type="button"
       className={`like${liked ? ' like--on' : ''}`}
       onClick={onClick}
-      disabled={liked || busy}
+      disabled={busy}
       aria-pressed={liked}
-      aria-label={liked ? 'You liked this post' : 'Like this post'}
+      aria-label={liked ? 'Remove your like' : 'Like this post'}
     >
       <span className="like__heart" aria-hidden="true">
         <Icon name={liked ? 'heart' : 'heart-outline'} size={15} />

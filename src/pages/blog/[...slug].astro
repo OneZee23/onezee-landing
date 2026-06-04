@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import LikeButton from '../../components/LikeButton.tsx';
+import ViewCounter from '../../components/ViewCounter.tsx';
 import { Icon } from '../../components/Icon';
 import { AUTHOR } from '../../consts';
 import '../../styles/blog.css';
@@ -87,6 +88,7 @@ const jsonLd = {
       {series && <span class="series-badge">{series}</span>}
       <time class="post__date" datetime={isoDate}>{fmtDate(date)}</time>
       <span class="post__readtime">· {t.read}</span>
+      <ViewCounter postId={post.id} lang={lang} client:idle />
       <span class="lang-tag">{lang}</span>
     </div>
     <h1 class="post__title">{title}</h1>

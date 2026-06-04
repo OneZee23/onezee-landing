@@ -394,7 +394,8 @@
 }
 
 /* ---------- Post meta extras (reading time) ---------- */
-.post__readtime {
+.post__readtime,
+.post__views {
   font-family: var(--mono);
   font-size: 0.8rem;
   color: var(--faint);

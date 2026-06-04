@@ -1,34 +1,34 @@
 import React from 'react';
-import { writing } from '../data';
+import { useSite } from '../i18n/context';
 import { Icon } from './Icon';
 import { Reveal } from './Reveal';
 
-export const Writing: React.FC = () => (
-  <section className="section" id="writing">
-    <Reveal>
-      <p className="eyebrow">I write</p>
-      <p className="prose">
-        I write about backend, web3 and the messy reality of shipping indie apps — on Habr and in
-        my Telegram channel.
-      </p>
-      <div className="hero__links">
-        <a className="ilink ilink--cv" href="/blog">
-          <span>Read the blog</span>
-          <Icon name="arrow" size={13} className="ilink__arrow" />
-        </a>
-        {writing.map((w) => (
-          <a
-            key={w.kind + w.url}
-            className="ilink"
-            href={w.url}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            <Icon name={w.kind} size={16} />
-            <span>{w.label}</span>
+export const Writing: React.FC = () => {
+  const { c } = useSite();
+  return (
+    <section className="section" id="writing">
+      <Reveal>
+        <p className="eyebrow">{c.writing.title}</p>
+        <p className="prose">{c.writing.prose}</p>
+        <div className="hero__links">
+          <a className="ilink ilink--cv" href="/blog">
+            <span>{c.writing.cta}</span>
+            <Icon name="arrow" size={13} className="ilink__arrow" />
           </a>
-        ))}
-      </div>
-    </Reveal>
-  </section>
-);
+          {c.writing.links.map((w) => (
+            <a
+              key={w.kind + w.url}
+              className="ilink"
+              href={w.url}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <Icon name={w.kind} size={16} />
+              <span>{w.label}</span>
+            </a>
+          ))}
+        </div>
+      </Reveal>
+    </section>
+  );
+};

@@ -1,12 +1,17 @@
 ---
-// Homepage. The existing React landing is server-rendered to static HTML at
-// build time (NO hydration) — content is always in the DOM, which is great for
-// SEO. The scroll-reveal fade-in is handled by the framework-independent script
-// in BaseLayout, not by React.
+// Homepage (English, default locale at `/`). The React landing is server-rendered
+// to static HTML (no hydration); the reveal fade-in is handled by the script in
+// BaseLayout. RU lives at /ru/.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import App from '../App';
+
+const alternates = [
+  { hreflang: 'en', href: new URL('/', Astro.site).toString() },
+  { hreflang: 'ru', href: new URL('/ru/', Astro.site).toString() },
+  { hreflang: 'x-default', href: new URL('/', Astro.site).toString() },
+];
 ---
 
-<BaseLayout>
-  <App />
+<BaseLayout lang="en" alternates={alternates}>
+  <App lang="en" />
 </BaseLayout>

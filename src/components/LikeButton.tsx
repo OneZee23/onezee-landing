@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Icon } from './Icon';
 
 /**
  * A small "like" island for blog posts. Reads the current count from /api/like
@@ -70,7 +71,9 @@ export default function LikeButton({ postId }: { postId: string }): React.ReactE
       aria-pressed={liked}
       aria-label={liked ? 'You liked this post' : 'Like this post'}
     >
-      <span className="like__heart" aria-hidden="true">{liked ? '♥' : '♡'}</span>
+      <span className="like__heart" aria-hidden="true">
+        <Icon name={liked ? 'heart' : 'heart-outline'} size={15} />
+      </span>
       <span className="like__count">{likes}</span>
     </button>
   );

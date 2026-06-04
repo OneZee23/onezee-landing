@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { Icon } from '../../components/Icon';
 import { externalWriting, mentions } from '../../data';
-import { TELEGRAM_CHANNEL_URL, seriesSlug } from '../../consts';
+import { TELEGRAM_CHANNEL_URL, seriesSlug, seriesIcon } from '../../consts';
 import '../../styles/blog.css';
 
 const all = (await getCollection('posts', ({ data }) => !data.draft)).sort(
@@ -23,17 +23,18 @@ for (const p of all) {
 interface Group {
   title: string;
   slug: string | null; // topic-page slug (null for the "Заметки" bucket)
+  icon: string | null;
   posts: Post[];
   latest: number;
 }
 const groups: Group[] = [];
 for (const [key, posts] of bySeries) {
   if (key === '__notes__') continue;
-  groups.push({ title: key, slug: seriesSlug(key), posts, latest: posts[0].data.date.valueOf() });
+  groups.push({ title: key, slug: seriesSlug(key), icon: seriesIcon(key), posts, latest: posts[0].data.date.valueOf() });
 }
 groups.sort((a, b) => b.latest - a.latest);
 const notes = bySeries.get('__notes__');
-if (notes?.length) groups.push({ title: 'Заметки', slug: null, posts: notes, latest: 0 });
+if (notes?.length) groups.push({ title: 'Заметки', slug: null, icon: null, posts: notes, latest: 0 });
 ---
 
 <BaseLayout
@@ -58,6 +59,7 @@ if (notes?.length) groups.push({ title: 'Заметки', slug: null, posts: not
     {groups.map((g) => (
       <details class="blog-season" open>
         <summary class="blog-season__head">
+          {g.icon && <img class="blog-season__logo" src={g.icon} alt="" width="30" height="30" loading="lazy" />}
           <span class="blog-season__title">{g.title}</span>
           <span class="blog-season__count">{g.posts.length}</span>
         </summary>

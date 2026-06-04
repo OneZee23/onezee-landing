@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Icon } from './Icon';
 
 // Russian plural: 1 просмотр / 2 просмотра / 5 просмотров.
 function ruPlural(n: number): string {
@@ -57,5 +58,10 @@ export default function ViewCounter({ postId, lang }: { postId: string; lang: 'r
 
   if (views == null) return null;
   const label = lang === 'ru' ? ruPlural(views) : views === 1 ? 'view' : 'views';
-  return <span className="post__views">· {views} {label}</span>;
+  return (
+    <span className="post__views">
+      <Icon name="eye" size={15} />
+      {views} {label}
+    </span>
+  );
 }

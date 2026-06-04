@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PostCard from '../../../components/PostCard.astro';
-import { seriesSlug } from '../../../consts';
+import { seriesIcon, seriesSlug } from '../../../consts';
 import '../../../styles/blog.css';
 
 export async function getStaticPaths() {
@@ -21,6 +21,7 @@ export async function getStaticPaths() {
 
 const { series, posts } = Astro.props;
 const total = posts.find((p) => p.data.total != null)?.data.total;
+const icon = seriesIcon(series);
 ---
 
 <BaseLayout
@@ -31,7 +32,10 @@ const total = posts.find((p) => p.data.total != null)?.data.total;
   <div class="blogwrap">
     <a class="bloghead__back" href="/blog">← все посты</a>
     <p class="eyebrow">Проект</p>
-    <h1 class="blogtitle">{series}</h1>
+    <div class="topic-head">
+      {icon && <img class="topic-head__logo" src={icon} alt="" width="46" height="46" />}
+      <h1 class="blogtitle">{series}</h1>
+    </div>
     <p class="prose">
       {posts.length} {posts.length === 1 ? 'пост' : 'постов'}{total ? ` · ${total}-дневный спринт` : ''}. От первого дня к последнему.
     </p>

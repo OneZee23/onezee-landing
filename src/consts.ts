@@ -18,3 +18,16 @@ export const DEFAULT_OG_IMAGE = '/logo192.jpg';
 /** URL slug for a series/project name → used by /blog/series/<slug>. */
 export const seriesSlug = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+// Project logos (in public/icons/) for blog chapters + topic pages, keyed by
+// the series name as it appears in the PoW signature. Add new projects here.
+const SERIES_ICON: Record<string, string> = {
+  TeachTrack: '/icons/teachtrack.png',
+  TripTrack: '/icons/triptrack.png',
+  LifeTrack: '/icons/lifetrack.png',
+  Fraggram: '/icons/fraggram.png',
+  'onezee.dev': '/icons/onezee.png',
+};
+
+/** Project logo path for a series name, or null to fall back to text only. */
+export const seriesIcon = (name: string): string | null => SERIES_ICON[name] ?? null;

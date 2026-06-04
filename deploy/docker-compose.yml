@@ -1,0 +1,68 @@
+# onezee.dev — Astro Node server + Redis + a Cloudflare Tunnel.
+#
+# Runs on tt-edge-ru (217.198.9.156). No inbound ports are opened: the tunnel
+# serves onezee.dev -> http://app:4321 from inside this compose network, so the
+# existing triptrack 443 TCP passthrough is left completely untouched.
+#
+#   First run:  cp .env.example .env   # put your TUNNEL_TOKEN
+#               docker compose up -d
+#   Update:     docker compose pull && docker compose up -d
+#   Logs:       docker compose logs -f app
+
+services:
+  app:
+    image: ghcr.io/onezee23/onezee-landing:latest
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "4321"
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    expose:
+      - "4321"            # internal only — reached by cloudflared as app:4321
+    mem_limit: 256m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --maxmemory
+      - 96mb
+      - --maxmemory-policy
+      - noeviction
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    mem_limit: 128m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: ["tunnel", "--no-autoupdate", "run"]
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:?set TUNNEL_TOKEN in deploy/.env}
+    depends_on:
+      - app
+    mem_limit: 64m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+volumes:
+  redis-data:

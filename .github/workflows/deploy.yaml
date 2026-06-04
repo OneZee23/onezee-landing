@@ -1,11 +1,9 @@
 name: Deploy to Kubernetes
 
+# DEPRECATED. onezee.dev now runs via Docker Compose + Cloudflare Tunnel on
+# tt-edge-ru (see deploy/). This k8s/werf pipeline is kept for reference only and
+# runs solely when triggered by hand — it no longer fires on push.
 on:
-  push:
-    branches:
-      - master
-      - main
-  # Allow the ingestion workflow (and you) to trigger a deploy on demand.
   workflow_dispatch:
 
 env:

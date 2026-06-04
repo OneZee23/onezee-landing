@@ -33,10 +33,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          # Use PUSH_TOKEN (a PAT) if set so the content commit can trigger the
-          # deploy via push; otherwise fall back to the built-in token and rely
-          # on the explicit "Trigger deploy" step below.
-          token: ${{ secrets.PUSH_TOKEN || github.token }}
+          # Built-in token: its push deliberately does NOT trigger the deploy
+          # workflow, so the explicit "Trigger deploy" step below is the single
+          # deploy trigger (new content deploys exactly once, never twice).
+          token: ${{ github.token }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -71,7 +71,6 @@ jobs:
 
       - name: Trigger deploy
         if: steps.commit.outputs.changed == 'true'
-        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy.yaml --ref "${{ github.ref_name }}"

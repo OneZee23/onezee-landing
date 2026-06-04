@@ -76,14 +76,13 @@ Likes need a Redis. Without it the like button simply hides; the site works fine
    ```
 3. Redeploy. The like button appears and counts persist.
 
-## 6. (you) Auto-deploy of new posts — optional but recommended
+## 6. Auto-deploy of new posts — already wired
 
-The ingest workflow commits new posts and then tries to trigger a deploy
-(`gh workflow run deploy.yaml`). If your org restricts that, add a Personal Access
-Token so the content commit itself triggers the deploy:
-- Create a PAT (classic: `repo` + `workflow` scope, or fine-grained with contents
-  + actions write).
-- Add it as repo secret **`PUSH_TOKEN`**. The ingest workflow already prefers it.
+The ingest workflow commits new posts with the built-in token, then triggers the
+deploy explicitly (`gh workflow run deploy.yaml`) — so each new post deploys
+**exactly once**, no extra setup. The only requirement: the Actions bot must be
+able to push to `master`. If you ever branch-protect `master`, allow the bot to
+push (or it will fail visibly in the Actions tab — never silently).
 
 ## 7. (you) SEO kickstart
 

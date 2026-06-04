@@ -3,9 +3,8 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import node from '@astrojs/node';
 
-// Canonical public origin. Overridable at build time via SITE_URL env.
-// NOTE: CI currently deploys to onezee.ru while the brand is onezee.dev —
-// set SITE_URL to whichever domain is the indexed one. See docs/superpowers/specs.
+// Canonical public origin (sitemap + <link rel=canonical>). Domain: onezee.dev.
+// Override at build time with SITE_URL only if you serve from a different host.
 const site = process.env.SITE_URL || 'https://onezee.dev';
 
 // https://astro.build/config

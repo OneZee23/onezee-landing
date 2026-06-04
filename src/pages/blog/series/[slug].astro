@@ -7,13 +7,18 @@ import '../../../styles/blog.css';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft && !!data.series);
-  const bySeries = new Map<string, typeof posts>();
+  // Key by SLUG (not raw name) so two series names that slugify the same don't
+  // produce duplicate paths (which would break the build); their posts merge.
+  const bySlug = new Map<string, { series: string; items: typeof posts }>();
   for (const p of posts) {
-    const key = p.data.series as string;
-    (bySeries.get(key) ?? bySeries.set(key, []).get(key)!).push(p);
+    const name = p.data.series as string;
+    const slug = seriesSlug(name);
+    const entry = bySlug.get(slug) ?? { series: name, items: [] };
+    entry.items.push(p);
+    bySlug.set(slug, entry);
   }
-  return [...bySeries.entries()].map(([series, items]) => ({
-    params: { slug: seriesSlug(series) },
+  return [...bySlug.entries()].map(([slug, { series, items }]) => ({
+    params: { slug },
     // Oldest → newest: a project topic reads as the build story from day one.
     props: { series, posts: items.sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf()) },
   }));

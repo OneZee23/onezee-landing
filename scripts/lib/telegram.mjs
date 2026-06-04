@@ -236,7 +236,9 @@ export function postsFromHtml(html, { siteTag = '#site', includePow = false } = 
     .filter((msg) => {
       if (!msg.textPlain) return false;
       if (hasSiteTag(msg.textPlain, siteTag)) return true;
-      return includePow && parseProgress(msg.textPlain) != null;
+      // Bulk: only the real "PoW <Project> — день N/30" signature (series present),
+      // not a bare "day N/M" that could appear casually in prose.
+      return includePow && parseProgress(msg.textPlain)?.series != null;
     })
     .map((msg) => {
       const title = deriveTitle(msg.textPlain, { siteTag });
@@ -265,5 +267,6 @@ export function makeExcerpt(markdown, maxLen = 180) {
     .trim();
   if (plain.length <= maxLen) return plain;
   const cut = plain.slice(0, maxLen);
-  return cut.slice(0, cut.lastIndexOf(' ')).trim() + '…';
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trim() + '…';
 }

@@ -35,19 +35,26 @@ function ipHashOf(request: Request, clientAddress: string | undefined): string {
   return crypto.createHash('sha256').update(ip).digest('hex').slice(0, 16);
 }
 
-export const GET: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async ({ url, request, clientAddress }) => {
   const postId = url.searchParams.get('postId') ?? '';
   if (!VALID_ID.test(postId)) return json({ error: 'invalid postId' }, 400);
 
+  const ipHash = ipHashOf(request, clientAddress);
   const redis = getRedis();
   if (!redis) {
-    return json({ postId, likes: memLikes.get(postId) ?? 0, enabled: true });
+    return json({
+      postId,
+      likes: memLikes.get(postId) ?? 0,
+      liked: memDedup.get(postId)?.has(ipHash) ?? false,
+      enabled: true,
+    });
   }
   try {
-    const raw = await redis.get(likeKey(postId));
-    return json({ postId, likes: Number(raw) || 0, enabled: true });
+    const likes = Number(await redis.get(likeKey(postId))) || 0;
+    const liked = (await redis.exists(dedupKey(postId, ipHash))) === 1;
+    return json({ postId, likes, liked, enabled: true });
   } catch {
-    return json({ postId, likes: 0, enabled: false });
+    return json({ postId, likes: 0, liked: false, enabled: false });
   }
 };
 
@@ -86,7 +93,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const likes = fresh === 'OK'
       ? await redis.incr(likeKey(postId))
       : Number(await redis.get(likeKey(postId))) || 0;
-    return json({ postId, likes, enabled: true, counted: fresh === 'OK' });
+    return json({ postId, likes, enabled: true, liked: true, counted: fresh === 'OK' });
   } catch {
     return json({ postId, likes: 0, enabled: false });
   }
@@ -114,7 +121,7 @@ export const DELETE: APIRoute = async ({ request, clientAddress }) => {
       likes = Math.max(0, likes - 1);
       memLikes.set(postId, likes);
     }
-    return json({ postId, likes, enabled: true });
+    return json({ postId, likes, enabled: true, liked: false });
   }
 
   try {
@@ -127,7 +134,7 @@ export const DELETE: APIRoute = async ({ request, clientAddress }) => {
         likes = 0;
       }
     }
-    return json({ postId, likes, enabled: true });
+    return json({ postId, likes, enabled: true, liked: false });
   } catch {
     return json({ postId, likes: 0, enabled: false });
   }

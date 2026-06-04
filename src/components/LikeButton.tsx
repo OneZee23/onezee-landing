@@ -1,33 +1,34 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Icon } from './Icon';
 
 /**
- * A small "like" island for blog posts. Reads the current count from /api/like
- * on mount and increments on click. One like per browser (localStorage) backed
- * by a server-side one-per-IP guard. If the likes backend is disabled (no Redis),
- * the button quietly hides — the post still reads fine.
+ * A small "like" island for blog posts. The server (/api/like) is the source of
+ * truth: GET returns the current count + whether this client (by IP) already
+ * liked; clicking toggles via POST/DELETE. If the likes backend is disabled
+ * (no Redis), the button quietly hides — the post still reads fine.
  */
 export default function LikeButton({ postId }: { postId: string }): React.ReactElement | null {
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
   const [enabled, setEnabled] = useState(true);
   const [busy, setBusy] = useState(false);
+  // Once the user clicks, the in-flight mount GET must not overwrite the toggled
+  // state (it could land later with a pre-click snapshot and revert the like).
+  const interacted = useRef(false);
 
   useEffect(() => {
-    try {
-      setLiked(localStorage.getItem(`liked:${postId}`) === '1');
-    } catch {
-      /* private mode / storage blocked — ignore */
-    }
     let cancelled = false;
     fetch(`/api/like?postId=${encodeURIComponent(postId)}`)
       .then((r) => r.json())
       .then((d) => {
-        if (cancelled) return;
+        if (cancelled || interacted.current) return;
         setLikes(typeof d.likes === 'number' ? d.likes : 0);
+        setLiked(!!d.liked);
         setEnabled(d.enabled !== false);
       })
-      .catch(() => !cancelled && setEnabled(false));
+      .catch(() => {
+        if (!cancelled && !interacted.current) setEnabled(false);
+      });
     return () => {
       cancelled = true;
     };
@@ -35,17 +36,12 @@ export default function LikeButton({ postId }: { postId: string }): React.ReactE
 
   const onClick = useCallback(async () => {
     if (busy) return;
+    interacted.current = true;
     setBusy(true);
     const next = !liked; // toggle: like or un-like
     // Optimistic update.
     setLiked(next);
     setLikes((n) => Math.max(0, n + (next ? 1 : -1)));
-    try {
-      if (next) localStorage.setItem(`liked:${postId}`, '1');
-      else localStorage.removeItem(`liked:${postId}`);
-    } catch {
-      /* ignore */
-    }
     try {
       const res = await fetch('/api/like', {
         method: next ? 'POST' : 'DELETE',
@@ -55,6 +51,7 @@ export default function LikeButton({ postId }: { postId: string }): React.ReactE
       const d = await res.json();
       if (d.enabled === false) setEnabled(false);
       if (typeof d.likes === 'number') setLikes(d.likes);
+      if (typeof d.liked === 'boolean') setLiked(d.liked);
     } catch {
       /* keep the optimistic count */
     } finally {

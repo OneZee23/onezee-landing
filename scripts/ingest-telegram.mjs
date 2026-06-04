@@ -101,6 +101,14 @@ function detectSeries(markdown) {
   return null;
 }
 
+// ru if Cyrillic outweighs Latin — a single quoted Russian word in an English
+// post (or vice-versa) shouldn't flip the language.
+function detectLang(text) {
+  const cyrillic = (text.match(/[Ѐ-ӿ]/g) || []).length;
+  const latin = (text.match(/[A-Za-z]/g) || []).length;
+  return cyrillic > latin ? 'ru' : 'en';
+}
+
 function frontmatter(post, cover) {
   const hashtagSeries = detectSeries(post.markdown);
   const progress = post.progress; // { series, day, total } | null from the PoW signature
@@ -119,7 +127,7 @@ function frontmatter(post, cover) {
     seriesName ? `series: ${JSON.stringify(seriesName)}` : null,
     progress && Number.isFinite(progress.day) ? `day: ${progress.day}` : null,
     progress && Number.isFinite(progress.total) ? `total: ${progress.total}` : null,
-    `lang: ${JSON.stringify(/[Ѐ-ӿ]/.test(`${post.title} ${post.markdown}`) ? 'ru' : 'en')}`,
+    `lang: ${JSON.stringify(detectLang(`${post.title} ${post.markdown}`))}`,
     `telegramId: ${post.id}`,
     `telegramUrl: ${JSON.stringify(post.telegramUrl)}`,
     `tags: [${tags.map((t) => JSON.stringify(t)).join(', ')}]`,
@@ -187,18 +195,33 @@ async function main() {
   const { ids: existingIds, slugs: existingSlugs } = await readExisting();
   const collected = new Map();
   let before;
+  let exhausted = false;
 
   for (let page = 0; page < MAX_PAGES; page++) {
     const html = await fetchPage(before);
     const msgs = extractMessages(html);
-    if (msgs.length === 0) break;
+    if (msgs.length === 0) {
+      exhausted = true;
+      break;
+    }
     for (const p of postsFromHtml(html, { siteTag: SITE_TAG, includePow: INCLUDE_POW })) {
       if (!collected.has(p.id)) collected.set(p.id, p);
     }
-    if (!BACKFILL) break; // incremental: newest page is enough
+    if (!BACKFILL) {
+      exhausted = true;
+      break; // incremental: newest page is enough
+    }
     const minId = Math.min(...msgs.map((m) => m.id));
-    if (!Number.isFinite(minId) || minId <= 1) break;
+    if (!Number.isFinite(minId) || minId <= 1) {
+      exhausted = true;
+      break;
+    }
     before = minId;
+  }
+  if (BACKFILL && !exhausted) {
+    console.warn(
+      `Reached MAX_PAGES (${MAX_PAGES}) before the channel start — older posts may be missing. Re-run with MAX_PAGES higher to go deeper.`,
+    );
   }
 
   const fresh = [...collected.values()]
@@ -209,7 +232,10 @@ async function main() {
   let written = 0;
   for (const post of fresh) {
     let slug = post.slug;
-    if (usedSlugs.has(slug)) slug = `${slug}-${post.id}`;
+    if (usedSlugs.has(slug)) {
+      slug = `${slug}-${post.id}`;
+      if (usedSlugs.has(slug)) slug = `post-${post.id}`; // telegram id is unique
+    }
     usedSlugs.add(slug);
     await writePost(post, slug);
     written++;

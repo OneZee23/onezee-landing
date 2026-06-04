@@ -12,6 +12,10 @@ export const Writing: React.FC = () => (
         my Telegram channel.
       </p>
       <div className="hero__links">
+        <a className="ilink ilink--cv" href="/blog">
+          <span>Read the blog</span>
+          <Icon name="arrow" size={13} className="ilink__arrow" />
+        </a>
         {writing.map((w) => (
           <a
             key={w.kind + w.url}

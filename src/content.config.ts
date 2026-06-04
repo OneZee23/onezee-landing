@@ -10,6 +10,8 @@ const posts = defineCollection({
     title: z.string(),
     // ISO date string in frontmatter; coerced to a Date.
     date: z.coerce.date(),
+    // Optional last-updated date → JSON-LD dateModified + og:article:modified_time.
+    updated: z.coerce.date().optional(),
     // Short summary for the blog index + meta description. Optional —
     // falls back to a trimmed body excerpt when absent.
     excerpt: z.string().optional(),

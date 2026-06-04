@@ -14,6 +14,10 @@ export const Hero: React.FC = () => (
         <h1 className="hero__lead">{heroLead}</h1>
         <p className="hero__sub">{heroSub}</p>
         <nav className="hero__links" aria-label="Profiles">
+          <a className="ilink ilink--cv" href="/blog">
+            <span>Blog</span>
+            <Icon name="arrow" size={13} className="ilink__arrow" />
+          </a>
           <a className="ilink ilink--cv" href={resumeUrl} target="_blank" rel="noreferrer noopener">
             <span>Résumé (PDF)</span>
             <Icon name="arrow" size={13} className="ilink__arrow" />

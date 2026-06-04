@@ -98,7 +98,7 @@ function detectSeries(markdown) {
   return null;
 }
 
-function frontmatter(post, slug, cover) {
+function frontmatter(post, cover) {
   const hashtagSeries = detectSeries(post.markdown);
   const progress = post.progress; // { series, day, total } | null from the PoW signature
   // Prefer the project name from the PoW signature, normalised through SERIES_TAGS.
@@ -141,7 +141,7 @@ async function writePost(post, slug) {
   }
   const cover = imagePaths[0];
   const extraImages = imagePaths.slice(1).map((p) => `\n\n![](${p})`).join('');
-  const body = `${frontmatter(post, slug, cover)}\n\n${post.markdown}${extraImages}\n`;
+  const body = `${frontmatter(post, cover)}\n\n${post.markdown}${extraImages}\n`;
   await fs.writeFile(path.join(CONTENT_DIR, `${slug}.md`), body, 'utf8');
   console.log(`  + ${slug}.md  (tg#${post.id}, ${imagePaths.length} image(s))`);
 }

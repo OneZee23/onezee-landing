@@ -9,6 +9,7 @@ interface Props {
   image?: string;
   type?: 'website' | 'article';
   publishedTime?: Date;
+  modifiedTime?: Date;
   tags?: string[];
   lang?: 'ru' | 'en';
   noindex?: boolean;
@@ -20,6 +21,7 @@ const {
   image = DEFAULT_OG_IMAGE,
   type = 'website',
   publishedTime,
+  modifiedTime,
   tags = [],
   lang = 'en',
   noindex = false,
@@ -39,7 +41,7 @@ const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
 <link rel="manifest" href="/manifest.json" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link rel="canonical" href={canonicalURL} />
-{noindex && <meta name="robots" content="noindex, nofollow" />}
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
 
 <title>{title}</title>
 <meta name="description" content={description} />
@@ -55,6 +57,9 @@ const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
 <meta property="og:locale" content={ogLocale} />
 {type === 'article' && publishedTime && (
   <meta property="article:published_time" content={publishedTime.toISOString()} />
+)}
+{type === 'article' && modifiedTime && (
+  <meta property="article:modified_time" content={modifiedTime.toISOString()} />
 )}
 {type === 'article' && tags.map((t) => <meta property="article:tag" content={t} />)}
 

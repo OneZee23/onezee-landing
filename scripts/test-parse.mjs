@@ -7,7 +7,6 @@ import {
   hasSiteTag,
   deriveTitle,
   slugify,
-  htmlToMarkdown,
   makeExcerpt,
   parseProgress,
 } from './lib/telegram.mjs';

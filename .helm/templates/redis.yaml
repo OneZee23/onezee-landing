@@ -1,0 +1,90 @@
+{{- if .Values.redis.enabled }}
+# Minimal single-node Redis for the likes/views counters. Persists to a DO Block
+# Storage PVC (AOF), so counts survive restarts. ClusterIP-only (internal).
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-redis
+  namespace: {{ .Values.namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.redis.storage | default "1Gi" }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-redis
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Release.Name }}-redis
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate # the PVC is RWO — never run two pods on it at once
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-redis
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-redis
+    spec:
+      containers:
+        - name: redis
+          image: {{ .Values.redis.image | default "redis:7-alpine" }}
+          args:
+            - redis-server
+            - --appendonly
+            - "yes"
+            - --maxmemory
+            - 128mb
+            - --maxmemory-policy
+            - noeviction
+          ports:
+            - name: redis
+              containerPort: 6379
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 192Mi
+          readinessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-redis
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Release.Name }}-redis
+spec:
+  type: ClusterIP
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
+      name: redis
+  selector:
+    app: {{ .Release.Name }}-redis
+{{- end }}

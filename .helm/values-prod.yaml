@@ -24,3 +24,7 @@ ingress:
 
 namespace: onezee-landing
 
+# Run a small Redis in the cluster so likes + views persist.
+redis:
+  enabled: true
+

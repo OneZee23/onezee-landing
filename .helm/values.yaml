@@ -1,11 +1,16 @@
 app:
   port: 4321  # Astro Node server (HOST=0.0.0.0 PORT=4321)
-  # Connection string for the likes counter. Leave empty to run without likes
-  # (the like button hides itself). Set this in .helm/secret-values-prod.yaml
-  # (werf-encrypted) so it isn't committed in plaintext, e.g.
-  #   app:
-  #     redisUrl: "redis://:password@my-redis:6379"
+  # External Redis URL for likes/views. Usually leave empty and use the in-cluster
+  # `redis:` below. If you prefer a managed Redis, set this in
+  # .helm/secret-values-prod.yaml (werf-encrypted): app.redisUrl: "redis://:pw@host:6379"
   redisUrl: ""
+
+# Tiny in-cluster Redis for the likes/views counters. When enabled, the app's
+# REDIS_URL points at it automatically (app.redisUrl above, if set, wins).
+redis:
+  enabled: false
+  image: redis:7-alpine
+  storage: 1Gi  # DO Block Storage PVC — counts persist across pod restarts
 
 replication:
   minReplicas: 1

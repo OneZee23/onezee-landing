@@ -42,6 +42,9 @@ spec:
             {{- if .Values.app.redisUrl }}
             - name: REDIS_URL
               value: {{ .Values.app.redisUrl | quote }}
+            {{- else if .Values.redis.enabled }}
+            - name: REDIS_URL
+              value: "redis://{{ .Release.Name }}-redis:6379"
             {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

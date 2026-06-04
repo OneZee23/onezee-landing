@@ -9,8 +9,9 @@ const likeKey = (postId: string) => `likes:${postId}`;
 const dedupKey = (postId: string, ipHash: string) => `liked:${postId}:${ipHash}`;
 const DEDUP_TTL_SECONDS = 60 * 60 * 24 * 365; // one like per IP per year
 
-// Slug shape we generate for posts; also the only thing we accept as an id.
-const VALID_ID = /^[a-z0-9][a-z0-9-]{0,80}$/i;
+// Accepts the slugs we generate plus hand-authored content ids (which may
+// contain '_' or a nested path). Bounded charset + length; safe as a Redis key.
+const VALID_ID = /^[a-z0-9][a-z0-9/_-]{0,120}$/i;
 
 // In-memory fallback when REDIS_URL is unset (local dev, or a Redis-less deploy).
 // Per-process and non-persistent — fine for dev; set REDIS_URL in production so
@@ -26,6 +27,9 @@ function json(data: unknown, status = 200): Response {
 }
 
 function ipHashOf(request: Request, clientAddress: string | undefined): string {
+  // Best-effort per-client key for like dedup — NOT a security boundary
+  // (X-Forwarded-For is client-supplied; worst case a determined user inflates a
+  // vanity count). The original client is the left-most XFF entry.
   const xff = request.headers.get('x-forwarded-for') ?? '';
   const ip = xff.split(',')[0]?.trim() || clientAddress || 'unknown';
   return crypto.createHash('sha256').update(ip).digest('hex').slice(0, 16);

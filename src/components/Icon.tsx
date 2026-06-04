@@ -1,5 +1,5 @@
 import React from 'react';
-import { LinkKind } from '../data';
+import type { LinkKind } from '../data';
 
 type IconName = LinkKind | 'arrow';
 

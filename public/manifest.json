@@ -1,6 +1,6 @@
 {
-  "short_name": "OneZee Landing",
-  "name": "Nikita OneZee Shevelev Landing",
+  "short_name": "OneZee",
+  "name": "Nikita Shevelev — onezee.dev",
   "icons": [
     {
       "src": "favicon-icon.ico",
@@ -8,11 +8,13 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
-      "type": "image/jpg",
+      "src": "logo192.jpg",
+      "type": "image/jpeg",
       "sizes": "192x192"
     }
   ],
-  "start_url": ".",
-  "display": "standalone"
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#100e0c",
+  "background_color": "#100e0c"
 }

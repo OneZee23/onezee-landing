@@ -1,5 +1,4 @@
 import React from 'react';
-import { useReveal } from '../hooks/useReveal';
 
 interface RevealProps {
   children: React.ReactNode;
@@ -7,16 +6,13 @@ interface RevealProps {
   className?: string;
 }
 
-/** Wraps children with a scroll-into-view fade/slide. */
-export const Reveal: React.FC<RevealProps> = ({ children, delay = 0, className = '' }) => {
-  const { ref, visible } = useReveal<HTMLDivElement>();
-  return (
-    <div
-      ref={ref}
-      className={`reveal ${visible ? 'is-visible' : ''} ${className}`.trim()}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {children}
-    </div>
-  );
-};
+/**
+ * Marks a block for the scroll-reveal fade-in. The homepage is rendered to
+ * static HTML (no hydration), so visibility is toggled by the framework-independent
+ * reveal script in BaseLayout.astro — this stays a plain element with no state.
+ */
+export const Reveal: React.FC<RevealProps> = ({ children, delay = 0, className = '' }) => (
+  <div className={`reveal ${className}`.trim()} style={{ transitionDelay: `${delay}ms` }}>
+    {children}
+  </div>
+);

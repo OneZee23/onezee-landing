@@ -112,6 +112,28 @@ check('parseProgress reads the proof-of-work signature', () => {
   // overtime is preserved
   assert.deepEqual(parseProgress('PoW TeachTrack — день 34/30'), { series: 'TeachTrack', day: 34, total: 30 });
   assert.equal(parseProgress('just a normal post, no counter'), null);
+  // 'PoW' marker and lowercase prose words are NOT mistaken for a project
+  assert.deepEqual(parseProgress('PoW — день 1/30'), { series: null, day: 1, total: 30 });
+  assert.deepEqual(parseProgress('I shipped my app — day 1/30'), { series: null, day: 1, total: 30 });
+});
+
+check('nested <div> in message text does not truncate or drop the post', () => {
+  const html = `<div class="tgme_widget_message js-widget_message" data-post="onezee_co/77">
+    <div class="tgme_widget_message_text js-message_text">Intro <div class="tgme_widget_message_inline_keyboard">btn</div> tail with <a href="?q=%23site">#site</a> and more</div>
+    <div class="tgme_widget_message_footer"><time datetime="2026-06-01T00:00:00+00:00"></time></div>
+  </div>`;
+  const posts = postsFromHtml(html);
+  assert.equal(posts.length, 1, 'post must not be dropped');
+  assert.match(posts[0].markdown, /tail with/, 'content after the nested div is kept');
+});
+
+check('page thumbnails after the last message are not used as its photos', () => {
+  const html = `<div class="tgme_widget_message js-widget_message" data-post="onezee_co/88">
+    <div class="tgme_widget_message_text js-message_text">A post #site</div>
+    <div class="tgme_widget_message_footer"><time datetime="2026-06-02T00:00:00+00:00"></time></div>
+  </div>
+  <div class="tgme_widget_message_photo_wrap" style="background-image:url('https://cdn/footer-ad.jpg')"></div>`;
+  assert.deepEqual(extractMessages(html)[0].photos, [], 'footer thumbnail must not leak');
 });
 
 console.log(`\n${passed} checks passed ✅`);

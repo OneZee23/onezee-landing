@@ -1,14 +1,12 @@
 ---
-// Homepage. The existing React landing renders inside the Astro shell:
-// server-rendered to HTML at build (good for SEO), then hydrated on the
-// client so the scroll-reveal animations and image fallbacks keep working.
+// Homepage. The existing React landing is server-rendered to static HTML at
+// build time (NO hydration) — content is always in the DOM, which is great for
+// SEO. The scroll-reveal fade-in is handled by the framework-independent script
+// in BaseLayout, not by React.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import App from '../App';
 ---
 
-{/* Rendered to static HTML (no hydration) — content is always in the DOM for
-    SEO and is never hidden behind a JS island. The fade-in is handled by the
-    reveal script in BaseLayout. */}
 <BaseLayout>
   <App />
 </BaseLayout>

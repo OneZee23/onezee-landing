@@ -140,6 +140,27 @@ export function buildSlug(title, id) {
   return slugify(title) || `post-${id}`;
 }
 
+/**
+ * Extract the inner HTML of a message's text div, balancing nested <div>s.
+ * A plain non-greedy regex would stop at the first </div> and truncate the body
+ * when Telegram nests a div (quotes, link previews, inline keyboards) — which can
+ * even fuse the #site tag with following text and drop the whole post.
+ */
+function extractTextDiv(chunk) {
+  const open = /<div class="tgme_widget_message_text[^"]*"[^>]*>/i.exec(chunk);
+  if (!open) return '';
+  const start = open.index + open[0].length;
+  const tagRe = /<(\/?)div\b[^>]*>/gi;
+  tagRe.lastIndex = start;
+  let depth = 1;
+  let t;
+  while ((t = tagRe.exec(chunk)) !== null) {
+    depth += t[1] === '/' ? -1 : 1;
+    if (depth === 0) return chunk.slice(start, t.index);
+  }
+  return chunk.slice(start);
+}
+
 /** Parse a t.me/s channel HTML page into structured messages (newest order as on page). */
 export function extractMessages(html = '') {
   const markerRe = /<div class="tgme_widget_message[ "][^>]*\bdata-post="([^"]+)"/g;
@@ -157,20 +178,22 @@ export function extractMessages(html = '') {
     const id = Number(idStr);
     if (!Number.isFinite(id)) continue;
 
-    const textHtmlMatch = chunk.match(
-      /<div class="tgme_widget_message_text[^"]*"[^>]*>([\s\S]*?)<\/div>/i,
-    );
-    const textHtml = textHtmlMatch ? textHtmlMatch[1] : '';
+    const textHtml = extractTextDiv(chunk);
     const textPlain = stripTags(textHtml);
 
     const dateMatch = chunk.match(/<time[^>]*datetime="([^"]+)"/i);
     const datetime = dateMatch ? dateMatch[1] : null;
 
+    // Photos live in the message bubble, before its footer. Bounding the search
+    // to the pre-footer region keeps the last message from picking up page-footer
+    // / recommended-channel thumbnails that follow it in the HTML.
+    const footerIdx = chunk.search(/tgme_widget_message_footer/i);
+    const photoRegion = footerIdx >= 0 ? chunk.slice(0, footerIdx) : chunk;
     const photos = [];
     const photoRe =
       /tgme_widget_message_(?:photo|video_thumb)_wrap[^>]*style="[^"]*background-image:url\(['"]?([^'")]+)['"]?\)/gi;
     let p;
-    while ((p = photoRe.exec(chunk)) !== null) {
+    while ((p = photoRe.exec(photoRegion)) !== null) {
       photos.push(decodeEntities(p[1]));
     }
 
@@ -186,11 +209,13 @@ export function extractMessages(html = '') {
  * Note: day can exceed total (overtime, e.g. 34/30) — kept as-is.
  */
 export function parseProgress(text = '') {
-  const withSeries = text.match(
-    /(?:pow\s+)?([A-Za-z][A-Za-z0-9]*)\s*[—–-]\s*(?:день|day)\s+(\d+)\s*\/\s*(\d+)/i,
+  const m = text.match(
+    /(?:pow\s+)?([A-Za-z][A-Za-z0-9]+)\s*[—–-]\s*(?:день|day)\s+(\d+)\s*\/\s*(\d+)/i,
   );
-  if (withSeries) {
-    return { series: withSeries[1], day: Number(withSeries[2]), total: Number(withSeries[3]) };
+  // Only treat the captured token as a project if it looks like one (CamelCase /
+  // capitalised) and isn't the "PoW" marker — avoids "...my app — day 1/30" → "app".
+  if (m && /^[A-Z]/.test(m[1]) && m[1].toLowerCase() !== 'pow') {
+    return { series: m[1], day: Number(m[2]), total: Number(m[3]) };
   }
   const bare = text.match(/(?:день|day)\s+(\d+)\s*\/\s*(\d+)/i);
   if (bare) {

@@ -22,6 +22,10 @@ export function getRedis(): Redis | null {
       enableOfflineQueue: false,
       connectTimeout: 1500,
       lazyConnect: false,
+      // Give up reconnecting after a few tries instead of looping forever and
+      // spamming logs when REDIS_URL is wrong/unreachable. Requests still
+      // fail-soft (likes degrade), they just stop retrying.
+      retryStrategy: (times) => (times > 5 ? null : Math.min(times * 200, 2000)),
     });
     // Swallow connection errors — likes degrade gracefully instead of crashing.
     redis.on('error', (err: Error) => {

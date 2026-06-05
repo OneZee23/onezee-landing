@@ -87,9 +87,18 @@ const SERIES_TAGS = {
   triptrack: 'TripTrack',
   teachtrack: 'TeachTrack',
   lifetrack: 'LifeTrack',
-  fraggram: 'Fraggram',
+  fraggram: 'FragGram',
   onezee: 'onezee.dev',
 };
+
+// Early devlog posts often don't name their project in the text (just "день 5/30"),
+// so map Telegram message-id ranges → project (inclusive). Ids are the number in the
+// post URL: https://t.me/onezee_co/<id>. Add a line when a new series starts this way.
+const SERIES_RANGES = [
+  { from: 36, to: 83, series: 'FragGram' },    // Telegram Stars / Fragment shop
+  { from: 97, to: 172, series: 'LifeTrack' },  // habit tracker (ran to 34/30)
+  { from: 173, to: 190, series: 'TripTrack' }, // days 0–8; day 9+ name the project in-text
+];
 
 function detectSeries(markdown) {
   const re = /#([A-Za-z][A-Za-z0-9_]*)/g;
@@ -114,6 +123,7 @@ function frontmatter(post, cover) {
   const progress = post.progress; // { series, day, total } | null from the PoW signature
   // Prefer the project name from the PoW signature, normalised through SERIES_TAGS.
   const seriesName =
+    post.rangeSeries ||
     (progress && progress.series && (SERIES_TAGS[progress.series.toLowerCase()] || progress.series)) ||
     (hashtagSeries && hashtagSeries.name) ||
     null;
@@ -204,7 +214,7 @@ async function main() {
       exhausted = true;
       break;
     }
-    for (const p of postsFromHtml(html, { siteTag: SITE_TAG, includePow: INCLUDE_POW })) {
+    for (const p of postsFromHtml(html, { siteTag: SITE_TAG, includePow: INCLUDE_POW, seriesRanges: SERIES_RANGES })) {
       if (!collected.has(p.id)) collected.set(p.id, p);
     }
     if (!BACKFILL) {

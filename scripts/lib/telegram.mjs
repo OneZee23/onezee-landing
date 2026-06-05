@@ -107,10 +107,17 @@ export function htmlToMarkdown(html = '', { siteTag = '#site' } = {}) {
   return s;
 }
 
+// A line that is ONLY a progress marker, e.g. "День 0/30." or "TripTrack — день 9/30".
+// Some posts lead with it; it must never become the title.
+const PROGRESS_ONLY_LINE =
+  /^(?:pow\s+)?(?:[A-Za-zЀ-ӿ][\wЀ-ӿ]*\s*[—–-]\s*)?(?:день|day)\s+\d+\s*\/\s*\d+[.!…]*$/i;
+
 /** First meaningful line, tag-stripped, trimmed to a sensible title length. */
 export function deriveTitle(textPlain, { siteTag = '#site' } = {}) {
   const cleaned = stripSiteTag(textPlain, siteTag).trim();
-  const firstLine = cleaned.split('\n').map((l) => l.trim()).find(Boolean) || 'Untitled';
+  const lines = cleaned.split('\n').map((l) => l.trim()).filter(Boolean);
+  // Skip a leading bare "день N/30" line (FragGram day 0 etc.) so the title is real text.
+  const firstLine = lines.find((l) => !PROGRESS_ONLY_LINE.test(l)) || lines[0] || 'Untitled';
   if (firstLine.length <= 100) return firstLine.replace(/[*_`~]+/g, '');
   const cut = firstLine.slice(0, 100);
   const lastSpace = cut.lastIndexOf(' ');
@@ -226,19 +233,34 @@ export function parseProgress(text = '') {
 }
 
 /**
+ * Series name for a Telegram message id, from explicit ranges [{ from, to, series }]
+ * (inclusive). Used to group early devlog posts whose text doesn't name the project
+ * (bare "день 5/30"). Returns the series, or null when the id is in no range.
+ */
+export function seriesForId(id, ranges = []) {
+  for (const r of ranges) {
+    if (id >= r.from && id <= r.to) return r.series;
+  }
+  return null;
+}
+
+/**
  * High-level: page messages as content objects.
  * Kept when the message carries the routing tag (#site) — or, when includePow
  * is set, when it carries a proof-of-work signature ("день N/30"), so the whole
  * devlog can be bulk-imported without tagging each post.
  */
-export function postsFromHtml(html, { siteTag = '#site', includePow = false } = {}) {
+export function postsFromHtml(html, { siteTag = '#site', includePow = false, seriesRanges = [] } = {}) {
   return extractMessages(html)
     .filter((msg) => {
       if (!msg.textPlain) return false;
       if (hasSiteTag(msg.textPlain, siteTag)) return true;
-      // Bulk: only the real "PoW <Project> — день N/30" signature (series present),
-      // not a bare "day N/M" that could appear casually in prose.
-      return includePow && parseProgress(msg.textPlain)?.series != null;
+      if (!includePow) return false;
+      const prog = parseProgress(msg.textPlain);
+      // Explicit "PoW <Project> — день N/30" signature (project named in the text)…
+      if (prog?.series != null) return true;
+      // …or a bare "день N/30" that sits inside a known project id-range.
+      return prog != null && seriesForId(msg.id, seriesRanges) != null;
     })
     .map((msg) => {
       const title = deriveTitle(msg.textPlain, { siteTag });
@@ -254,6 +276,8 @@ export function postsFromHtml(html, { siteTag = '#site', includePow = false } = 
         markdown,
         excerpt: makeExcerpt(markdown),
         progress: parseProgress(msg.textPlain),
+        // Project from the id-range (wins over text detection for unnamed early posts).
+        rangeSeries: seriesForId(msg.id, seriesRanges),
       };
     });
 }

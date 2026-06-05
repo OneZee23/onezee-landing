@@ -9,6 +9,7 @@ import {
   slugify,
   makeExcerpt,
   parseProgress,
+  seriesForId,
 } from './lib/telegram.mjs';
 
 // A representative slice of t.me/s/<channel> markup: one tagged post (with a
@@ -145,6 +146,48 @@ check('includePow imports PoW posts without #site (bulk mode)', () => {
   assert.equal(posts.length, 1, 'includePow → imported');
   assert.equal(posts[0].progress.series, 'TeachTrack');
   assert.equal(posts[0].progress.day, 5);
+});
+
+check('seriesForId maps message ids to a project by inclusive range', () => {
+  const ranges = [
+    { from: 36, to: 83, series: 'FragGram' },
+    { from: 173, to: 190, series: 'TripTrack' },
+  ];
+  assert.equal(seriesForId(50, ranges), 'FragGram');
+  assert.equal(seriesForId(83, ranges), 'FragGram'); // inclusive upper bound
+  assert.equal(seriesForId(180, ranges), 'TripTrack');
+  assert.equal(seriesForId(95, ranges), null); // gap between ranges
+});
+
+check('deriveTitle skips a leading "день N/30" line', () => {
+  assert.equal(
+    deriveTitle('День 0/30.\n\nНа этой неделе появилась идея.'),
+    'На этой неделе появилась идея.',
+  );
+  // a trailing marker still leaves the real first line as the title
+  assert.equal(
+    deriveTitle('Дизайн перенёс в приложение.\n\nДень 5/30.'),
+    'Дизайн перенёс в приложение.',
+  );
+});
+
+check('bare "день N/30" is imported only inside a known id-range', () => {
+  const html = `<div class="tgme_widget_message js-widget_message" data-post="onezee_co/50">
+    <div class="tgme_widget_message_text js-message_text">День 0/30.<br/><br/>На этой неделе появилась одна идея — не могу не поделиться.</div>
+    <div class="tgme_widget_message_footer"><time datetime="2026-01-10T00:00:00+00:00"></time></div>
+  </div>`;
+  // includePow alone isn't enough — the project isn't named in the text
+  assert.equal(postsFromHtml(html, { includePow: true }).length, 0);
+  // …but with the id-range it's imported and grouped under the project
+  const posts = postsFromHtml(html, {
+    includePow: true,
+    seriesRanges: [{ from: 36, to: 83, series: 'FragGram' }],
+  });
+  assert.equal(posts.length, 1);
+  assert.equal(posts[0].rangeSeries, 'FragGram');
+  assert.equal(posts[0].progress.day, 0);
+  assert.equal(posts[0].progress.total, 30);
+  assert.equal(posts[0].title, 'На этой неделе появилась одна идея — не могу не поделиться.');
 });
 
 console.log(`\n${passed} checks passed ✅`);

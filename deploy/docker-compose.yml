@@ -23,9 +23,6 @@ services:
         condition: service_healthy
     expose:
       - "4321"            # internal only — reached by cloudflared as app:4321
-    labels:
-      # Watchtower auto-updates only this container when a new :latest is pushed.
-      com.centurylinklabs.watchtower.enable: "true"
     mem_limit: 256m
     logging:
       driver: json-file
@@ -67,21 +64,9 @@ services:
       driver: json-file
       options: { max-size: "10m", max-file: "3" }
 
-  watchtower:
-    # Auto-deploy: polls GHCR and restarts `app` when a new :latest is pushed
-    # (only containers labeled watchtower.enable=true — i.e. just `app`).
-    # GHCR image to avoid Docker Hub pull limits.
-    image: ghcr.io/containrrr/watchtower:latest
-    restart: unless-stopped
-    command: --label-enable --cleanup --interval 300
-    environment:
-      WATCHTOWER_NO_STARTUP_MESSAGE: "true"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    mem_limit: 64m
-    logging:
-      driver: json-file
-      options: { max-size: "10m", max-file: "3" }
+# Auto-deploy is handled by a host cron (not a container), because the
+# unmaintained watchtower image can't talk to a modern Docker API. See
+# deploy/README.md → "Updating": a */5 cron runs `docker compose pull app && up -d app`.
 
 volumes:
   redis-data:

@@ -64,12 +64,22 @@ Open https://onezee.dev — new site. Like/view counters now persist in Redis.
 
 ---
 
-## Updating to a new version
-Push to `master` → **Build image** publishes a fresh `:latest`. Then on the server:
-```bash
-cd ~/onezee && docker compose pull && docker compose up -d
+## Updating (auto-deploy)
+Push to `master` (or a Telegram ingest) → **Build image** publishes a fresh `:latest`.
+A host cron pulls it within ~5 min and restarts only `app`:
+```cron
+*/5 * * * * cd /home/onezee/onezee && /usr/bin/docker compose pull -q app && /usr/bin/docker compose up -d app >> /home/onezee/onezee/deploy.log 2>&1
 ```
-(Automating this last step over SSH from CI is a later nice-to-have.)
+Install it once with:
+```bash
+( crontab -l 2>/dev/null; echo '*/5 * * * * cd /home/onezee/onezee && /usr/bin/docker compose pull -q app && /usr/bin/docker compose up -d app >> /home/onezee/onezee/deploy.log 2>&1' ) | crontab -
+```
+`pull` is a cheap digest check when nothing changed; `up -d app` only recreates the
+container when the image actually changed. Watch progress in `~/onezee/deploy.log`.
+Manual deploy any time: `cd ~/onezee && docker compose pull app && docker compose up -d app`.
+
+> We use cron instead of a watchtower container: the unmaintained `containrrr/watchtower`
+> image ships a Docker API client too old for modern Docker daemons (API ≥ 1.40).
 
 ## Handy
 ```bash

@@ -10,7 +10,8 @@ on:
     paths-ignore:
       - 'deploy/**'
       - 'docs/**'
-      - '**/*.md'
+      - 'README.md'
+      - 'LAUNCH.md'
   workflow_dispatch:
 
 permissions:

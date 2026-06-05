@@ -33,9 +33,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          # Built-in token: its push deliberately does NOT trigger the deploy
-          # workflow, so the explicit "Trigger deploy" step below is the single
-          # deploy trigger (new content deploys exactly once, never twice).
+          # Built-in token: its push deliberately does NOT trigger other
+          # workflows, so the explicit "Trigger build" step below is the single
+          # build trigger (new content builds exactly once, never twice).
           token: ${{ github.token }}
 
       - name: Setup Node
@@ -69,8 +69,9 @@ jobs:
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
-      - name: Trigger deploy
+      - name: Trigger build
         if: steps.commit.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy.yaml --ref "${{ github.ref_name }}"
+        # Builds a fresh :latest; Watchtower on the server auto-pulls it.
+        run: gh workflow run build-image.yml --ref "${{ github.ref_name }}"

@@ -190,4 +190,37 @@ check('bare "день N/30" is imported only inside a known id-range', () => {
   assert.equal(posts[0].title, 'На этой неделе появилась одна идея — не могу не поделиться.');
 });
 
+check('a post split across messages with «…» merges into one', () => {
+  const html = `<div class="tgme_widget_message js-widget_message" data-post="onezee_co/200">
+    <div class="tgme_widget_message_text js-message_text">Большой пост, часть один про интервью.<br/>…</div>
+    <div class="tgme_widget_message_footer"><time datetime="2026-06-06T10:00:00+00:00"></time></div>
+  </div>
+  <div class="tgme_widget_message js-widget_message" data-post="onezee_co/201">
+    <div class="tgme_widget_message_text js-message_text">…часть два про проекты. <a href="?q=%23site">#site</a></div>
+    <div class="tgme_widget_message_footer"><time datetime="2026-06-06T10:01:00+00:00"></time></div>
+  </div>`;
+  const posts = postsFromHtml(html);
+  assert.equal(posts.length, 1, 'two messages → one post');
+  assert.equal(posts[0].id, 200, 'keeps the first part id (the post start)');
+  assert.equal(posts[0].title, 'Большой пост, часть один про интервью.');
+  assert.match(posts[0].markdown, /часть один про интервью/);
+  assert.match(posts[0].markdown, /часть два про проекты/, 'second part is included');
+  assert.doesNotMatch(posts[0].markdown, /…/, 'the join ellipses are stripped');
+  assert.doesNotMatch(posts[0].markdown, /#site/);
+});
+
+check('adjacent messages without «…» are NOT merged', () => {
+  const html = `<div class="tgme_widget_message js-widget_message" data-post="onezee_co/300">
+    <div class="tgme_widget_message_text js-message_text">Standalone first post.</div>
+    <div class="tgme_widget_message_footer"><time datetime="2026-06-06T10:00:00+00:00"></time></div>
+  </div>
+  <div class="tgme_widget_message js-widget_message" data-post="onezee_co/301">
+    <div class="tgme_widget_message_text js-message_text">Second post <a href="?q=%23site">#site</a></div>
+    <div class="tgme_widget_message_footer"><time datetime="2026-06-06T10:01:00+00:00"></time></div>
+  </div>`;
+  const posts = postsFromHtml(html);
+  assert.equal(posts.length, 1, 'only the #site post; the first is separate and untagged');
+  assert.equal(posts[0].id, 301);
+});
+
 console.log(`\n${passed} checks passed ✅`);

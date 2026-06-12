@@ -1,12 +1,15 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { seriesIcon } from '../consts';
 
 interface Props {
   post: CollectionEntry<'posts'>;
+  showSeries?: boolean; // show the project chip (used in the cross-project "Свежее" list)
 }
-const { post } = Astro.props;
-const { title, date, excerpt, cover, day, total, lang } = post.data;
+const { post, showSeries = false } = Astro.props;
+const { title, date, excerpt, cover, day, total, lang, series } = post.data;
 const fmt = (d: Date) => d.toLocaleDateString('ru-RU', { year: 'numeric', month: 'short', day: 'numeric' });
+const seriesLogo = showSeries && series ? seriesIcon(series) : null;
 ---
 
 <li class="postcard">
@@ -14,6 +17,12 @@ const fmt = (d: Date) => d.toLocaleDateString('ru-RU', { year: 'numeric', month:
     {cover && <img class="postcard__cover" src={cover} alt="" loading="lazy" width="92" height="92" />}
     <div class="postcard__body">
       <div class="postcard__meta">
+        {showSeries && series && (
+          <span class="postcard__series">
+            {seriesLogo && <img class="postcard__series-logo" src={seriesLogo} alt="" width="16" height="16" loading="lazy" />}
+            {series}
+          </span>
+        )}
         {day != null && total != null && <span class="postcard__day">День {day}/{total}</span>}
         <time class="postcard__date" datetime={date.toISOString()}>{fmt(date)}</time>
         <span class="lang-tag">{lang}</span>

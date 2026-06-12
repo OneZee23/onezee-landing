@@ -244,6 +244,38 @@ export function seriesForId(id, ranges = []) {
   return null;
 }
 
+// "…" / "..." at the END of one message and the START of the next marks a long
+// post the author split across several Telegram messages. The routing tag (#site)
+// sits on the last part.
+const CONT_END = /(?:…|\.\.\.)\s*$/;
+const CONT_START = /^\s*(?:…|\.\.\.)/;
+const stripContEndPlain = (s) => s.replace(/\s*(?:…|\.\.\.)\s*$/, '');
+const stripContStartPlain = (s) => s.replace(/^\s*(?:…|\.\.\.)\s*/, '');
+const stripContEndHtml = (s) => s.replace(/\s*(?:…|\.\.\.|&#8230;|&hellip;)\s*$/i, '');
+const stripContStartHtml = (s) => s.replace(/^\s*(?:…|\.\.\.|&#8230;|&hellip;)\s*/i, '');
+
+/**
+ * Stitch a post split across consecutive messages into one. Each part ends with
+ * "…" and the next starts with "…"; we concatenate text + media in id order and
+ * keep the FIRST part's id/date (the post's start). #site on any part counts.
+ */
+export function mergeContinuations(messages) {
+  const sorted = [...messages].sort((a, b) => a.id - b.id);
+  const out = [];
+  for (const msg of sorted) {
+    const prev = out[out.length - 1];
+    if (prev && msg.id === prev._lastId + 1 && CONT_START.test(msg.textPlain) && CONT_END.test(prev.textPlain)) {
+      prev.textPlain = `${stripContEndPlain(prev.textPlain)}\n\n${stripContStartPlain(msg.textPlain)}`;
+      prev.textHtml = `${stripContEndHtml(prev.textHtml)}<br/><br/>${stripContStartHtml(msg.textHtml)}`;
+      prev.media = [...prev.media, ...msg.media];
+      prev._lastId = msg.id;
+    } else {
+      out.push({ ...msg, _lastId: msg.id });
+    }
+  }
+  return out;
+}
+
 /**
  * High-level: page messages as content objects.
  * Kept when the message carries the routing tag (#site) — or, when includePow
@@ -251,7 +283,7 @@ export function seriesForId(id, ranges = []) {
  * devlog can be bulk-imported without tagging each post.
  */
 export function postsFromHtml(html, { siteTag = '#site', includePow = false, seriesRanges = [] } = {}) {
-  return extractMessages(html)
+  return mergeContinuations(extractMessages(html))
     .filter((msg) => {
       if (!msg.textPlain) return false;
       if (hasSiteTag(msg.textPlain, siteTag)) return true;

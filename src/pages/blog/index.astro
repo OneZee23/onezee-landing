@@ -56,6 +56,15 @@ if (notes?.length) groups.push({ title: 'Заметки', slug: null, icon: null
       <p class="prose" style="margin-top:2rem;color:var(--faint)">Пока пусто — первый пост скоро будет.</p>
     )}
 
+    {all.length > 0 && (
+      <section class="blog-latest">
+        <p class="eyebrow">Свежее</p>
+        <ul class="postlist" role="list">
+          {all.slice(0, 8).map((p) => <PostCard post={p} showSeries />)}
+        </ul>
+      </section>
+    )}
+
     {groups.map((g) => (
       <details class="blog-season" open>
         <summary class="blog-season__head">

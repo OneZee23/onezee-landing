@@ -250,6 +250,32 @@
   color: var(--muted);
   white-space: nowrap;
 }
+/* Project chip shown on cross-project cards (the "Свежее" list). */
+.postcard__series {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.postcard__series-logo {
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  object-fit: cover;
+  flex: none;
+}
+/* "Свежее" — newest posts across all projects, at the top of /blog. */
+.blog-latest {
+  margin-top: 2.25rem;
+}
+.blog-latest > .postlist {
+  margin-top: 0.75rem;
+}
 .lang-tag {
   font-family: var(--mono);
   font-size: 0.62rem;

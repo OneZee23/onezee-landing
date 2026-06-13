@@ -59,7 +59,7 @@ const { lang = 'en', theme } = Astro.props;
         const lens = (sel, opts) =>
           document.querySelectorAll(sel).forEach((el) => initLiquidGlass(el, opts));
         lens('.langswitch', { radius: 'max', scale: 18, chroma: 3, tint: 0.32, specular: 0.55, backdropBlur: 1 });
-        lens('.ilink--cv', { radius: 'max', scale: 13, chroma: 3, tint: 0.5, specular: 0.5, backdropBlur: 2, press: true, pressFactor: 2.1 });
+        lens('.ilink--cv', { radius: 'max', scale: 9, chroma: 2, tint: 0.66, saturation: 1.25, specular: 0.5, backdropBlur: 2, press: true, pressFactor: 2.4 });
         lens('.status', { radius: 'max', scale: 12, chroma: 2, tint: 0.4, specular: 0.5, backdropBlur: 2 });
       }
     </script>

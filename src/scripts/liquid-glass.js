@@ -200,12 +200,11 @@ function styleElement(el, c, filterId, active) {
   const parts = [];
   if (c.specular > 0) {
     const s = c.specular;
-    parts.push(`inset 0 1px 1px rgba(255,255,255,${0.55 * s})`);
-    parts.push(`inset 1px 0 1px rgba(255,255,255,${0.25 * s})`);
-    parts.push(`inset 0 -1px 1px rgba(0,0,0,${0.18 * s})`);
-    parts.push(`inset -1px 0 1px rgba(0,0,0,${0.1 * s})`);
+    // symmetric top→bottom bevel (light from above) — a diagonal one looks "tilted"
+    parts.push(`inset 0 1px 1px rgba(255,255,255,${0.6 * s})`);
+    parts.push(`inset 0 -1px 1px rgba(10,14,30,${0.12 * s})`);
   }
-  parts.push(`0 6px 20px rgba(20,28,56,${0.16})`);
+  parts.push(`0 3px 12px rgba(20,28,56,${0.12})`);
   el.style.boxShadow = parts.join(', ');
 }
 

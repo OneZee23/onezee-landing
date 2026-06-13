@@ -542,12 +542,13 @@
   color: var(--faint);
   white-space: nowrap;
 }
+/* Views ride along in the top meta row — a quiet metric next to the date. */
 .post__views {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.32rem;
   font-family: var(--mono);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--faint);
   white-space: nowrap;
 }

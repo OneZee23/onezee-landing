@@ -1,12 +1,47 @@
 /* ============================================================
-   Blog — inherits the site's tokens from index.css (:root vars).
-   Same warm-dark editorial language as the landing.
+   Blog — light Liquid-Glass, same canvas as the homepage.
+   Pages opt in via <BaseLayout theme="glass" reading>, so the body carries
+   .theme-glass (light tokens + pastel mesh) and .theme-glass--reading (still
+   mesh). The reading column is one calm frosted-glass slab floating over it.
    ============================================================ */
 
-.blogwrap {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: clamp(2.5rem, 8vh, 4.5rem) 1.5rem clamp(3rem, 9vh, 6rem);
+/* Reading slab — a calm, more opaque frosted sheet than the homepage cards, so
+   long-form text stays comfortable; it still tints with the mesh through the
+   frost and shows the colour at its margins. .blogwrap and .post share it. */
+.blogwrap,
+.post {
+  position: relative;
+  isolation: isolate;
+  max-width: 40rem; /* ~64ch on the slab — comfortable measure, esp. for Cyrillic */
+  margin: clamp(1.5rem, 5vh, 3.5rem) auto;
+  padding: clamp(2rem, 5vh, 3.4rem) clamp(1.4rem, 4vw, 2.8rem) clamp(2.4rem, 6vh, 4rem);
+  background: var(--glass-fill-read);
+  -webkit-backdrop-filter: blur(28px) saturate(150%) brightness(1.04);
+  backdrop-filter: blur(28px) saturate(150%) brightness(1.04);
+  border: 1px solid var(--glass-stroke);
+  border-radius: 26px;
+  box-shadow: var(--glass-shadow);
+}
+/* curved-glass top sheen + faint lower vignette — same recipe as the homepage panels */
+.blogwrap::before,
+.post::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 52%),
+    radial-gradient(135% 130% at 50% -10%, transparent 60%, rgba(10, 14, 30, 0.05));
+}
+@media (max-width: 600px) {
+  .blogwrap,
+  .post {
+    margin: 0.7rem auto;
+    padding: 1.6rem 1.15rem 2.2rem;
+    border-radius: 18px;
+  }
 }
 
 .bloghead__back {
@@ -17,7 +52,7 @@
   color: var(--muted);
 }
 .bloghead__back:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .blogtitle {
@@ -65,7 +100,7 @@
   content: '▾';
 }
 .blog-season__head:hover::after {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .blog-season__title {
   font-family: var(--serif);
@@ -91,7 +126,7 @@
   color: var(--muted);
 }
 .blog-season__all:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 .blog-season__body .postlist {
   margin-top: 0.3rem;
@@ -207,11 +242,6 @@
 /* ============================================================
    Single post
    ============================================================ */
-.post {
-  max-width: 40rem; /* ~69ch — comfortable measure, esp. for Cyrillic */
-  margin: 0 auto;
-  padding: clamp(2.5rem, 8vh, 4.5rem) 1.5rem clamp(3rem, 9vh, 6rem);
-}
 .post__meta {
   display: flex;
   align-items: center;
@@ -237,7 +267,7 @@
   font-size: 0.66rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   background: var(--accent-soft);
   border: 1px solid var(--accent-soft);
   border-radius: 999px;
@@ -259,7 +289,7 @@
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: var(--accent);
+  color: var(--accent-text);
   white-space: nowrap;
 }
 .postcard__series-logo {
@@ -366,7 +396,7 @@
   margin: 2rem 0 0.6rem;
 }
 .prose-article a {
-  color: var(--accent);
+  color: var(--accent-text);
   text-decoration: underline;
   text-decoration-color: var(--accent-soft);
   text-decoration-thickness: 1px;
@@ -540,7 +570,7 @@
   transition: color 0.15s ease, border-color 0.15s ease;
 }
 .post__tg:hover {
-  color: var(--accent);
+  color: var(--accent-text);
   border-color: var(--accent);
 }
 .post__tg svg {
@@ -605,7 +635,7 @@
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 .like:hover:not(:disabled) {
-  color: var(--accent);
+  color: var(--accent-text);
   border-color: var(--accent);
 }
 .like__heart {
@@ -616,7 +646,7 @@
   transition: transform 0.15s ease;
 }
 .like--on {
-  color: var(--accent);
+  color: var(--accent-text);
   border-color: var(--accent-soft);
   background: var(--accent-soft);
 }
@@ -632,5 +662,16 @@
   .postcard__cover {
     width: 64px;
     height: 64px;
+  }
+}
+
+/* Reduced-transparency: the reading slab goes solid, no blur (Safari/Firefox lack
+   this query, so the slab stays an additive frost on a readable base for them too). */
+@media (prefers-reduced-transparency: reduce) {
+  .blogwrap,
+  .post {
+    background: rgba(255, 255, 255, 0.94);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }

@@ -48,10 +48,14 @@ body.theme-glass {
   --muted: #474c60; /* AA on light glass */
   --faint: #5a6074; /* darkened so small mono meta clears AA (was #8a8fa3, ~3.2:1) */
   --line: rgba(15, 23, 42, 0.08);
+  --line-strong: rgba(15, 23, 42, 0.16); /* readable hairline on light (borders, tracks) */
+  --bg-soft: rgba(15, 23, 42, 0.045); /* light well for code blocks / cover placeholders */
   --accent: #d8693c; /* non-text accent (dots, borders, icon tints — needs 3:1) */
   --accent-text: #b04d1c; /* darker accent for small TEXT (eyebrows, labels, links — needs 4.5:1) */
   --accent-soft: rgba(216, 105, 60, 0.12);
   --ok: #3f9e6a;
+  /* Calmer, more opaque slab for long-form reading (blog) — text stays comfortable. */
+  --glass-fill-read: rgba(255, 255, 255, 0.58);
   color-scheme: light;
 }
 html.theme-glass-root { color-scheme: light; } /* light scrollbar + Safari overscroll */
@@ -104,6 +108,9 @@ body.theme-glass::before {
 }
 /* freeze the mesh while the tab is hidden (set via visibilitychange in BaseLayout) */
 body.theme-glass.is-hidden::before { animation-play-state: paused; }
+/* Reading pages (blog) keep the mesh still — calmer for long-form reading, and it
+   avoids re-sampling a large backdrop-filter slab on every animation frame. */
+body.theme-glass--reading::before { animation: none; }
 
 a {
   color: var(--accent-text);

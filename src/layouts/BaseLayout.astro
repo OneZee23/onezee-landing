@@ -14,10 +14,12 @@ interface Props {
   lang?: 'ru' | 'en';
   alternates?: { hreflang: string; href: string }[];
   noindex?: boolean;
-  theme?: 'glass'; // opt a page into the light Liquid-Glass palette (homepage only)
+  theme?: 'glass'; // opt a page into the light Liquid-Glass palette
+  reading?: boolean; // long-form variant (blog): still mesh, calm reading slab
 }
 
-const { lang = 'en', theme } = Astro.props;
+const { lang = 'en', theme, reading } = Astro.props;
+const bodyClass = theme === 'glass' ? (reading ? 'theme-glass theme-glass--reading' : 'theme-glass') : undefined;
 ---
 
 <!doctype html>
@@ -28,7 +30,7 @@ const { lang = 'en', theme } = Astro.props;
         EN/RU pill glides across the language switch. Scoped to the homepage. */}
     {theme === 'glass' && <style is:inline set:html="@view-transition { navigation: auto; }" />}
   </head>
-  <body class={theme === 'glass' ? 'theme-glass' : undefined}>
+  <body class={bodyClass}>
     <slot />
 
     {/* Scroll-reveal as a tiny, framework-independent enhancement.

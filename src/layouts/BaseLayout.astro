@@ -14,9 +14,10 @@ interface Props {
   lang?: 'ru' | 'en';
   alternates?: { hreflang: string; href: string }[];
   noindex?: boolean;
+  theme?: 'glass'; // opt a page into the light Liquid-Glass palette (homepage only)
 }
 
-const { lang = 'en' } = Astro.props;
+const { lang = 'en', theme } = Astro.props;
 ---
 
 <!doctype html>
@@ -24,7 +25,7 @@ const { lang = 'en' } = Astro.props;
   <head>
     <BaseHead {...Astro.props} />
   </head>
-  <body>
+  <body class={theme === 'glass' ? 'theme-glass' : undefined}>
     <slot />
 
     {/* Scroll-reveal as a tiny, framework-independent enhancement.
@@ -44,6 +45,22 @@ const { lang = 'en' } = Astro.props;
         els.forEach(function (el) { io.observe(el); });
         // Safety net: never leave content hidden.
         setTimeout(showAll, 3000);
+      })();
+    </script>
+
+    {/* Cursor-follow specular highlight on the glass panels. Sets two CSS vars;
+        all rendering stays on the compositor. Skipped if reduced-motion. */}
+    <script is:inline>
+      (function () {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var cards = document.querySelectorAll('.section, .contact');
+        cards.forEach(function (el) {
+          el.addEventListener('pointermove', function (e) {
+            var r = el.getBoundingClientRect();
+            el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+            el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+          });
+        });
       })();
     </script>
   </body>

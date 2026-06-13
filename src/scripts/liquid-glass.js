@@ -271,7 +271,7 @@ export function initLiquidGlass(el, opts = {}) {
     ro.observe(el);
   }
 
-  return {
+  const api = {
     active: true,
     svg: refs.svg,
     update(o) {
@@ -283,6 +283,7 @@ export function initLiquidGlass(el, opts = {}) {
     destroy() {
       if (ro) ro.disconnect();
       cancelAnimationFrame(raf);
+      unwirePress();
       refs.svg.remove();
       el.style.backdropFilter = '';
       el.style.removeProperty('-webkit-backdrop-filter');
@@ -291,6 +292,29 @@ export function initLiquidGlass(el, opts = {}) {
       el.style.removeProperty('isolation');
     },
   };
+
+  // Press: the glass refracts harder while held — the real material response
+  // (the displacement scale bumps up on pointer-down, reverts on release).
+  const baseScale = config.scale;
+  let unwirePress = () => {};
+  if (options.press) {
+    const factor = options.pressFactor ?? 1.7;
+    let pressed = false;
+    const down = () => { pressed = true; api.update({ scale: baseScale * factor }); };
+    const up = () => { if (!pressed) return; pressed = false; api.update({ scale: baseScale }); };
+    el.addEventListener('pointerdown', down);
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+    el.addEventListener('pointerleave', up);
+    unwirePress = () => {
+      el.removeEventListener('pointerdown', down);
+      el.removeEventListener('pointerup', up);
+      el.removeEventListener('pointercancel', up);
+      el.removeEventListener('pointerleave', up);
+    };
+  }
+
+  return api;
 }
 
 export default initLiquidGlass;

@@ -18,15 +18,18 @@
   --ok: #86b97f;
 
   /* Glass (consumed only inside the homepage's .theme-glass scope) */
-  --glass-fill: rgba(255, 255, 255, 0.42);
-  --glass-fill-strong: rgba(255, 255, 255, 0.6);
-  --glass-stroke: rgba(255, 255, 255, 0.5);
-  --glass-blur: 22px;
+  --glass-fill: rgba(250, 251, 255, 0.26);
+  --glass-fill-strong: rgba(252, 253, 255, 0.6);
+  --glass-stroke: rgba(255, 255, 255, 0.32);
+  --glass-blur: 20px;
   --glass-radius: 24px;
+  /* edge geometry (rim + inner hairline + dark bottom bevel) + 2-layer float */
   --glass-shadow:
-    0 18px 46px rgba(20, 28, 56, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    inset 0 -2px 6px rgba(255, 255, 255, 0.4);
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(10, 14, 30, 0.06),
+    0 1px 2px rgba(16, 24, 40, 0.10),
+    0 24px 48px -16px rgba(16, 24, 40, 0.2);
 
   --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
   --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -117,8 +120,8 @@ a {
   position: relative;
   isolation: isolate;
   background: var(--glass-fill);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(200%);
-  backdrop-filter: blur(var(--glass-blur)) saturate(200%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(125%) brightness(1.05);
+  backdrop-filter: blur(var(--glass-blur)) saturate(125%) brightness(1.05);
   border: 1px solid var(--glass-stroke);
   border-radius: var(--glass-radius);
   box-shadow: var(--glass-shadow);
@@ -132,21 +135,12 @@ a {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 42%),
-    linear-gradient(118deg, transparent 38%, rgba(255, 255, 255, 0.3) 50%, transparent 62%);
-  background-size: 100% 100%, 240% 100%;
-  background-repeat: no-repeat;
-  background-position: 0 0, 140% 0;
-  animation: glass-sheen 11s ease-in-out infinite;
   pointer-events: none;
   z-index: -1;
-}
-.section:nth-of-type(2n)::before { animation-delay: -3.7s; }
-.section:nth-of-type(3n)::before { animation-delay: -7.1s; }
-@keyframes glass-sheen {
-  0%, 100% { background-position: 0 0, 140% 0; }
-  50% { background-position: 0 0, -40% 0; }
+  /* diagonal top-left sheen of a curved surface + a faint lower vignette */
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 52%),
+    radial-gradient(135% 130% at 50% -10%, transparent 60%, rgba(10, 14, 30, 0.055));
 }
 /* cursor-follow specular highlight (driven by --mx/--my from BaseLayout) */
 .section::after,
@@ -652,13 +646,20 @@ a.proj-icon-slot:hover .proj-icon {
   body.theme-glass::before {
     animation: none;
   }
-  .section::before,
-  .contact::before {
-    animation: none;
-  }
   .section::after,
   .contact::after {
     transition: none;
+  }
+}
+
+/* Reduced-transparency: opaque panels, no blur. (Safari/Firefox lack this query,
+   so glass stays additive on a readable base for them too.) */
+@media (prefers-reduced-transparency: reduce) {
+  .section,
+  .contact {
+    background: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
@@ -729,56 +730,26 @@ a.proj-icon-slot:hover .proj-icon {
   }
 }
 
-/* ---------- Interactive glass: tactile press + a light-sweep on hover ---------- */
-.ilink--cv,
-.langswitch {
-  position: relative;
-  overflow: hidden;
-}
+/* ---------- Interactive glass: Apple-style material press ----------
+   The glass refracts harder while held (lens scale bumps via JS); the box
+   springs back with a hint of overshoot on release. No glints, no fake shine. */
 .ilink--cv {
-  transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), filter 0.2s ease;
-}
-.ilink--cv:hover {
-  transform: translateY(-1.5px);
-  filter: brightness(1.05) saturate(1.06);
+  transition: transform 0.45s cubic-bezier(0.34, 1.45, 0.5, 1);
 }
 .ilink--cv:active {
-  transform: scale(0.95);
-  transition-duration: 0.08s;
+  transform: scale(0.94);
+  transition-duration: 0.09s;
 }
 .langswitch__opt {
-  transition: color 0.2s ease, transform 0.12s ease;
+  transition: color 0.2s ease, transform 0.1s ease;
 }
 .langswitch__opt:active {
-  transform: scale(0.9);
-}
-/* a glint that sweeps across the glass on hover — the "it's alive" tell */
-.ilink--cv::after,
-.langswitch::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(118deg, transparent 36%, rgba(255, 255, 255, 0.6) 50%, transparent 64%);
-  background-size: 250% 100%;
-  background-position: 165% 0;
-  opacity: 0;
-}
-.ilink--cv:hover::after,
-.langswitch:hover::after {
-  opacity: 1;
-  animation: glass-swipe 0.85s cubic-bezier(0.32, 0.72, 0, 1);
-}
-@keyframes glass-swipe {
-  from { background-position: 165% 0; }
-  to { background-position: -65% 0; }
+  transform: scale(0.92);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ilink--cv { transition: none; }
-  .ilink--cv:hover { transform: none; }
-  .ilink--cv:hover::after,
-  .langswitch:hover::after { animation: none; opacity: 0; }
+  .ilink--cv,
+  .langswitch__opt { transition: none; }
+  .ilink--cv:active,
+  .langswitch__opt:active { transform: none; }
 }

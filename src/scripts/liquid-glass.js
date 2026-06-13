@@ -13,13 +13,20 @@
  * Zero dependencies. MIT. Adapted from rizroze/liquid-glass + kube.io writeup.
  */
 
-/** True only where SVG filters work as a backdrop-filter (real refraction). */
+/** True only where SVG filters actually RENDER as a backdrop-filter (real
+ *  refraction). Safari & Firefox parse `url()` in backdrop-filter (so CSS.supports
+ *  returns true) but never paint it (WebKit #245510, Gecko) — they'd silently
+ *  lose the blur, so route them to the clean blur fallback. Only Chromium refracts. */
 export function supportsRefraction() {
   if (typeof CSS === 'undefined' || !CSS.supports) return false;
-  return (
+  const syntaxOK =
     CSS.supports('backdrop-filter', 'url(#a)') ||
-    CSS.supports('-webkit-backdrop-filter', 'url(#a)')
-  );
+    CSS.supports('-webkit-backdrop-filter', 'url(#a)');
+  if (!syntaxOK) return false;
+  const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+  const isSafari = /\bAppleWebKit\//.test(ua) && !/\bChrome\//.test(ua) && !/\bChromium\//.test(ua);
+  const isFirefox = /\bFirefox\//.test(ua) || /\bGecko\/\d/.test(ua);
+  return !isSafari && !isFirefox;
 }
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -40,7 +47,7 @@ function resolve(el, opts) {
     width,
     height,
     radius,
-    scale: opts.scale ?? opts.displace ?? 70,
+    scale: opts.scale ?? 70,
     chroma: opts.chroma ?? 6,
     blur: opts.blur ?? Math.max(2, minSide * 0.06),
     core: opts.core ?? 0.18,
@@ -52,8 +59,8 @@ function resolve(el, opts) {
   };
 }
 
-function buildDisplacementMap(c) {
-  const pad = Math.ceil(c.scale) + 2;
+function buildDisplacementMap(c, padScale) {
+  const pad = Math.ceil(padScale) + 2;
   const W = c.width + pad * 2;
   const H = c.height + pad * 2;
 
@@ -122,7 +129,7 @@ function buildFilterSVG(id) {
     <defs>
       <filter id="${id}" color-interpolation-filters="sRGB"
               x="0" y="0" width="100%" height="100%">
-        <feImage result="map" preserveAspectRatio="none" crossorigin="anonymous"/>
+        <feImage result="map" preserveAspectRatio="none"/>
 
         <feDisplacementMap in="SourceGraphic" in2="map"
             xChannelSelector="R" yChannelSelector="B" data-ch="r" result="dR"/>
@@ -157,8 +164,11 @@ function buildFilterSVG(id) {
   };
 }
 
-function applyFilter(c, refs) {
-  const { uri, pad } = buildDisplacementMap(c);
+// Build the displacement map + filter region. Expensive (canvas + toDataURL) —
+// call only on init/resize. `padScale` sizes the map for the MAX displacement
+// the lens will reach so the pressed state isn't clipped.
+function applyMap(c, refs, padScale) {
+  const { uri, pad } = buildDisplacementMap(c, padScale);
 
   const px = Math.ceil((pad / c.width) * 100);
   const py = Math.ceil((pad / c.height) * 100);
@@ -171,13 +181,14 @@ function applyFilter(c, refs) {
   refs.feImage.setAttribute('y', `-${py}%`);
   refs.feImage.setAttribute('width', `${100 + px * 2}%`);
   refs.feImage.setAttribute('height', `${100 + py * 2}%`);
-  refs.feImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', uri);
   refs.feImage.setAttribute('href', uri);
+}
 
+// Cheap: just the per-channel displacement strengths — safe to call on every press.
+function applyScale(c, refs) {
   refs.r.setAttribute('scale', String(c.scale));
   refs.g.setAttribute('scale', String(c.scale + c.chroma));
   refs.b.setAttribute('scale', String(c.scale + c.chroma * 2));
-
   refs.soft.setAttribute('stdDeviation', String(Math.max(0, c.backdropBlur)));
 }
 
@@ -253,7 +264,15 @@ export function initLiquidGlass(el, opts = {}) {
   const refs = buildFilterSVG(id);
   document.body.appendChild(refs.svg);
 
-  applyFilter(config, refs);
+  // The map pattern is scale-independent, so build it ONCE sized for the MAX
+  // displacement the lens will reach (base, or base*pressFactor when pressable);
+  // press then only nudges the cheap displacement attrs — no canvas.toDataURL().
+  const baseScale = config.scale;
+  const pressFactor = options.press ? (options.pressFactor ?? 1.7) : 1;
+  const maxScale = baseScale * pressFactor;
+
+  applyMap(config, refs, maxScale);
+  applyScale(config, refs);
   styleElement(el, config, id, true);
 
   let ro = null;
@@ -263,7 +282,8 @@ export function initLiquidGlass(el, opts = {}) {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         config = resolve(el, options);
-        applyFilter(config, refs);
+        applyMap(config, refs, config.scale * pressFactor);
+        applyScale(config, refs);
         styleElement(el, config, id, true);
       });
     });
@@ -276,7 +296,8 @@ export function initLiquidGlass(el, opts = {}) {
     update(o) {
       options = { ...options, ...o };
       config = resolve(el, options);
-      applyFilter(config, refs);
+      applyMap(config, refs, config.scale * pressFactor);
+      applyScale(config, refs);
       styleElement(el, config, id, true);
     },
     destroy() {
@@ -292,15 +313,13 @@ export function initLiquidGlass(el, opts = {}) {
     },
   };
 
-  // Press: the glass refracts harder while held — the real material response
-  // (the displacement scale bumps up on pointer-down, reverts on release).
-  const baseScale = config.scale;
+  // Press: refract harder while held — only mutate the displacement strength
+  // (cheap setAttribute), never rebuild the map.
   let unwirePress = () => {};
   if (options.press) {
-    const factor = options.pressFactor ?? 1.7;
     let pressed = false;
-    const down = () => { pressed = true; api.update({ scale: baseScale * factor }); };
-    const up = () => { if (!pressed) return; pressed = false; api.update({ scale: baseScale }); };
+    const down = () => { pressed = true; config.scale = baseScale * pressFactor; applyScale(config, refs); };
+    const up = () => { if (!pressed) return; pressed = false; config.scale = baseScale; applyScale(config, refs); };
     el.addEventListener('pointerdown', down);
     el.addEventListener('pointerup', up);
     el.addEventListener('pointercancel', up);

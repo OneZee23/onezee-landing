@@ -1,5 +1,6 @@
 /* ============================================================
-   onezee.dev — editorial devlog · honest & human · warm dark
+   onezee.dev — editorial devlog, reimagined as Liquid Glass
+   light Apple canvas · frosted panels · soft pastel mesh
    ============================================================ */
 
 :root {
@@ -13,8 +14,23 @@
   --line-strong: rgba(243, 238, 230, 0.18);
 
   --accent: #e8865a;
+  --accent-text: #e8865a; /* accent used for small TEXT (own value per theme for AA) */
   --accent-soft: rgba(232, 134, 90, 0.14);
   --ok: #86b97f;
+
+  /* Glass (consumed only inside the homepage's .theme-glass scope) */
+  --glass-fill: rgba(250, 251, 255, 0.26);
+  --glass-fill-strong: rgba(252, 253, 255, 0.6);
+  --glass-stroke: rgba(255, 255, 255, 0.32);
+  --glass-blur: 20px;
+  --glass-radius: 24px;
+  /* edge geometry (rim + inner hairline + dark bottom bevel) + 2-layer float */
+  --glass-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(10, 14, 30, 0.06),
+    0 1px 2px rgba(16, 24, 40, 0.10),
+    0 24px 48px -16px rgba(16, 24, 40, 0.2);
 
   --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
   --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -23,6 +39,26 @@
   --maxw: 800px;
   --maxw-hero: 1040px;
 }
+
+/* Light "Liquid Glass" palette — scoped to the homepage (<body class="theme-glass">)
+   so the blog keeps its warm-dark theme untouched. */
+body.theme-glass {
+  --bg: #eceef4;
+  --text: #0b0f1a;
+  --muted: #474c60; /* AA on light glass */
+  --faint: #5a6074; /* darkened so small mono meta clears AA (was #8a8fa3, ~3.2:1) */
+  --line: rgba(15, 23, 42, 0.08);
+  --line-strong: rgba(15, 23, 42, 0.16); /* readable hairline on light (borders, tracks) */
+  --bg-soft: rgba(15, 23, 42, 0.045); /* light well for code blocks / cover placeholders */
+  --accent: #d8693c; /* non-text accent (dots, borders, icon tints — needs 3:1) */
+  --accent-text: #b04d1c; /* darker accent for small TEXT (eyebrows, labels, links — needs 4.5:1) */
+  --accent-soft: rgba(216, 105, 60, 0.12);
+  --ok: #3f9e6a;
+  /* Calmer, more opaque slab for long-form reading (blog) — text stays comfortable. */
+  --glass-fill-read: rgba(255, 255, 255, 0.58);
+  color-scheme: light;
+}
+html.theme-glass-root { color-scheme: light; } /* light scrollbar + Safari overscroll */
 
 * {
   box-sizing: border-box;
@@ -43,14 +79,51 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Soft pastel mesh behind the homepage — gives the glass colour to refract. */
+body.theme-glass::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  z-index: -2;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(at 12% 14%, rgba(255, 158, 116, 0.72) 0px, transparent 50%),
+    radial-gradient(at 88% 10%, rgba(138, 166, 255, 0.66) 0px, transparent 50%),
+    radial-gradient(at 50% 26%, rgba(198, 170, 255, 0.50) 0px, transparent 52%),
+    radial-gradient(at 16% 74%, rgba(148, 214, 255, 0.60) 0px, transparent 52%),
+    radial-gradient(at 84% 78%, rgba(226, 174, 255, 0.62) 0px, transparent 52%),
+    radial-gradient(at 52% 98%, rgba(255, 204, 156, 0.55) 0px, transparent 54%);
+  background-size: 100% 100%;
+  will-change: transform;
+  /* animate a compositor-only transform — no per-frame repaint of the gradient */
+  animation: mesh-drift 36s ease-in-out infinite alternate;
+}
+@keyframes mesh-drift {
+  0% { transform: translate3d(0, 0, 0) scale(1.04); }
+  50% { transform: translate3d(-4%, 3%, 0) scale(1.12); }
+  100% { transform: translate3d(3%, -4%, 0) scale(1.07); }
+}
+/* freeze the mesh while the tab is hidden (set via visibilitychange in BaseLayout) */
+body.theme-glass.is-hidden::before { animation-play-state: paused; }
+/* Reading pages (blog) keep the mesh still — calmer for long-form reading, and it
+   avoids re-sampling a large backdrop-filter slab on every animation frame. */
+body.theme-glass--reading::before { animation: none; }
+
 a {
-  color: var(--accent);
+  color: var(--accent-text);
   text-decoration: none;
 }
 
 ::selection {
-  background: rgba(232, 134, 90, 0.28);
+  background: rgba(216, 105, 60, 0.22);
   color: #fff;
+}
+/* dark selected text reads on the light homepage (global #fff is for the dark blog) */
+body.theme-glass ::selection {
+  color: var(--text);
 }
 
 :focus-visible {
@@ -59,6 +132,32 @@ a {
   border-radius: 3px;
 }
 
+/* ---------- Glass surface (panels share this look) ---------- */
+.section,
+.contact {
+  position: relative;
+  isolation: isolate;
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(125%) brightness(1.05);
+  backdrop-filter: blur(var(--glass-blur)) saturate(125%) brightness(1.05);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow);
+}
+/* curved-glass top sheen */
+.section::before,
+.contact::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  /* diagonal top-left sheen of a curved surface + a faint lower vignette */
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 52%),
+    radial-gradient(135% 130% at 50% -10%, transparent 60%, rgba(10, 14, 30, 0.055));
+}
 /* ---------- Reveal ---------- */
 .reveal {
   opacity: 0;
@@ -77,7 +176,7 @@ a {
   font-size: 0.72rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .ilink {
@@ -110,16 +209,27 @@ a {
   font-size: 0.82rem;
   color: var(--muted);
 }
+/* CV button — a small glass pill */
 .ilink--cv {
-  border: 1px solid var(--accent);
   border-radius: 999px;
-  padding: 5px 13px;
-  color: var(--accent);
+  padding: 6px 15px;
+  color: var(--accent-text);
   font-weight: 600;
+  background: var(--glass-fill-strong);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid var(--glass-stroke);
+  box-shadow: 0 4px 14px rgba(20, 28, 56, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  /* springy press + eased shadow, declared once (was split across two rules) */
+  transition: transform 0.45s cubic-bezier(0.34, 1.45, 0.5, 1), box-shadow 0.18s ease;
 }
-.ilink--cv svg { color: var(--accent); }
+.ilink--cv svg { color: var(--accent-text); }
 .ilink--cv span { border-bottom: none; }
-.ilink--cv:hover { background: var(--accent-soft); color: var(--accent); }
+.ilink--cv:hover {
+  color: var(--accent-text);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(20, 28, 56, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
 .ilink__arrow {
   margin-left: -0.15rem;
 }
@@ -153,23 +263,12 @@ a {
 }
 
 /* ============================================================
-   HERO
+   HERO  (stays airy — big type floating over the mesh)
    ============================================================ */
 .hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(3.5rem, 11vh, 7rem) 1.5rem clamp(2.5rem, 6vh, 4rem);
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -30%;
-  left: 50%;
-  width: 60rem;
-  height: 40rem;
-  transform: translateX(-50%);
-  background: radial-gradient(ellipse at center, rgba(232, 134, 90, 0.13), transparent 65%);
-  pointer-events: none;
+  padding: clamp(4rem, 12vh, 7.5rem) 1.5rem clamp(2.5rem, 6vh, 4rem);
 }
 
 .hero__grid {
@@ -187,16 +286,23 @@ a {
   align-items: center;
   gap: 0.55rem;
   margin: 0 0 1.5rem;
+  padding: 0.32rem 0.8rem 0.32rem 0.7rem;
+  border-radius: 999px;
   font-family: var(--mono);
   font-size: 0.76rem;
   color: var(--muted);
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  border: 1px solid var(--glass-stroke);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 .status__dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--ok);
-  box-shadow: 0 0 0 4px rgba(134, 185, 127, 0.16);
+  box-shadow: 0 0 0 4px rgba(63, 158, 106, 0.18);
 }
 
 .hero__lead {
@@ -206,6 +312,7 @@ a {
   font-size: clamp(2.1rem, 5.2vw, 3.5rem);
   line-height: 1.08;
   letter-spacing: -0.015em;
+  color: var(--text);
 }
 .hero__sub {
   margin: 1.4rem 0 0;
@@ -229,9 +336,9 @@ a {
   max-width: 290px;
   aspect-ratio: 5 / 6;
   object-fit: cover;
-  border-radius: 18px;
-  border: 1px solid var(--line-strong);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  border-radius: 22px;
+  border: 1px solid var(--glass-stroke);
+  box-shadow: 0 20px 50px rgba(20, 28, 56, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 .portrait--monogram {
   display: flex;
@@ -240,8 +347,10 @@ a {
   font-family: var(--serif);
   font-size: 4.5rem;
   font-weight: 500;
-  color: var(--text);
-  background: linear-gradient(150deg, rgba(232, 134, 90, 0.3), rgba(21, 17, 13, 1));
+  color: var(--accent);
+  background: linear-gradient(150deg, rgba(216, 105, 60, 0.22), rgba(255, 255, 255, 0.55));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
 }
 
 /* ============================================================
@@ -251,11 +360,13 @@ a {
   max-width: var(--maxw);
   margin: 0 auto;
   padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.2rem, 3vh, 1.8rem);
 }
 
 .section {
-  padding: clamp(2.75rem, 7vh, 4.5rem) 0;
-  border-top: 1px solid var(--line);
+  padding: clamp(1.9rem, 4.5vh, 2.8rem) clamp(1.4rem, 4vw, 2.4rem);
 }
 
 /* ---------- Now / Day job lead ---------- */
@@ -343,12 +454,15 @@ a.proj-icon-slot:hover {
   height: 100%;
   border-radius: 12px;
   object-fit: cover;
-  border: 1px solid var(--line);
-  background: var(--bg-soft);
-  transition: border-color 0.18s ease;
+  /* solid white app-icon tile: a logo with a white PNG background blends in
+     seamlessly instead of "peeking" against the glass */
+  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 8px rgba(20, 28, 56, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 a.proj-icon-slot:hover .proj-icon {
-  border-color: var(--accent);
+  box-shadow: 0 4px 14px rgba(20, 28, 56, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 .proj-icon--mono {
   display: flex;
@@ -365,24 +479,23 @@ a.proj-icon-slot:hover .proj-icon {
 /* Archived / dead project — a greyed relic */
 .feed__item--archived .proj-icon {
   filter: grayscale(1);
-  opacity: 0.5;
+  opacity: 0.55;
 }
 .feed__item--archived .proj-icon--mono {
   color: var(--faint);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(15, 23, 42, 0.05);
   border-color: var(--line);
   filter: none;
   opacity: 1;
 }
 .feed__item--archived .feed__name {
-  color: var(--faint);
+  color: var(--muted);
 }
 .feed__item--archived .feed__blurb {
-  color: var(--faint);
-  opacity: 0.9;
+  color: var(--muted);
 }
 .feed__item--archived .feed__year {
-  opacity: 0.7;
+  opacity: 1;
 }
 .feed__name {
   grid-area: name;
@@ -428,7 +541,7 @@ a.proj-icon-slot:hover .proj-icon {
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   padding-top: 0.15rem;
 }
 .stacklist__items {
@@ -444,9 +557,8 @@ a.proj-icon-slot:hover .proj-icon {
    ============================================================ */
 .contact {
   max-width: var(--maxw);
-  margin: 0 auto;
-  padding: clamp(3rem, 8vh, 5.5rem) 1.5rem clamp(3.5rem, 9vh, 6rem);
-  border-top: 1px solid var(--line);
+  margin: clamp(1.2rem, 3vh, 1.8rem) auto 0;
+  padding: clamp(2.5rem, 7vh, 4rem) clamp(1.5rem, 5vw, 3rem);
 }
 .contact__title {
   margin: 0;
@@ -484,6 +596,11 @@ a.proj-icon-slot:hover .proj-icon {
 }
 .contact__meta--dim a:hover {
   color: var(--accent);
+}
+
+/* The page sits above the fixed mesh, with breathing room at the foot. */
+.page {
+  padding-bottom: clamp(2rem, 6vh, 4rem);
 }
 
 /* ============================================================
@@ -526,27 +643,106 @@ a.proj-icon-slot:hover .proj-icon {
     transform: none !important;
     transition: none;
   }
+  body.theme-glass::before {
+    animation: none;
+  }
 }
 
-/* ---------- Language switch (EN · RU) ---------- */
+/* Reduced-transparency: opaque panels, no blur. (Safari/Firefox lack this query,
+   so glass stays additive on a readable base for them too.) */
+@media (prefers-reduced-transparency: reduce) {
+  .section,
+  .contact {
+    background: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* ---------- Language switch (EN · RU) — glass segmented control ---------- */
 .langswitch {
   position: fixed;
   top: 1rem;
   right: 1.1rem;
   z-index: 10;
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 0.35rem;
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
-  padding: 0.28rem 0.6rem;
+  padding: 3px;
   border-radius: 999px;
-  background: rgba(16, 14, 12, 0.6);
-  backdrop-filter: blur(6px);
-  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  background: var(--glass-fill);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid var(--glass-stroke);
+  box-shadow: 0 4px 14px rgba(20, 28, 56, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
-.langswitch__opt { color: var(--faint); transition: color 0.15s ease; }
-.langswitch__opt:hover { color: var(--accent); }
-.langswitch__opt.is-active { color: var(--text); }
-.langswitch__sep { color: var(--faint); opacity: 0.5; }
+.langswitch__pill {
+  position: absolute;
+  z-index: 0;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: var(--glass-fill-strong);
+  box-shadow: 0 1px 3px rgba(20, 28, 56, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+  /* shared element across EN/RU navigations — glides between positions */
+  view-transition-name: lang-pill;
+}
+/* spring the gliding pill; soften the page cross-fade */
+::view-transition-group(lang-pill) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+}
+.langswitch--ru .langswitch__pill {
+  transform: translateX(100%);
+}
+.langswitch__opt {
+  position: relative;
+  z-index: 1;
+  padding: 5px 13px;
+  text-align: center;
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+.langswitch__opt:hover {
+  color: var(--accent);
+}
+.langswitch__opt.is-active {
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .langswitch__pill {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* ---------- Interactive glass: Apple-style material press ----------
+   The glass refracts harder while held (lens scale bumps via JS); the box
+   springs back with a hint of overshoot on release. No glints, no fake shine. */
+.ilink--cv:active {
+  transform: scale(0.94);
+  transition-duration: 0.09s;
+}
+.langswitch__opt {
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+.langswitch__opt:active {
+  transform: scale(0.92);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ilink--cv,
+  .langswitch__opt { transition: none; }
+  .ilink--cv:active,
+  .langswitch__opt:active { transform: none; }
+}

@@ -1,6 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-// Global styles (the original landing stylesheet — reused verbatim).
+// Global styles: the light Liquid-Glass homepage theme + shared base.
 import '../index.css';
 
 interface Props {
@@ -14,17 +14,23 @@ interface Props {
   lang?: 'ru' | 'en';
   alternates?: { hreflang: string; href: string }[];
   noindex?: boolean;
+  theme?: 'glass'; // opt a page into the light Liquid-Glass palette
+  reading?: boolean; // long-form variant (blog): still mesh, calm reading slab
 }
 
-const { lang = 'en' } = Astro.props;
+const { lang = 'en', theme, reading } = Astro.props;
+const bodyClass = theme === 'glass' ? (reading ? 'theme-glass theme-glass--reading' : 'theme-glass') : undefined;
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={lang} class={theme === 'glass' ? 'theme-glass-root' : undefined}>
   <head>
     <BaseHead {...Astro.props} />
+    {/* Opt the glass homepage into native cross-document view transitions so the
+        EN/RU pill glides across the language switch. Scoped to the homepage. */}
+    {theme === 'glass' && <style is:inline set:html="@view-transition { navigation: auto; }" />}
   </head>
-  <body>
+  <body class={bodyClass}>
     <slot />
 
     {/* Scroll-reveal as a tiny, framework-independent enhancement.
@@ -45,6 +51,34 @@ const { lang = 'en' } = Astro.props;
         // Safety net: never leave content hidden.
         setTimeout(showAll, 3000);
       })();
+    </script>
+
+    {/* Homepage glass enhancements (no-op on the dark blog). */}
+    <script>
+      import { initLiquidGlass } from '../scripts/liquid-glass.js';
+      if (document.body.classList.contains('theme-glass')) {
+        // Pause the animated mesh while the tab is hidden (saves battery/CPU).
+        const syncHidden = () => document.body.classList.toggle('is-hidden', document.hidden);
+        document.addEventListener('visibilitychange', syncHidden);
+        syncHidden();
+
+        // Real feDisplacementMap refraction only pays off on fine-pointer (desktop)
+        // Chromium; phones/coarse pointers keep the clean CSS blur fallback. Deferred
+        // off the load critical path (the CSS frosted look is already correct).
+        const fine = window.matchMedia('(pointer: fine)').matches && window.innerWidth >= 760;
+        if (fine) {
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          const run = () => {
+            const lens = (sel: string, opts: Record<string, unknown>) =>
+              document.querySelectorAll(sel).forEach((el) => initLiquidGlass(el, opts));
+            lens('.langswitch', { radius: 'max', scale: 18, chroma: 3, tint: 0.32, specular: 0.55, backdropBlur: 1 });
+            lens('.ilink--cv', { radius: 'max', scale: 9, chroma: 2, tint: 0.66, saturation: 1.25, specular: 0.5, backdropBlur: 2, press: !reduce, pressFactor: 2.4 });
+            lens('.status', { radius: 'max', scale: 12, chroma: 2, tint: 0.4, specular: 0.5, backdropBlur: 2 });
+          };
+          if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 2000 });
+          else setTimeout(run, 200);
+        }
+      }
     </script>
   </body>
 </html>

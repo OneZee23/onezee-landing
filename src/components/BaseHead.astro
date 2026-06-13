@@ -14,6 +14,7 @@ interface Props {
   lang?: 'ru' | 'en';
   alternates?: { hreflang: string; href: string }[];
   noindex?: boolean;
+  theme?: 'glass';
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   lang = 'en',
   alternates = [],
   noindex = false,
+  theme,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -36,7 +38,7 @@ const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content="#100e0c" />
+<meta name="theme-color" content={theme === 'glass' ? '#eceef4' : '#100e0c'} />
 <meta name="generator" content={Astro.generator} />
 <link rel="icon" href="/favicon-icon.ico" />
 <link rel="apple-touch-icon" href="/logo192.jpg" />

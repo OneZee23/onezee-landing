@@ -50,6 +50,8 @@ body.theme-glass {
   --ok: #3f9e6a;
   color-scheme: light;
 }
+/* slightly darker muted text for AA contrast on light glass */
+body.theme-glass { --muted: #474c60; }
 
 * {
   box-sizing: border-box;
@@ -78,11 +80,11 @@ body.theme-glass::before {
   z-index: -2;
   background-color: var(--bg);
   background-image:
-    radial-gradient(at 16% 20%, rgba(255, 196, 161, 0.55) 0px, transparent 50%),
-    radial-gradient(at 84% 14%, rgba(173, 198, 255, 0.50) 0px, transparent 50%),
-    radial-gradient(at 22% 82%, rgba(196, 234, 255, 0.45) 0px, transparent 52%),
-    radial-gradient(at 80% 78%, rgba(226, 205, 255, 0.50) 0px, transparent 52%),
-    radial-gradient(at 50% 50%, rgba(255, 230, 198, 0.40) 0px, transparent 55%);
+    radial-gradient(at 14% 18%, rgba(255, 184, 143, 0.62) 0px, transparent 55%),
+    radial-gradient(at 86% 12%, rgba(150, 184, 255, 0.58) 0px, transparent 55%),
+    radial-gradient(at 20% 80%, rgba(168, 222, 255, 0.52) 0px, transparent 56%),
+    radial-gradient(at 82% 76%, rgba(214, 190, 255, 0.56) 0px, transparent 56%),
+    radial-gradient(at 50% 48%, rgba(255, 220, 178, 0.46) 0px, transparent 58%);
   background-size: 170% 170%;
   animation: mesh-drift 32s ease-in-out infinite alternate;
 }
@@ -143,7 +145,7 @@ a {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
-  background: radial-gradient(260px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 60%);
+  background: radial-gradient(260px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 60%);
   mix-blend-mode: screen;
 }
 .section:hover::after,

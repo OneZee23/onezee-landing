@@ -693,6 +693,17 @@ a.proj-icon-slot:hover .proj-icon {
   background: var(--glass-fill-strong);
   box-shadow: 0 1px 3px rgba(20, 28, 56, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.95);
   transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+  /* shared element across EN/RU navigations — glides between positions */
+  view-transition-name: lang-pill;
+}
+/* spring the gliding pill; soften the page cross-fade */
+::view-transition-group(lang-pill) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
 }
 .langswitch--ru .langswitch__pill {
   transform: translateX(100%);
@@ -716,4 +727,58 @@ a.proj-icon-slot:hover .proj-icon {
   .langswitch__pill {
     transition-duration: 0.01ms;
   }
+}
+
+/* ---------- Interactive glass: tactile press + a light-sweep on hover ---------- */
+.ilink--cv,
+.langswitch {
+  position: relative;
+  overflow: hidden;
+}
+.ilink--cv {
+  transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), filter 0.2s ease;
+}
+.ilink--cv:hover {
+  transform: translateY(-1.5px);
+  filter: brightness(1.05) saturate(1.06);
+}
+.ilink--cv:active {
+  transform: scale(0.95);
+  transition-duration: 0.08s;
+}
+.langswitch__opt {
+  transition: color 0.2s ease, transform 0.12s ease;
+}
+.langswitch__opt:active {
+  transform: scale(0.9);
+}
+/* a glint that sweeps across the glass on hover — the "it's alive" tell */
+.ilink--cv::after,
+.langswitch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(118deg, transparent 36%, rgba(255, 255, 255, 0.6) 50%, transparent 64%);
+  background-size: 250% 100%;
+  background-position: 165% 0;
+  opacity: 0;
+}
+.ilink--cv:hover::after,
+.langswitch:hover::after {
+  opacity: 1;
+  animation: glass-swipe 0.85s cubic-bezier(0.32, 0.72, 0, 1);
+}
+@keyframes glass-swipe {
+  from { background-position: 165% 0; }
+  to { background-position: -65% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ilink--cv { transition: none; }
+  .ilink--cv:hover { transform: none; }
+  .ilink--cv:hover::after,
+  .langswitch:hover::after { animation: none; opacity: 0; }
 }

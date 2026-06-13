@@ -24,6 +24,9 @@ const { lang = 'en', theme } = Astro.props;
 <html lang={lang}>
   <head>
     <BaseHead {...Astro.props} />
+    {/* Opt the glass homepage into native cross-document view transitions so the
+        EN/RU pill glides across the language switch. Scoped to the homepage. */}
+    {theme === 'glass' && <style is:inline set:html="@view-transition { navigation: auto; }" />}
   </head>
   <body class={theme === 'glass' ? 'theme-glass' : undefined}>
     <slot />

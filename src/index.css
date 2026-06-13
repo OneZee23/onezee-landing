@@ -18,15 +18,15 @@
   --ok: #86b97f;
 
   /* Glass (consumed only inside the homepage's .theme-glass scope) */
-  --glass-fill: rgba(255, 255, 255, 0.52);
-  --glass-fill-strong: rgba(255, 255, 255, 0.74);
-  --glass-stroke: rgba(15, 23, 42, 0.08);
-  --glass-blur: 18px;
+  --glass-fill: rgba(255, 255, 255, 0.42);
+  --glass-fill-strong: rgba(255, 255, 255, 0.6);
+  --glass-stroke: rgba(255, 255, 255, 0.5);
+  --glass-blur: 22px;
   --glass-radius: 24px;
   --glass-shadow:
-    0 12px 36px rgba(20, 28, 56, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.45);
+    0 18px 46px rgba(20, 28, 56, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 6px rgba(255, 255, 255, 0.4);
 
   --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
   --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -80,12 +80,13 @@ body.theme-glass::before {
   z-index: -2;
   background-color: var(--bg);
   background-image:
-    radial-gradient(at 14% 18%, rgba(255, 184, 143, 0.62) 0px, transparent 55%),
-    radial-gradient(at 86% 12%, rgba(150, 184, 255, 0.58) 0px, transparent 55%),
-    radial-gradient(at 20% 80%, rgba(168, 222, 255, 0.52) 0px, transparent 56%),
-    radial-gradient(at 82% 76%, rgba(214, 190, 255, 0.56) 0px, transparent 56%),
-    radial-gradient(at 50% 48%, rgba(255, 220, 178, 0.46) 0px, transparent 58%);
-  background-size: 170% 170%;
+    radial-gradient(at 12% 14%, rgba(255, 158, 116, 0.72) 0px, transparent 50%),
+    radial-gradient(at 88% 10%, rgba(138, 166, 255, 0.66) 0px, transparent 50%),
+    radial-gradient(at 50% 26%, rgba(198, 170, 255, 0.50) 0px, transparent 52%),
+    radial-gradient(at 16% 74%, rgba(148, 214, 255, 0.60) 0px, transparent 52%),
+    radial-gradient(at 84% 78%, rgba(226, 174, 255, 0.62) 0px, transparent 52%),
+    radial-gradient(at 52% 98%, rgba(255, 204, 156, 0.55) 0px, transparent 54%);
+  background-size: 160% 160%;
   animation: mesh-drift 32s ease-in-out infinite alternate;
 }
 @keyframes mesh-drift {
@@ -116,8 +117,8 @@ a {
   position: relative;
   isolation: isolate;
   background: var(--glass-fill);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(200%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(200%);
   border: 1px solid var(--glass-stroke);
   border-radius: var(--glass-radius);
   box-shadow: var(--glass-shadow);
@@ -131,9 +132,21 @@ a {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 42%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 42%),
+    linear-gradient(118deg, transparent 38%, rgba(255, 255, 255, 0.3) 50%, transparent 62%);
+  background-size: 100% 100%, 240% 100%;
+  background-repeat: no-repeat;
+  background-position: 0 0, 140% 0;
+  animation: glass-sheen 11s ease-in-out infinite;
   pointer-events: none;
   z-index: -1;
+}
+.section:nth-of-type(2n)::before { animation-delay: -3.7s; }
+.section:nth-of-type(3n)::before { animation-delay: -7.1s; }
+@keyframes glass-sheen {
+  0%, 100% { background-position: 0 0, 140% 0; }
+  50% { background-position: 0 0, -40% 0; }
 }
 /* cursor-follow specular highlight (driven by --mx/--my from BaseLayout) */
 .section::after,
@@ -637,6 +650,10 @@ a.proj-icon-slot:hover .proj-icon {
     transition: none;
   }
   body.theme-glass::before {
+    animation: none;
+  }
+  .section::before,
+  .contact::before {
     animation: none;
   }
   .section::after,

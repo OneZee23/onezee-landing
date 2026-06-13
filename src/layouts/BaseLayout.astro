@@ -63,5 +63,18 @@ const { lang = 'en', theme } = Astro.props;
         });
       })();
     </script>
+
+    {/* Real Liquid-Glass refraction lens on the homepage chrome (Chromium gets
+        true feDisplacementMap refraction; Safari/Firefox get a clean blur). */}
+    <script>
+      import { initLiquidGlass } from '../scripts/liquid-glass.js';
+      if (document.body.classList.contains('theme-glass')) {
+        const lens = (sel, opts) =>
+          document.querySelectorAll(sel).forEach((el) => initLiquidGlass(el, opts));
+        lens('.langswitch', { radius: 'max', scale: 18, chroma: 3, tint: 0.32, specular: 0.55, backdropBlur: 1 });
+        lens('.ilink--cv', { radius: 'max', scale: 13, chroma: 3, tint: 0.5, specular: 0.5, backdropBlur: 2 });
+        lens('.status', { radius: 'max', scale: 12, chroma: 2, tint: 0.4, specular: 0.5, backdropBlur: 2 });
+      }
+    </script>
   </body>
 </html>

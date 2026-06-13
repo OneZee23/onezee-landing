@@ -125,8 +125,6 @@ a {
   border: 1px solid var(--glass-stroke);
   border-radius: var(--glass-radius);
   box-shadow: var(--glass-shadow);
-  --mx: 50%;
-  --my: 0%;
 }
 /* curved-glass top sheen */
 .section::before,
@@ -142,24 +140,6 @@ a {
     linear-gradient(125deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 52%),
     radial-gradient(135% 130% at 50% -10%, transparent 60%, rgba(10, 14, 30, 0.055));
 }
-/* cursor-follow specular highlight (driven by --mx/--my from BaseLayout) */
-.section::after,
-.contact::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  background: radial-gradient(260px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 60%);
-  mix-blend-mode: screen;
-}
-.section:hover::after,
-.contact:hover::after {
-  opacity: 1;
-}
-
 /* ---------- Reveal ---------- */
 .reveal {
   opacity: 0;
@@ -455,13 +435,15 @@ a.proj-icon-slot:hover {
   height: 100%;
   border-radius: 12px;
   object-fit: cover;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 2px 8px rgba(20, 28, 56, 0.08);
-  transition: border-color 0.18s ease;
+  /* solid white app-icon tile: a logo with a white PNG background blends in
+     seamlessly instead of "peeking" against the glass */
+  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 8px rgba(20, 28, 56, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 a.proj-icon-slot:hover .proj-icon {
-  border-color: var(--accent);
+  box-shadow: 0 4px 14px rgba(20, 28, 56, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 .proj-icon--mono {
   display: flex;
@@ -645,10 +627,6 @@ a.proj-icon-slot:hover .proj-icon {
   }
   body.theme-glass::before {
     animation: none;
-  }
-  .section::after,
-  .contact::after {
-    transition: none;
   }
 }
 

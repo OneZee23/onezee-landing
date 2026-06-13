@@ -51,22 +51,6 @@ const { lang = 'en', theme } = Astro.props;
       })();
     </script>
 
-    {/* Cursor-follow specular highlight on the glass panels. Sets two CSS vars;
-        all rendering stays on the compositor. Skipped if reduced-motion. */}
-    <script is:inline>
-      (function () {
-        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        var cards = document.querySelectorAll('.section, .contact');
-        cards.forEach(function (el) {
-          el.addEventListener('pointermove', function (e) {
-            var r = el.getBoundingClientRect();
-            el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-            el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
-          });
-        });
-      })();
-    </script>
-
     {/* Real Liquid-Glass refraction lens on the homepage chrome (Chromium gets
         true feDisplacementMap refraction; Safari/Firefox get a clean blur). */}
     <script>

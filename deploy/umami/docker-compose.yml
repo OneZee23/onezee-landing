@@ -1,0 +1,65 @@
+# Self-hosted Umami analytics for onezee.dev, fronted by its OWN Cloudflare Tunnel
+# — consistent with the main site: no inbound ports, TLS at Cloudflare's edge.
+# Three containers: umami + postgres + cloudflared.
+#
+#   cp .env.example .env     # UMAMI_DB_PASSWORD, UMAMI_APP_SECRET, UMAMI_TUNNEL_TOKEN
+#   docker compose up -d
+# Then in the Cloudflare tunnel add a Public Hostname:
+#   umami.onezee.dev  ->  Service HTTP  ->  http://umami:3000
+#
+# ⚠️ Don't run this on tt-edge-ru (~1 GB, already ~half used) — Umami + Postgres
+# want ~400-500 MB. Use a separate small box, or add swap first. See README.md.
+services:
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    container_name: umami
+    restart: unless-stopped
+    expose:
+      - "3000"            # internal only — cloudflared reaches it as umami:3000
+    environment:
+      DATABASE_URL: postgresql://umami:${UMAMI_DB_PASSWORD}@db:5432/umami
+      DATABASE_TYPE: postgresql
+      APP_SECRET: ${UMAMI_APP_SECRET}
+    depends_on:
+      db:
+        condition: service_healthy
+    mem_limit: 320m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  db:
+    image: postgres:16-alpine
+    container_name: umami-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${UMAMI_DB_PASSWORD}
+    volumes:
+      - umami-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d umami"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    mem_limit: 256m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: ["tunnel", "--no-autoupdate", "run"]
+    environment:
+      TUNNEL_TOKEN: ${UMAMI_TUNNEL_TOKEN:?set UMAMI_TUNNEL_TOKEN in .env}
+    depends_on:
+      - umami
+    mem_limit: 64m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+volumes:
+  umami-db:

@@ -36,6 +36,12 @@ jobs:
         with:
           context: .
           push: true
+          # Public analytics config, baked into the static build. Set these as
+          # repo Variables (Settings → Secrets and variables → Actions → Variables).
+          # Left empty → no analytics tag is emitted.
+          build-args: |
+            PUBLIC_UMAMI_SRC=${{ vars.PUBLIC_UMAMI_SRC }}
+            PUBLIC_UMAMI_WEBSITE_ID=${{ vars.PUBLIC_UMAMI_WEBSITE_ID }}
           tags: |
             ghcr.io/onezee23/onezee-landing:latest
             ghcr.io/onezee23/onezee-landing:${{ github.sha }}

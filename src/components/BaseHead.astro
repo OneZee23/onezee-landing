@@ -34,6 +34,13 @@ const {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const imageURL = new URL(image, Astro.site);
 const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
+
+// Self-hosted Umami analytics (cookieless). Set both env vars to activate;
+// without them the tag is omitted, so local/dev builds stay clean.
+//   PUBLIC_UMAMI_SRC=https://umami.onezee.dev/script.js
+//   PUBLIC_UMAMI_WEBSITE_ID=<website uuid from the Umami dashboard>
+const umamiSrc = import.meta.env.PUBLIC_UMAMI_SRC;
+const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
 ---
 
 <meta charset="UTF-8" />
@@ -81,3 +88,6 @@ const ogLocale = lang === 'ru' ? 'ru_RU' : 'en_US';
   rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
 />
+
+<!-- Analytics: self-hosted Umami (cookieless, GDPR-friendly). Inert unless env set. -->
+{umamiSrc && umamiId && <script defer src={umamiSrc} data-website-id={umamiId}></script>}

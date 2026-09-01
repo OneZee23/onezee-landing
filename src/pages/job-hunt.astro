@@ -1,0 +1,23 @@
+---
+// Public job-hunt funnel (English) at /job-hunt. Static, glass theme.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { LangSwitch } from '../components/LangSwitch';
+import JobHuntPage from '../components/JobHuntPage';
+
+const alternates = [
+  { hreflang: 'en', href: new URL('/job-hunt', Astro.site).toString() },
+  { hreflang: 'ru', href: new URL('/ru/job-hunt', Astro.site).toString() },
+  { hreflang: 'x-default', href: new URL('/job-hunt', Astro.site).toString() },
+];
+---
+
+<BaseLayout
+  lang="en"
+  theme="glass"
+  title="Job hunt, in the open — Nikita Shevelev"
+  description="A live, honest funnel of my senior backend job search: applications, interviews, offers — aggregate numbers, updated as it moves."
+  alternates={alternates}
+>
+  <LangSwitch lang="en" enHref="/job-hunt" ruHref="/ru/job-hunt" />
+  <JobHuntPage lang="en" />
+</BaseLayout>

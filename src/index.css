@@ -746,3 +746,293 @@ a.proj-icon-slot:hover .proj-icon {
   .ilink--cv:active,
   .langswitch__opt:active { transform: none; }
 }
+
+/* ============================================================
+   JOB HUNT  (/job-hunt) — public funnel page
+   ============================================================ */
+.jh {
+  padding-top: clamp(3.5rem, 9vh, 5.5rem);
+  padding-bottom: clamp(2.5rem, 7vh, 4.5rem);
+}
+.jh__title {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 4.6vw, 2.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+.jh__intro {
+  margin: 1.1rem 0 0;
+  max-width: 56ch;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+.jh__meta {
+  margin: 1.6rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 2rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+.jh__meta dt {
+  display: inline;
+  color: var(--accent-text);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-right: 0.5rem;
+}
+.jh__meta dd { display: inline; margin: 0; color: var(--muted); }
+.jh__meta > div { white-space: nowrap; }
+
+/* headline stat cards */
+.jh__cards {
+  margin: 1.9rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.7rem;
+}
+.jh__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  background: var(--glass-fill-strong);
+  border: 1px solid var(--glass-stroke);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.jh__card--accent { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 0 0 1px var(--accent-soft); }
+.jh__card-val {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 5vw, 2.3rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.jh__card--accent .jh__card-val { color: var(--accent-text); }
+.jh__card-lbl {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+}
+
+/* tables (funnel + trend) */
+.jh__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.jh__table th,
+.jh__table td {
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+  border-top: 1px solid var(--line);
+}
+.jh__table thead th {
+  border-top: none;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 500;
+}
+.jh__table tbody th[scope='row'] {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.1rem;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+/* trend table keeps mono dates (data, not names) */
+.jh__table--trend tbody th[scope='row'] {
+  font-family: var(--mono);
+  font-size: 0.86rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+.jh__note {
+  margin: 0.9rem 0 0;
+  max-width: 58ch;
+  font-size: 0.84rem;
+  color: var(--faint);
+}
+.jh__note b { color: var(--muted); font-weight: 500; }
+.jh__num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); }
+.jh__num--total { color: var(--text); font-weight: 600; }
+.jh__zero { color: var(--faint); }
+.jh__hint { color: var(--faint); font-weight: 400; font-size: 0.82em; }
+.jh__hint--block { display: block; margin: -0.6rem 0 1.1rem; font-family: var(--mono); font-size: 0.78rem; }
+.jh__row--note th[scope='row'],
+.jh__row--note .jh__num { color: var(--faint); font-weight: 400; }
+.jh__row--term th[scope='row'] { color: var(--muted); }
+.jh__row--term .jh__num--total { color: var(--muted); }
+
+/* depth funnel bars */
+.jh__bars { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; }
+.jh__bar {
+  display: grid;
+  grid-template-columns: 9.5rem 1fr 2.2rem;
+  align-items: center;
+  gap: 0.8rem;
+}
+.jh__bar-lbl { font-family: var(--serif); font-size: 1rem; letter-spacing: -0.005em; color: var(--text); }
+.jh__bar-track {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.jh__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), #f0a877);
+  min-width: 2px;
+}
+.jh__bar-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 0.86rem; color: var(--text); text-align: right; }
+
+/* benchmark — market vs reality */
+.jh__bench-intro { margin: 0 0 0.7rem; color: var(--muted); }
+.jh__bench-line {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+.jh__bench-line strong { color: var(--accent-text); font-weight: 600; }
+.jh__arrow { color: var(--faint); }
+.jh__bench-months { font-family: var(--mono); font-size: 0.9rem; font-weight: 400; color: var(--faint); letter-spacing: 0; }
+.jh__bench-profile { margin: 0.9rem 0 0; max-width: 60ch; color: var(--muted); font-size: 0.98rem; }
+.jh__takeaway {
+  margin: 1.3rem 0 0;
+  padding: 0.9rem 1.1rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  background: var(--accent-soft);
+  max-width: 64ch;
+  color: var(--text);
+  font-size: 0.99rem;
+}
+
+/* footer */
+/* the metric line under the headline cards */
+.jh__metric {
+  margin: 1.1rem 0 0;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
+/* current-phase note */
+.jh__phase {
+  margin: 0;
+  max-width: 68ch;
+  padding: 1rem 1.15rem;
+  border-radius: 16px;
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-stroke);
+  color: var(--muted);
+  font-size: 0.96rem;
+}
+
+/* the networking channel — aggregate, deliberately not a funnel */
+.jh__net-lead { margin: 0 0 1.2rem; max-width: 62ch; color: var(--muted); }
+.jh__net {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 1.6rem 2.6rem;
+}
+.jh__net-item { display: flex; flex-direction: column; gap: 0.2rem; }
+.jh__net-val {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 5vw, 2.3rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.jh__net-item--quiet .jh__net-val { font-size: clamp(1.2rem, 3.4vw, 1.5rem); color: var(--muted); }
+.jh__net-lbl { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; color: var(--faint); }
+
+/* what hiring me involves */
+.jh__visa-intro { margin: 0 0 1.1rem; max-width: 66ch; color: var(--muted); }
+.jh__visa {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  max-width: 72ch;
+}
+.jh__visa li {
+  position: relative;
+  padding-left: 1.15rem;
+  color: var(--text);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+.jh__visa li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.jh__visa-src {
+  margin: 1.2rem 0 0;
+  max-width: 72ch;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: var(--faint);
+}
+
+.jh__foot { padding: 0 clamp(1.4rem, 4vw, 2.4rem); }
+.jh__disclaimer { margin: 0; font-family: var(--mono); font-size: 0.76rem; color: var(--faint); }
+.jh__updated { margin: 0.4rem 0 1rem; font-family: var(--mono); font-size: 0.76rem; color: var(--faint); }
+
+@media (max-width: 560px) {
+  .jh__cards { grid-template-columns: repeat(2, 1fr); }
+  .jh__table { font-size: 0.84rem; }
+  .jh__table th, .jh__table td { padding: 0.5rem 0.35rem; }
+  .jh__bar { grid-template-columns: 6.5rem 1fr 2rem; gap: 0.5rem; }
+  .jh__net { gap: 1.1rem 1.8rem; }
+  .jh__bar-lbl { font-size: 0.82rem; }
+}
+
+/* ---------- Homepage job-hunt teaser ---------- */
+.jh-mini__lead { margin: 0 0 1.3rem; max-width: 52ch; color: var(--muted); }
+.jh-mini { display: flex; flex-wrap: wrap; align-items: center; gap: 1.4rem 2rem; }
+.jh-mini__stat { display: flex; flex-direction: column; gap: 0.15rem; }
+.jh-mini__val {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.jh-mini__lbl {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.jh-mini__cta { margin-left: auto; color: var(--accent-text); font-weight: 600; }
+@media (max-width: 480px) { .jh-mini__cta { margin-left: 0; } }

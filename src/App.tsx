@@ -4,6 +4,7 @@ import { Now } from './components/Now';
 import { Shipped } from './components/Shipped';
 import { DayJob } from './components/DayJob';
 import { WorkWith } from './components/WorkWith';
+import { JobHunt } from './components/JobHunt';
 import { Writing } from './components/Writing';
 import { Contact } from './components/Contact';
 import { LangSwitch } from './components/LangSwitch';
@@ -20,6 +21,7 @@ const App: React.FC<{ lang?: Locale }> = ({ lang = 'en' }) => (
         <Shipped />
         <DayJob />
         <WorkWith />
+        <JobHunt />
         <Writing />
       </main>
       <Contact />

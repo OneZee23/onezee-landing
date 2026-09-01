@@ -18,6 +18,7 @@ export interface SiteContent {
   dayJob: { title: string; period: string; org: string; url: string; icon: string; lead: string; points: string[] };
   skills: { title: string; groups: SkillGroup[] };
   writing: { title: string; prose: string; cta: string; links: SiteLink[] };
+  jobHunt: { title: string; lead: string; applied: string; calls: string; offers: string; cta: string };
   contact: { title: string; heading: string; sub: string; languages: string; ossMeta: string; oldYoutube: string };
 }
 
@@ -120,6 +121,14 @@ export const SITE: Record<Locale, SiteContent> = {
       cta: 'Read the blog',
       links: writingLinks,
     },
+    jobHunt: {
+      title: 'Job hunt — in the open',
+      lead: 'I track my senior backend search publicly — the real funnel, updated as it moves.',
+      applied: 'applied',
+      calls: 'first calls',
+      offers: 'offers',
+      cta: 'See the full funnel',
+    },
     contact: {
       title: 'Say hi',
       heading: "Let's build something that has to stay up.",
@@ -181,6 +190,14 @@ export const SITE: Record<Locale, SiteContent> = {
       prose: 'Заметки о бэкенде, web3 и суровой реальности инди-разработки — публикуются из моего Telegram-канала.',
       cta: 'Читать блог',
       links: writingLinks,
+    },
+    jobHunt: {
+      title: 'Поиск работы — в открытую',
+      lead: 'Веду поиск senior backend-роли публично — реальная воронка, обновляется по ходу.',
+      applied: 'подано',
+      calls: 'первых созвонов',
+      offers: 'офферов',
+      cta: 'Вся воронка',
     },
     contact: {
       title: 'Напиши',

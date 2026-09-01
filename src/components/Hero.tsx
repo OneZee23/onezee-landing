@@ -4,7 +4,7 @@ import { Portrait } from './Portrait';
 import { Icon } from './Icon';
 
 export const Hero: React.FC = () => {
-  const { c } = useSite();
+  const { c, lang } = useSite();
   return (
     <header className="hero">
       <div className="hero__grid">
@@ -18,6 +18,10 @@ export const Hero: React.FC = () => {
           <nav className="hero__links" aria-label="Profiles">
             <a className="ilink ilink--cv" href="/blog">
               <span>{c.hero.blog}</span>
+              <Icon name="arrow" size={13} className="ilink__arrow" />
+            </a>
+            <a className="ilink ilink--cv" href={lang === 'ru' ? '/ru/job-hunt' : '/job-hunt'}>
+              <span>{c.hero.jobHunt}</span>
               <Icon name="arrow" size={13} className="ilink__arrow" />
             </a>
             <a className="ilink ilink--cv" href={c.resumeUrl} target="_blank" rel="noreferrer noopener">

@@ -12,7 +12,7 @@ export interface SiteContent {
   profile: typeof profile;
   socials: SiteLink[];
   resumeUrl: string;
-  hero: { status: string; lead: string; sub: string; resume: string; blog: string };
+  hero: { status: string; lead: string; sub: string; resume: string; blog: string; jobHunt: string };
   now: { title: string; items: string[] };
   shipped: { title: string; items: ShipItem[] };
   dayJob: { title: string; period: string; org: string; url: string; icon: string; lead: string; points: string[] };
@@ -74,11 +74,12 @@ export const SITE: Record<Locale, SiteContent> = {
     socials,
     resumeUrl,
     hero: {
-      status: 'Open to senior backend roles · EU · remote · CIS',
+      status: 'Open to senior backend roles · Germany · EU · remote · CIS',
       lead: "Hi, I'm Nikita. I build backends that handle real money — and ship small apps in public.",
-      sub: "Senior backend engineer, 5+ years. My current role is winding down — I'm after the next senior backend role: EU, remote, or a CIS product team. Open to talk.",
+      sub: "Senior backend engineer, 5+ years. Between roles since June, searching full time — Germany (Blue Card eligible), EU, remote, or a CIS product team. Open to talk.",
       resume: 'Résumé (PDF)',
       blog: 'Blog',
+      jobHunt: 'Job hunt, in the open',
     },
     now: {
       title: 'Now',
@@ -144,11 +145,12 @@ export const SITE: Record<Locale, SiteContent> = {
     socials,
     resumeUrl,
     hero: {
-      status: 'Открыт к senior backend-ролям · EU · remote · СНГ',
+      status: 'Открыт к senior backend-ролям · Германия · EU · remote · СНГ',
       lead: 'Привет, я Никита. Делаю бэкенды, через которые идут реальные деньги — и публично выпускаю свои приложения.',
-      sub: 'Senior backend-инженер, 5+ лет. Текущая роль сворачивается — ищу следующую senior backend-позицию: EU, remote или продуктовая команда в СНГ. Открыт к разговору.',
+      sub: 'Senior backend-инженер, 5+ лет. С июня без работы, ищу полный день — Германия (подхожу под Blue Card), EU, remote или продуктовая команда в СНГ. Открыт к разговору.',
       resume: 'Резюме (PDF)',
       blog: 'Блог',
+      jobHunt: 'Поиск работы, в открытую',
     },
     now: {
       title: 'Сейчас',

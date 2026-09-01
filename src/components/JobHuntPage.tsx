@@ -44,15 +44,15 @@ type Copy = {
 
 const COPY: Record<Locale, Copy> = {
   en: {
-    eyebrow: 'Job hunt — in the open',
+    eyebrow: 'Job hunt - in the open',
     title: 'How the market actually behaves',
     intro:
-      "I'm looking for my next senior backend role and tracking the real funnel here, updated as it moves. No spin — aggregate numbers, honest about the zeros. The point is to see how far today's market sits from the comfortable myth that good engineers just get snapped up.",
+      "I'm looking for my next senior backend role and tracking the real funnel here, updated as it moves. No spin - aggregate numbers, honest about the zeros. The point is to see how far today's market sits from the comfortable myth that good engineers just get snapped up.",
     stats: { applied: 'Applied', calls: 'First calls', offers: 'Offers', reject: 'Reject rate' },
     funnelTitle: 'The application funnel, by channel',
-    funnelHint: 'Summer 2026 — closed and reconciled.',
+    funnelHint: 'Summer 2026 - closed and reconciled.',
     th: { stage: 'Stage', total: 'Total' },
-    pendingHint: 'still in flight — a subset of “applied”, no answer yet',
+    pendingHint: 'still in flight - a subset of “applied”, no answer yet',
     depthTitle: 'How far applications get',
     depthHint: 'Share of applications that reached each stage.',
     netConversations: 'real conversations with engineers in Europe',
@@ -71,24 +71,24 @@ const COPY: Record<Locale, Copy> = {
     updated: 'Updated',
     checked: 'Checked against primary sources on',
     disclaimer:
-      'Aggregate only — no company names, no salaries, no names of people I talk to. Honest numbers, including the zeros.',
+      'Aggregate only - no company names, no salaries, no names of people I talk to. Honest numbers, including the zeros.',
     back: '← onezee.dev',
   },
   ru: {
-    eyebrow: 'Поиск работы — в открытую',
+    eyebrow: 'Поиск работы - в открытую',
     title: 'Как рынок ведёт себя на самом деле',
     intro:
-      'Ищу следующую senior backend-роль и веду здесь реальную воронку — обновляется по ходу. Без приукрашивания: агрегированные цифры, честно про нули. Смысл — увидеть, насколько сегодняшний рынок далёк от удобного мифа «хорошего инженера сразу разбирают».',
+      'Ищу следующую senior backend-роль и веду здесь реальную воронку - обновляется по ходу. Без приукрашивания: агрегированные цифры, честно про нули. Смысл - увидеть, насколько сегодняшний рынок далёк от удобного мифа «хорошего инженера сразу разбирают».',
     stats: { applied: 'Подано', calls: 'Первых созвонов', offers: 'Офферов', reject: 'Доля отказов' },
     funnelTitle: 'Воронка откликов по каналам',
-    funnelHint: 'Лето 2026 — закрыто и сверено.',
+    funnelHint: 'Лето 2026 - закрыто и сверено.',
     th: { stage: 'Этап', total: 'Итого' },
-    pendingHint: 'ещё в процессе — часть «подано», ответа пока нет',
+    pendingHint: 'ещё в процессе - часть «подано», ответа пока нет',
     depthTitle: 'Докуда доходят отклики',
     depthHint: 'Доля откликов, дошедших до каждого этапа.',
     netConversations: 'живых разговоров с инженерами в Европе',
     benchTitle: 'Рынок против реальности',
-    benchIntro: 'Для масштаба — знакомый, искавший недавно:',
+    benchIntro: 'Для масштаба - знакомый, искавший недавно:',
     benchApplied: 'откликов',
     benchOffer: 'оффер',
     benchMonths: '~6 месяцев поиска',
@@ -102,7 +102,7 @@ const COPY: Record<Locale, Copy> = {
     updated: 'Обновлено',
     checked: 'Сверено с первоисточниками',
     disclaimer:
-      'Только агрегат — без названий компаний, зарплат и имён людей, с которыми я говорю. Честные цифры, включая нули.',
+      'Только агрегат - без названий компаний, зарплат и имён людей, с которыми я говорю. Честные цифры, включая нули.',
     back: '← onezee.dev',
   },
 };
@@ -190,7 +190,7 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
           </tbody>
         </table>
         <p className="jh__note">
-          <b>{stageByKey('pending')?.label[lang]}</b> — {t.pendingHint}
+          <b>{stageByKey('pending')?.label[lang]}</b> - {t.pendingHint}
         </p>
       </section>
 
@@ -215,7 +215,7 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
         </ul>
       </section>
 
-      {/* The other channel — aggregate reach, deliberately not a funnel */}
+      {/* The other channel - aggregate reach, deliberately not a funnel */}
       <section className="section reveal">
         <p className="eyebrow">{network.label[lang]}</p>
         <p className="jh__net-lead">{network.why[lang]}</p>
@@ -228,7 +228,7 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
         <p className="jh__note">{network.note[lang]}</p>
       </section>
 
-      {/* What hiring me involves — the objection, answered before it is raised */}
+      {/* What hiring me involves - the objection, answered before it is raised */}
       <section className="section reveal">
         <p className="eyebrow">{visa.title[lang]}</p>
         <p className="jh__visa-intro">{visa.intro[lang]}</p>
@@ -242,7 +242,7 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
         </p>
       </section>
 
-      {/* Market vs reality — only once the people behind the numbers have said yes */}
+      {/* Market vs reality - only once the people behind the numbers have said yes */}
       {benchmark.show && (
         <section className="section reveal">
           <p className="eyebrow">{t.benchTitle}</p>

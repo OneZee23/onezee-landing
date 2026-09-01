@@ -1,13 +1,13 @@
 {
-  "_comment": "PUBLIC, SANITIZED job-hunt data. AGGREGATE ONLY — never company names, salaries, recruiter or contact names, health, finances (this repo is open-source). Private detail lives in onezee-workspace/job-search/funnel.md. See docs/job-hunt-stats.md.",
+  "_comment": "PUBLIC, SANITIZED job-hunt data. AGGREGATE ONLY - never company names, salaries, recruiter or contact names, health, finances (this repo is open-source). Private detail lives in onezee-workspace/job-search/funnel.md. See docs/job-hunt-stats.md.",
   "meta": {
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
     "updated": "2026-09-01",
     "metric": {
-      "en": "The number I actually steer by is first calls — not applications. Volume is the one lever the data says does not work.",
-      "ru": "Метрика, по которой я реально рулю, — первые созвоны, а не отклики. Объём — единственный рычаг, про который данные говорят, что он не работает."
+      "en": "The number I actually steer by is first calls - not applications. Volume is the one lever the data says does not work.",
+      "ru": "Метрика, по которой я реально рулю, - первые созвоны, а не отклики. Объём - единственный рычаг, про который данные говорят, что он не работает."
     },
     "channels": [
       {
@@ -16,7 +16,7 @@
       },
       {
         "key": "linkedin",
-        "label": "LinkedIn"
+        "label": "LinkedIn & boards"
       },
       {
         "key": "referral",
@@ -31,8 +31,8 @@
     },
     "since": "2026-09-01",
     "note": {
-      "en": "The summer numbers below are closed and verified. September runs on a different plan — fewer applications, only postings that name visa support, and the effort moved into conversations with engineers already inside German companies. New numbers land here as they happen.",
-      "ru": "Летние цифры ниже закрыты и сверены. Сентябрь идёт по другому плану — меньше откликов, только вакансии с явной визовой поддержкой, а усилие перенесено в разговоры с инженерами внутри немецких компаний. Новые цифры появляются здесь по мере событий."
+      "en": "The summer numbers below are closed and verified. September runs on a different plan: fewer applications, only postings that name visa support, and the effort moved into conversations with engineers who already work in Europe. Day one of the restart: 6 applications, 0 first calls, 25 connection invitations. And one referral offer, which came out of a conversation, not out of any application. That is exactly what both reference funnels predicted.",
+      "ru": "Летние цифры ниже закрыты и сверены. Сентябрь идёт по другому плану: меньше откликов, только вакансии с явной визовой поддержкой, а усилие перенесено в разговоры с инженерами, которые уже работают в Европе. Первый день рестарта: 6 откликов, 0 первых созвонов, 25 приглашений в контакты. И одно предложение реферала, пришедшее из разговора, а не из отклика. Ровно то, что предсказывали обе контрольные воронки."
     }
   },
   "funnel": [
@@ -44,7 +44,7 @@
       },
       "counts": {
         "hh": 31,
-        "linkedin": 4,
+        "linkedin": 10,
         "referral": 1
       }
     },
@@ -124,14 +124,14 @@
     }
   ],
   "network": {
-    "conversations": 9,
+    "conversations": 10,
     "label": {
       "en": "The other channel",
       "ru": "Второй канал"
     },
     "note": {
-      "en": "Backend engineers already working in Europe who I've actually talked with — about how the market and the paperwork behave in practice. One number on purpose: these are conversations, not leads. No names, no per-person tracking, no funnel, no conversion rate. Nobody here is a step in anything.",
-      "ru": "Бэкенд-инженеры, уже работающие в Европе, с которыми я реально поговорил, — о том, как рынок и бумаги ведут себя на практике. Одно число намеренно: это разговоры, а не лиды. Ни имён, ни поимённого учёта, ни воронки, ни конверсии. Никто здесь не является ступенькой ни в чём."
+      "en": "Backend engineers already working in Europe who I've actually talked with - about how the market and the paperwork behave in practice. One number on purpose: these are conversations, not leads. No names, no per-person tracking, no funnel, no conversion rate. Nobody here is a step in anything.",
+      "ru": "Бэкенд-инженеры, уже работающие в Европе, с которыми я реально поговорил, - о том, как рынок и бумаги ведут себя на практике. Одно число намеренно: это разговоры, а не лиды. Ни имён, ни поимённого учёта, ни воронки, ни конверсии. Никто здесь не является ступенькой ни в чём."
     },
     "why": {
       "en": "Both reference funnels I have say the same thing: the one offer came through a warm introduction, not through applications. So this is where the hours go now.",
@@ -153,8 +153,8 @@
         "ru": "Blue Card по § 18g Abs. 1 AufenthG. Вуз в anabin со статусом H+."
       },
       {
-        "en": "Above the 2026 threshold of €50,700 gross per year the Blue Card is issued without Federal Employment Agency approval — no labour market test, no agency step.",
-        "ru": "Выше порога 2026 года в €50 700 брутто Blue Card выдаётся без согласия Bundesagentur für Arbeit — ни проверки рынка труда, ни этапа биржи."
+        "en": "Above the 2026 threshold of €50,700 gross per year the Blue Card is issued without Federal Employment Agency approval - no labour market test, no agency step.",
+        "ru": "Выше порога 2026 года в €50 700 брутто Blue Card выдаётся без согласия Bundesagentur für Arbeit - ни проверки рынка труда, ни этапа биржи."
       },
       {
         "en": "Germany has no sponsor licence and no employer registration. There is nothing for you to apply for or be accredited under.",
@@ -162,11 +162,11 @@
       },
       {
         "en": "If you want it faster: the accelerated procedure under § 81a AufenthG is one agreement with the immigration office at your own site plus a €411 fee, which is legally mine to pay. If you would rather do nothing extra, I file the visa myself and you provide the contract.",
-        "ru": "Если хотите быстрее: ускоренная процедура по § 81a AufenthG — это одно соглашение с Ausländerbehörde по вашему адресу и пошлина €411, которую по закону плачу я. Если возиться не хочется — визу подаю сам, от вас договор."
+        "ru": "Если хотите быстрее: ускоренная процедура по § 81a AufenthG - это одно соглашение с Ausländerbehörde по вашему адресу и пошлина €411, которую по закону плачу я. Если возиться не хочется - визу подаю сам, от вас договор."
       },
       {
         "en": "Realistically four to six months end to end. Official guidance starts at around four months; the Leipzig immigration office publishes five to six. The three-week figure that circulates covers only the consulate appointment after pre-approval.",
-        "ru": "Реалистично — четыре-шесть месяцев. Официальные оценки начинаются примерно с четырёх, памятка Ausländerbehörde Leipzig называет пять-шесть. Фигурирующие «три недели» — это только срок консульского термина после Vorabzustimmung."
+        "ru": "Реалистично - четыре-шесть месяцев. Официальные оценки начинаются примерно с четырёх, памятка Ausländerbehörde Leipzig называет пять-шесть. Фигурирующие «три недели» - это только срок консульского термина после Vorabzustimmung."
       }
     ],
     "sourcesLabel": {
@@ -190,16 +190,23 @@
       "interviews": 3,
       "offer": 0,
       "rejected": 12
+    },
+    {
+      "date": "2026-09-01",
+      "applied": 42,
+      "interviews": 3,
+      "offer": 0,
+      "rejected": 12
     }
   ],
   "benchmark": {
     "show": false,
-    "_comment": "HIDDEN until the people whose numbers these are have said yes. They shared them privately to help; publishing them, even anonymised, is a consent question, not a privacy one. Do not flip show:true before asking — see onezee-workspace/job-search/open-questions.md.",
+    "_comment": "HIDDEN until the people whose numbers these are have said yes. They shared them privately to help; publishing them, even anonymised, is a consent question, not a privacy one. Do not flip show:true before asking - see onezee-workspace/job-search/open-questions.md.",
     "applied": 300,
     "offers": 1,
     "profile": {
-      "en": "A friend — backend, ~6 years at one company, a single job on his CV. Searched for about six months.",
-      "ru": "Знакомый — бэкенд, ~6 лет в одной компании, единственное место в резюме. Искал около полугода."
+      "en": "A friend - backend, ~6 years at one company, a single job on his CV. Searched for about six months.",
+      "ru": "Знакомый - бэкенд, ~6 лет в одной компании, единственное место в резюме. Искал около полугода."
     },
     "via": {
       "en": "and the one offer came through a warm referral, not a cold application.",

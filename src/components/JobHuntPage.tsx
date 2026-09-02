@@ -1,13 +1,12 @@
 import React from 'react';
 import type { Locale } from '../content/site';
-import { jobHunt, stage, pct, weeksBetween, type LogDay } from '../content/job-hunt';
+import { jobHunt, stage, pct, weeksBetween, plural, type LogDay } from '../content/job-hunt';
 
 // Static, no hydration. Hover affordances are CSS + native title attributes.
 
 type Copy = {
   eyebrow: string;
-  heroPre: string;
-  heroPost: string;
+  hero: (calls: number, applied: number) => React.ReactNode;
   tiles: { calls: string; second: string; offers: string; awaiting: string };
   ladderTitle: string;
   ladderHint: string;
@@ -18,10 +17,10 @@ type Copy = {
   gapLine: (w: number) => string;
   logTitle: string;
   logHint: string;
-  ev: Record<string, string>;
+  ev: Record<string, (n: number) => string>;
   netTitle: string;
-  netUnit: string;
-  netLine: string;
+  netUnit: (n: number) => string;
+  netLine: (refs: number, applied: number) => string;
   metaRole: string;
   metaTarget: string;
   updated: string;
@@ -32,23 +31,35 @@ type Copy = {
 const COPY: Record<Locale, Copy> = {
   en: {
     eyebrow: 'Job hunt, in the open',
-    heroPre: 'first calls out of',
-    heroPost: 'applications',
+    hero: (c, a) => (
+      <>
+        <span className="jh__hero-n">{c}</span> first call{c === 1 ? '' : 's'} out of{' '}
+        <span className="jh__hero-d">{a}</span> application{a === 1 ? '' : 's'}
+      </>
+    ),
     tiles: { calls: 'First calls', second: 'Second rounds', offers: 'Offers', awaiting: 'No answer yet' },
     ladderTitle: 'How far applications get',
     ladderHint: 'Same scale across all stages. A dot marks a real zero.',
     stages: { applied: 'Applied', call1: 'First call', call2: 'Second round', final: 'Final', offer: 'Offer' },
     outcomeLine: (r, a) =>
-      `${r} rejections (a floor - they stopped being logged after 5 June), ${a} still without an answer.`,
+      `${r} rejection${r === 1 ? '' : 's'} (a floor - they stopped being logged after 5 June), ${a} still without an answer.`,
     channelsLine: (hh, b, r) => `By channel: ${hh} on a Russian job board, ${b} on LinkedIn and EU boards, ${r} through a referral.`,
     timelineTitle: 'Applications over time',
-    gapLine: (w) => `${w} weeks with no records. The search was running; the log was not.`,
+    gapLine: (w) => `${w} week${w === 1 ? '' : 's'} with no records. The search was running; the log was not.`,
     logTitle: 'Logged days',
     logHint: 'Day-level logging started 24 August. A day with no entry is a day with nothing logged.',
-    ev: { applied: 'applications', invites: 'invitations', acc: 'accepted', reply: 'replies', msg: 'messages', ref: 'referral offer' },
+    ev: {
+      applied: (n) => `application${n === 1 ? '' : 's'}`,
+      invites: (n) => `invitation${n === 1 ? '' : 's'}`,
+      acc: () => 'accepted',
+      reply: (n) => (n === 1 ? 'reply' : 'replies'),
+      msg: (n) => `message${n === 1 ? '' : 's'}`,
+      ref: (n) => `referral offer${n === 1 ? '' : 's'}`,
+    },
     netTitle: 'The other channel',
-    netUnit: 'real conversations with engineers in Europe',
-    netLine: 'One number on purpose. These are conversations, not leads: no names, no per-person tracking, no funnel, no conversion rate. So far they have removed two companies from the list and produced one referral offer, which no application did.',
+    netUnit: (n) => `real conversation${n === 1 ? '' : 's'} with engineers in Europe`,
+    netLine: (r, a) =>
+      `One number on purpose. These are conversations, not leads: no names, no per-person tracking, no funnel, no conversion rate. So far they have ruled out two companies and produced ${r} referral offer${r === 1 ? '' : 's'}, none of which had to be asked for. ${a} applications have produced none.`,
     metaRole: 'Role',
     metaTarget: 'Target',
     updated: 'Updated',
@@ -57,23 +68,36 @@ const COPY: Record<Locale, Copy> = {
   },
   ru: {
     eyebrow: 'Поиск работы, в открытую',
-    heroPre: 'первых созвона из',
-    heroPost: 'откликов',
+    hero: (c, a) => (
+      <>
+        <span className="jh__hero-n">{c}</span>{' '}
+        {plural(c, 'первый созвон', 'первых созвона', 'первых созвонов')} из{' '}
+        <span className="jh__hero-d">{a}</span> откликов
+      </>
+    ),
     tiles: { calls: 'Первых созвонов', second: 'Вторых этапов', offers: 'Офферов', awaiting: 'Без ответа' },
     ladderTitle: 'Докуда доходят отклики',
     ladderHint: 'Единый масштаб по всем стадиям. Точка отмечает настоящий ноль.',
     stages: { applied: 'Подано', call1: 'Первый созвон', call2: 'Второй этап', final: 'Финал', offer: 'Оффер' },
     outcomeLine: (r, a) =>
-      `${r} отказов (это пол: после 5 июня они перестали фиксироваться), ${a} без ответа.`,
+      `${r} ${plural(r, 'отказ', 'отказа', 'отказов')} (это пол: после 5 июня они перестали фиксироваться), ${a} без ответа.`,
     channelsLine: (hh, b, r) => `По каналам: ${hh} на российской доске, ${b} на LinkedIn и европейских бордах, ${r} через реферал.`,
     timelineTitle: 'Отклики во времени',
-    gapLine: (w) => `${w} недель без записей. Поиск шёл, учёт не вёлся.`,
+    gapLine: (w) => `${w} ${plural(w, 'неделя', 'недели', 'недель')} без записей. Поиск шёл, учёт не вёлся.`,
     logTitle: 'Записанные дни',
     logHint: 'Посуточный учёт начат 24 августа. День без строки это день, за который ничего не записано.',
-    ev: { applied: 'откликов', invites: 'приглашений', acc: 'принято', reply: 'ответов', msg: 'сообщений', ref: 'предложение реферала' },
+    ev: {
+      applied: (n) => plural(n, 'отклик', 'отклика', 'откликов'),
+      invites: (n) => plural(n, 'приглашение', 'приглашения', 'приглашений'),
+      acc: (n) => plural(n, 'принял', 'приняли', 'приняли'),
+      reply: (n) => plural(n, 'ответ', 'ответа', 'ответов'),
+      msg: (n) => plural(n, 'сообщение', 'сообщения', 'сообщений'),
+      ref: (n) => plural(n, 'реферал', 'реферала', 'рефералов'),
+    },
     netTitle: 'Второй канал',
-    netUnit: 'живых разговора с инженерами в Европе',
-    netLine: 'Одно число намеренно. Это разговоры, а не лиды: ни имён, ни поимённого учёта, ни воронки, ни конверсии. Пока они вычеркнули из списка две компании и принесли одно предложение реферала, чего не сделал ни один отклик.',
+    netUnit: (n) => `${plural(n, 'живой разговор', 'живых разговора', 'живых разговоров')} с инженерами в Европе`,
+    netLine: (r, a) =>
+      `Одно число намеренно. Это разговоры, а не лиды: ни имён, ни поимённого учёта, ни воронки, ни конверсии. Пока они вычеркнули из списка две компании и принесли ${r} ${plural(r, 'реферал', 'реферала', 'рефералов')}, и ни одного не пришлось просить. ${a} ${plural(a, 'отклик', 'отклика', 'откликов')} не принесли ни одного.`,
     metaRole: 'Роль',
     metaTarget: 'Цель',
     updated: 'Обновлено',
@@ -103,10 +127,7 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
     <div className="jh content">
       <header className="jh__head section reveal">
         <p className="eyebrow">{t.eyebrow}</p>
-        <h1 className="jh__hero">
-          <span className="jh__hero-n">{headline.calls}</span> {t.heroPre}{' '}
-          <span className="jh__hero-d">{headline.applied}</span> {t.heroPost}
-        </h1>
+        <h1 className="jh__hero">{t.hero(headline.calls, headline.applied)}</h1>
         <p className="jh__thesis">{meta.thesis[lang]}</p>
 
         <dl className="jh__meta">
@@ -197,7 +218,7 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
               <span className="jh__log-ev">
                 {EV_ORDER.filter((k) => d[k]).map((k) => (
                   <span className="jh__chip" key={k}>
-                    <b>{d[k]}</b> {t.ev[k as string]}
+                    <b>{d[k]}</b> {t.ev[k as string](d[k] as number)}
                   </span>
                 ))}
               </span>
@@ -210,9 +231,9 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
         <p className="eyebrow">{t.netTitle}</p>
         <div className="jh__net">
           <span className="jh__net-val">{network.conversations}</span>
-          <span className="jh__net-lbl">{t.netUnit}</span>
+          <span className="jh__net-lbl">{t.netUnit(network.conversations)}</span>
         </div>
-        <p className="jh__note">{t.netLine}</p>
+        <p className="jh__note">{t.netLine(network.referralOffers, headline.applied)}</p>
       </section>
 
       <section className="section reveal">

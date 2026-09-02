@@ -105,3 +105,15 @@ export const pct = (v: number): string => `${v}%`;
 /** Days between two ISO dates, for labelling the gap honestly. */
 export const weeksBetween = (a: string, b: string): number =>
   Math.round((Date.parse(b) - Date.parse(a)) / (7 * 864e5));
+
+/**
+ * Russian numeral agreement: 1 отклик / 2 отклика / 5 откликов.
+ * Generated sentences carry counts, so the form has to be computed, not guessed.
+ */
+export const plural = (n: number, one: string, few: string, many: string): string => {
+  const m10 = n % 10;
+  const m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return one;
+  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+  return many;
+};

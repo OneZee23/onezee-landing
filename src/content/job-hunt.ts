@@ -1,45 +1,69 @@
-// Typed view + derived metrics over the public job-hunt data.
-// Raw, AI-maintained: src/data/job-hunt.json (aggregate only — see that file's note).
+// Typed view over the public job-hunt data.
+// Raw data: src/data/job-hunt.json - GENERATED, never hand-edited.
+// Source of truth is onezee-workspace/job-search/funnel.md via to-public.py.
 import raw from '../data/job-hunt.json';
 import type { Locale } from './site';
 
-export type ChannelKey = 'hh' | 'linkedin' | 'referral';
 export type L10n = Record<Locale, string>;
 
-export interface Channel {
-  key: ChannelKey;
-  label: string;
+export interface Meta {
+  role: string;
+  target: string;
+  startDate: string;
+  updated: string;
+  thesis: L10n;
 }
 
-export interface FunnelStage {
-  key: string;
-  label: L10n;
-  counts: Record<ChannelKey, number>;
-  /** a sub-status of "applied" (still in flight), not a depth step */
-  note?: boolean;
-  /** a terminal outcome shown to the side of the funnel */
-  terminal?: boolean;
+/** The one headline: first calls out of applications. Not applications. */
+export interface Headline {
+  calls: number;
+  applied: number;
+  /** null when the denominator is under 10 - then we print counts only. */
+  callRatePct: number | null;
 }
 
-export interface Snapshot {
+export type StageKey = 'applied' | 'call1' | 'call2' | 'final' | 'offer';
+export interface LadderStep {
+  key: StageKey;
+  n: number;
+}
+
+export interface Outcomes {
+  rejected: number;
+  /** rejections stopped being logged after 5 June - the number is a floor */
+  rejectedIsFloor: boolean;
+  awaiting: number;
+}
+
+export interface TimelinePoint {
   date: string;
   applied: number;
-  interviews: number;
-  offer: number;
-  rejected: number;
+}
+
+/** The stretch with no records at all. Rendered as a labelled gap, never interpolated. */
+export interface Gap {
+  from: string;
+  to: string;
+}
+
+/** One logged day. Absent keys mean the event did not happen; absent days mean nothing was logged. */
+export interface LogDay {
+  date: string;
+  applied?: number;
+  invites?: number;
+  acc?: number;
+  reply?: number;
+  msg?: number;
+  ref?: number;
 }
 
 /**
- * The networking channel. Deliberately NOT a funnel: aggregate reach and a count of
- * conversations, with no stage ladder and no conversion percentages — the people in it
- * are people, not leads, and some of them read this page.
+ * ONE number by design. People are not a funnel: no stage ladder, no conversion
+ * rate, no per-batch tallies. Do not add fields here without re-reading that rule.
  */
 export interface Network {
-  /** ONE number on purpose — see the note in the data file. Do not add stages or a ratio. */
   conversations: number;
-  label: L10n;
-  note: L10n;
-  why: L10n;
+  referralOffers: number;
 }
 
 export interface VisaBlock {
@@ -51,82 +75,33 @@ export interface VisaBlock {
   checkedAt: string;
 }
 
-export interface Phase {
-  label: L10n;
-  since: string;
-  note: L10n;
-}
-
-export interface Benchmark {
-  /** false until the people whose numbers these are have consented. Respect it. */
-  show: boolean;
-  applied: number;
-  offers: number;
-  profile: L10n;
-  via: L10n;
+export interface Method {
+  title: L10n;
+  points: L10n[];
 }
 
 export interface JobHuntData {
-  meta: {
-    role: string;
-    target: string;
-    startDate: string;
-    updated: string;
-    metric: L10n;
-    channels: Channel[];
-  };
-  phase: Phase;
-  funnel: FunnelStage[];
+  meta: Meta;
+  headline: Headline;
+  ladder: LadderStep[];
+  channels: { hh: number; boards: number; referral: number };
+  outcomes: Outcomes;
+  timeline: TimelinePoint[];
+  gap: Gap;
+  log: LogDay[];
   network: Network;
   visa: VisaBlock;
-  snapshots: Snapshot[];
-  benchmark: Benchmark;
+  method: Method;
 }
 
 export const jobHunt = raw as unknown as JobHuntData;
 
-export const CHANNEL_KEYS: ChannelKey[] = ['hh', 'linkedin', 'referral'];
+export const stage = (k: StageKey): number =>
+  jobHunt.ladder.find((s) => s.key === k)?.n ?? 0;
 
-export const stageTotal = (s: FunnelStage): number =>
-  CHANNEL_KEYS.reduce((sum, k) => sum + (s.counts[k] ?? 0), 0);
+/** "7%" - only ever called with a denominator we already checked. */
+export const pct = (v: number): string => `${v}%`;
 
-export const stageByKey = (key: string): FunnelStage | undefined =>
-  jobHunt.funnel.find((s) => s.key === key);
-
-const total = (key: string): number => {
-  const s = stageByKey(key);
-  return s ? stageTotal(s) : 0;
-};
-
-export interface JobHuntMetrics {
-  applied: number;
-  /** the metric that actually steers the search */
-  firstCalls: number;
-  offers: number;
-  rejected: number;
-  appliedToCall: number; // 0..1
-  rejectRate: number; // 0..1
-  conversations: number;
-}
-
-export function metrics(): JobHuntMetrics {
-  const applied = total('applied');
-  const firstCalls = total('call1');
-  return {
-    applied,
-    firstCalls,
-    offers: total('offer'),
-    rejected: total('rejected'),
-    appliedToCall: applied ? firstCalls / applied : 0,
-    rejectRate: applied ? total('rejected') / applied : 0,
-    conversations: jobHunt.network.conversations,
-  };
-}
-
-/** "6%" style percent from a 0..1 ratio. */
-export const pct = (ratio: number, digits = 0): string =>
-  `${(ratio * 100).toFixed(digits)}%`;
-
-/** Funnel rows excluding the "pending" sub-status (depth steps only). */
-export const depthFunnel = (): FunnelStage[] =>
-  jobHunt.funnel.filter((s) => !s.note && !s.terminal);
+/** Days between two ISO dates, for labelling the gap honestly. */
+export const weeksBetween = (a: string, b: string): number =>
+  Math.round((Date.parse(b) - Date.parse(a)) / (7 * 864e5));

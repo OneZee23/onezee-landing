@@ -1,293 +1,240 @@
 import React from 'react';
 import type { Locale } from '../content/site';
-import {
-  jobHunt,
-  metrics,
-  stageTotal,
-  stageByKey,
-  depthFunnel,
-  pct,
-  CHANNEL_KEYS,
-} from '../content/job-hunt';
+import { jobHunt, stage, pct, weeksBetween, type LogDay } from '../content/job-hunt';
 
-// Static, no-hydration page (rendered to HTML at build time, like the homepage).
-// Reveal handled by the global IntersectionObserver in BaseLayout (.reveal class).
+// Static, no hydration. Hover affordances are CSS + native title attributes.
 
 type Copy = {
   eyebrow: string;
-  title: string;
-  intro: string;
-  stats: { applied: string; calls: string; offers: string; reject: string };
-  funnelTitle: string;
-  funnelHint: string;
-  th: { stage: string; total: string };
-  pendingHint: string;
-  depthTitle: string;
-  depthHint: string;
-  netConversations: string;
-  benchTitle: string;
-  benchIntro: string;
-  benchApplied: string;
-  benchOffer: string;
-  benchMonths: string;
-  takeaway: string;
-  trendTitle: string;
-  trendCols: { date: string; applied: string; interviews: string; offers: string };
+  heroPre: string;
+  heroPost: string;
+  tiles: { calls: string; second: string; offers: string; awaiting: string };
+  ladderTitle: string;
+  ladderHint: string;
+  stages: Record<string, string>;
+  outcomeLine: (r: number, a: number) => string;
+  channelsLine: (hh: number, b: number, r: number) => string;
+  timelineTitle: string;
+  gapLine: (w: number) => string;
+  logTitle: string;
+  logHint: string;
+  ev: Record<string, string>;
+  netTitle: string;
+  netUnit: string;
+  netLine: string;
   metaRole: string;
   metaTarget: string;
-  metaStarted: string;
   updated: string;
   checked: string;
-  disclaimer: string;
   back: string;
 };
 
 const COPY: Record<Locale, Copy> = {
   en: {
-    eyebrow: 'Job hunt - in the open',
-    title: 'How the market actually behaves',
-    intro:
-      "I'm looking for my next senior backend role and tracking the real funnel here, updated as it moves. No spin - aggregate numbers, honest about the zeros. The point is to see how far today's market sits from the comfortable myth that good engineers just get snapped up.",
-    stats: { applied: 'Applied', calls: 'First calls', offers: 'Offers', reject: 'Reject rate' },
-    funnelTitle: 'The application funnel, by channel',
-    funnelHint: 'Summer 2026 - closed and reconciled.',
-    th: { stage: 'Stage', total: 'Total' },
-    pendingHint: 'still in flight - a subset of “applied”, no answer yet',
-    depthTitle: 'How far applications get',
-    depthHint: 'Share of applications that reached each stage.',
-    netConversations: 'real conversations with engineers in Europe',
-    benchTitle: 'Market vs. reality',
-    benchIntro: 'For scale, a friend who searched recently:',
-    benchApplied: 'applications',
-    benchOffer: 'offer',
-    benchMonths: '~6 months of searching',
-    takeaway:
-      'The pattern so far is the same on both sides: cold applications convert near zero, and the few real conversations came through warm intros. So that’s where the effort goes now.',
-    trendTitle: 'Over time',
-    trendCols: { date: 'Date', applied: 'Applied', interviews: 'First calls', offers: 'Offers' },
+    eyebrow: 'Job hunt, in the open',
+    heroPre: 'first calls out of',
+    heroPost: 'applications',
+    tiles: { calls: 'First calls', second: 'Second rounds', offers: 'Offers', awaiting: 'No answer yet' },
+    ladderTitle: 'How far applications get',
+    ladderHint: 'Same scale across all stages. A dot marks a real zero.',
+    stages: { applied: 'Applied', call1: 'First call', call2: 'Second round', final: 'Final', offer: 'Offer' },
+    outcomeLine: (r, a) =>
+      `${r} rejections (a floor - they stopped being logged after 5 June), ${a} still without an answer.`,
+    channelsLine: (hh, b, r) => `By channel: ${hh} on a Russian job board, ${b} on LinkedIn and EU boards, ${r} through a referral.`,
+    timelineTitle: 'Applications over time',
+    gapLine: (w) => `${w} weeks with no records. The search was running; the log was not.`,
+    logTitle: 'Logged days',
+    logHint: 'Day-level logging started 24 August. A day with no entry is a day with nothing logged.',
+    ev: { applied: 'applications', invites: 'invitations', acc: 'accepted', reply: 'replies', msg: 'messages', ref: 'referral offer' },
+    netTitle: 'The other channel',
+    netUnit: 'real conversations with engineers in Europe',
+    netLine: 'One number on purpose. These are conversations, not leads: no names, no per-person tracking, no funnel, no conversion rate. So far they have removed two companies from the list and produced one referral offer, which no application did.',
     metaRole: 'Role',
     metaTarget: 'Target',
-    metaStarted: 'Started',
     updated: 'Updated',
-    checked: 'Checked against primary sources on',
-    disclaimer:
-      'Aggregate only - no company names, no salaries, no names of people I talk to. Honest numbers, including the zeros.',
+    checked: 'checked against primary sources',
     back: '← onezee.dev',
   },
   ru: {
-    eyebrow: 'Поиск работы - в открытую',
-    title: 'Как рынок ведёт себя на самом деле',
-    intro:
-      'Ищу следующую senior backend-роль и веду здесь реальную воронку - обновляется по ходу. Без приукрашивания: агрегированные цифры, честно про нули. Смысл - увидеть, насколько сегодняшний рынок далёк от удобного мифа «хорошего инженера сразу разбирают».',
-    stats: { applied: 'Подано', calls: 'Первых созвонов', offers: 'Офферов', reject: 'Доля отказов' },
-    funnelTitle: 'Воронка откликов по каналам',
-    funnelHint: 'Лето 2026 - закрыто и сверено.',
-    th: { stage: 'Этап', total: 'Итого' },
-    pendingHint: 'ещё в процессе - часть «подано», ответа пока нет',
-    depthTitle: 'Докуда доходят отклики',
-    depthHint: 'Доля откликов, дошедших до каждого этапа.',
-    netConversations: 'живых разговоров с инженерами в Европе',
-    benchTitle: 'Рынок против реальности',
-    benchIntro: 'Для масштаба - знакомый, искавший недавно:',
-    benchApplied: 'откликов',
-    benchOffer: 'оффер',
-    benchMonths: '~6 месяцев поиска',
-    takeaway:
-      'Картина пока одинаковая с обеих сторон: холодные отклики конвертят почти в ноль, а немногие живые разговоры пришли через тёплые интро. Туда теперь и уходит усилие.',
-    trendTitle: 'В динамике',
-    trendCols: { date: 'Дата', applied: 'Подано', interviews: 'Первых созвонов', offers: 'Офферы' },
+    eyebrow: 'Поиск работы, в открытую',
+    heroPre: 'первых созвона из',
+    heroPost: 'откликов',
+    tiles: { calls: 'Первых созвонов', second: 'Вторых этапов', offers: 'Офферов', awaiting: 'Без ответа' },
+    ladderTitle: 'Докуда доходят отклики',
+    ladderHint: 'Единый масштаб по всем стадиям. Точка отмечает настоящий ноль.',
+    stages: { applied: 'Подано', call1: 'Первый созвон', call2: 'Второй этап', final: 'Финал', offer: 'Оффер' },
+    outcomeLine: (r, a) =>
+      `${r} отказов (это пол: после 5 июня они перестали фиксироваться), ${a} без ответа.`,
+    channelsLine: (hh, b, r) => `По каналам: ${hh} на российской доске, ${b} на LinkedIn и европейских бордах, ${r} через реферал.`,
+    timelineTitle: 'Отклики во времени',
+    gapLine: (w) => `${w} недель без записей. Поиск шёл, учёт не вёлся.`,
+    logTitle: 'Записанные дни',
+    logHint: 'Посуточный учёт начат 24 августа. День без строки это день, за который ничего не записано.',
+    ev: { applied: 'откликов', invites: 'приглашений', acc: 'принято', reply: 'ответов', msg: 'сообщений', ref: 'предложение реферала' },
+    netTitle: 'Второй канал',
+    netUnit: 'живых разговора с инженерами в Европе',
+    netLine: 'Одно число намеренно. Это разговоры, а не лиды: ни имён, ни поимённого учёта, ни воронки, ни конверсии. Пока они вычеркнули из списка две компании и принесли одно предложение реферала, чего не сделал ни один отклик.',
     metaRole: 'Роль',
     metaTarget: 'Цель',
-    metaStarted: 'Старт',
     updated: 'Обновлено',
-    checked: 'Сверено с первоисточниками',
-    disclaimer:
-      'Только агрегат - без названий компаний, зарплат и имён людей, с которыми я говорю. Честные цифры, включая нули.',
+    checked: 'сверено с первоисточниками',
     back: '← onezee.dev',
   },
 };
 
-const fmtDate = (iso: string, lang: Locale): string =>
+const fmt = (iso: string, lang: Locale) =>
   new Date(iso + 'T00:00:00Z').toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-GB', {
-    day: 'numeric',
-    month: 'short',
-    timeZone: 'UTC',
+    day: 'numeric', month: 'short', timeZone: 'UTC',
   });
+
+const EV_ORDER: (keyof LogDay)[] = ['applied', 'invites', 'acc', 'reply', 'msg', 'ref'];
 
 export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
   const t = COPY[lang];
-  const m = metrics();
-  const { meta, phase, funnel, network, visa, benchmark, snapshots } = jobHunt;
-  const appliedTotal = stageTotal(stageByKey('applied')!);
-  const depth = depthFunnel();
+  const { meta, headline, ladder, channels, outcomes, timeline, gap, log, network, visa, method } = jobHunt;
+  const max = ladder[0].n;
 
-  const statCards = [
-    { value: String(m.applied), label: t.stats.applied },
-    { value: String(m.firstCalls), label: t.stats.calls },
-    { value: String(m.offers), label: t.stats.offers, accent: m.offers === 0 },
-    { value: pct(m.rejectRate), label: t.stats.reject },
-  ];
+  // timeline positions on a real, evenly-scaled date axis
+  const t0 = Date.parse(timeline[0].date);
+  const t1 = Date.parse(timeline[timeline.length - 1].date);
+  const at = (d: string) => ((Date.parse(d) - t0) / (t1 - t0)) * 100;
 
   return (
     <div className="jh content">
-      {/* Header + headline metrics */}
       <header className="jh__head section reveal">
         <p className="eyebrow">{t.eyebrow}</p>
-        <h1 className="jh__title">{t.title}</h1>
-        <p className="jh__intro">{t.intro}</p>
+        <h1 className="jh__hero">
+          <span className="jh__hero-n">{headline.calls}</span> {t.heroPre}{' '}
+          <span className="jh__hero-d">{headline.applied}</span> {t.heroPost}
+        </h1>
+        <p className="jh__thesis">{meta.thesis[lang]}</p>
 
         <dl className="jh__meta">
           <div><dt>{t.metaRole}</dt><dd>{meta.role}</dd></div>
           <div><dt>{t.metaTarget}</dt><dd>{meta.target}</dd></div>
-          <div><dt>{t.metaStarted}</dt><dd>{fmtDate(meta.startDate, lang)}</dd></div>
         </dl>
 
         <div className="jh__cards">
-          {statCards.map((c) => (
-            <div className={`jh__card${c.accent ? ' jh__card--accent' : ''}`} key={c.label}>
-              <span className="jh__card-val">{c.value}</span>
-              <span className="jh__card-lbl">{c.label}</span>
+          {[
+            { v: `${headline.calls}`, l: t.tiles.calls, sub: headline.callRatePct !== null ? pct(headline.callRatePct) : null },
+            { v: `${stage('call2')}`, l: t.tiles.second, sub: null },
+            { v: `${stage('offer')}`, l: t.tiles.offers, sub: null, accent: true },
+            { v: `${outcomes.awaiting}`, l: t.tiles.awaiting, sub: null },
+          ].map((c) => (
+            <div className={`jh__card${c.accent ? ' jh__card--accent' : ''}`} key={c.l}>
+              <span className="jh__card-val">{c.v}</span>
+              <span className="jh__card-lbl">{c.l}</span>
+              {c.sub && <span className="jh__card-sub">{c.sub}</span>}
             </div>
           ))}
         </div>
-
-        <p className="jh__metric">{meta.metric[lang]}</p>
       </header>
 
-      {/* Current phase */}
+      {/* The one chart that earns its place: the collapse from 44 to 0. */}
       <section className="section reveal">
-        <p className="eyebrow">{phase.label[lang]}</p>
-        <p className="jh__phase">{phase.note[lang]}</p>
-      </section>
-
-      {/* Funnel by channel */}
-      <section className="section reveal">
-        <p className="eyebrow">{t.funnelTitle}</p>
-        <p className="jh__hint jh__hint--block">{t.funnelHint}</p>
-        <table className="jh__table">
-          <thead>
-            <tr>
-              <th>{t.th.stage}</th>
-              {meta.channels.map((ch) => <th key={ch.key} className="jh__num">{ch.label}</th>)}
-              <th className="jh__num">{t.th.total}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {funnel.map((s) => (
-              <tr
-                key={s.key}
-                className={
-                  (s.note ? 'jh__row--note ' : '') + (s.terminal ? 'jh__row--term' : '')
-                }
-              >
-                <th scope="row">{s.label[lang]}</th>
-                {CHANNEL_KEYS.map((k) => (
-                  <td key={k} className="jh__num">{s.counts[k] || <span className="jh__zero">0</span>}</td>
-                ))}
-                <td className="jh__num jh__num--total">{stageTotal(s)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <p className="jh__note">
-          <b>{stageByKey('pending')?.label[lang]}</b> - {t.pendingHint}
-        </p>
-      </section>
-
-      {/* Depth funnel bars */}
-      <section className="section reveal">
-        <p className="eyebrow">{t.depthTitle}</p>
-        <p className="jh__hint jh__hint--block">{t.depthHint}</p>
-        <ul className="jh__bars">
-          {depth.map((s) => {
-            const n = stageTotal(s);
-            const w = appliedTotal ? Math.max((n / appliedTotal) * 100, n > 0 ? 4 : 0) : 0;
+        <p className="eyebrow">{t.ladderTitle}</p>
+        <p className="jh__hint jh__hint--block">{t.ladderHint}</p>
+        <ul className="jh__ladder">
+          {ladder.map((s) => {
+            const w = (s.n / max) * 100;
             return (
-              <li className="jh__bar" key={s.key}>
-                <span className="jh__bar-lbl">{s.label[lang]}</span>
-                <span className="jh__bar-track">
-                  <span className="jh__bar-fill" style={{ width: `${w}%` }} />
+              <li className="jh__step" key={s.key} title={`${t.stages[s.key]}: ${s.n}`}>
+                <span className="jh__step-lbl">{t.stages[s.key]}</span>
+                <span className="jh__step-track">
+                  {s.n > 0
+                    ? <span className="jh__step-fill" style={{ width: `${Math.max(w, 1.2)}%` }} />
+                    : <span className="jh__step-zero" aria-hidden="true" />}
                 </span>
-                <span className="jh__bar-val">{n}</span>
+                <span className={`jh__step-n${s.n === 0 ? ' jh__step-n--zero' : ''}`}>{s.n}</span>
               </li>
             );
           })}
         </ul>
+        <p className="jh__note">{t.outcomeLine(outcomes.rejected, outcomes.awaiting)}</p>
+        <p className="jh__note">{t.channelsLine(channels.hh, channels.boards, channels.referral)}</p>
       </section>
 
-      {/* The other channel - aggregate reach, deliberately not a funnel */}
+      {/* Three real points on a real axis. The emptiness is the message. */}
       <section className="section reveal">
-        <p className="eyebrow">{network.label[lang]}</p>
-        <p className="jh__net-lead">{network.why[lang]}</p>
-        <div className="jh__net">
-          <div className="jh__net-item">
-            <span className="jh__net-val">{network.conversations}</span>
-            <span className="jh__net-lbl">{t.netConversations}</span>
-          </div>
+        <p className="eyebrow">{t.timelineTitle}</p>
+        <div className="jh__tl">
+          <span className="jh__tl-axis" aria-hidden="true" />
+          <span
+            className="jh__tl-gap"
+            style={{ left: `${at(gap.from)}%`, width: `${at(gap.to) - at(gap.from)}%` }}
+            aria-hidden="true"
+          />
+          {timeline.map((p, i) => (
+            // 2 and 5 June sit three days apart on a 92-day axis. Dots stay at true
+            // positions; labels alternate above/below so they cannot collide.
+            <span
+              className={
+                'jh__tl-pt' +
+                (i % 2 ? ' jh__tl-pt--up' : '') +
+                (i === 0 ? ' jh__tl-pt--first' : '') +
+                (i === timeline.length - 1 ? ' jh__tl-pt--last' : '')
+              }
+              key={p.date}
+              style={{ left: `${at(p.date)}%` }}
+            >
+              <span className="jh__tl-dot" />
+              <span className="jh__tl-v">{p.applied}</span>
+              <span className="jh__tl-d">{fmt(p.date, lang)}</span>
+            </span>
+          ))}
         </div>
-        <p className="jh__note">{network.note[lang]}</p>
+        <p className="jh__note">{t.gapLine(weeksBetween(gap.from, gap.to))}</p>
       </section>
 
-      {/* What hiring me involves - the objection, answered before it is raised */}
+      {/* A log, not a chart: seven days is a journal, not a trend. */}
+      <section className="section reveal">
+        <p className="eyebrow">{t.logTitle}</p>
+        <p className="jh__hint jh__hint--block">{t.logHint}</p>
+        <ul className="jh__log">
+          {[...log].reverse().map((d) => (
+            <li className="jh__log-row" key={d.date}>
+              <span className="jh__log-d">{fmt(d.date, lang)}</span>
+              <span className="jh__log-ev">
+                {EV_ORDER.filter((k) => d[k]).map((k) => (
+                  <span className="jh__chip" key={k}>
+                    <b>{d[k]}</b> {t.ev[k as string]}
+                  </span>
+                ))}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="section reveal">
+        <p className="eyebrow">{t.netTitle}</p>
+        <div className="jh__net">
+          <span className="jh__net-val">{network.conversations}</span>
+          <span className="jh__net-lbl">{t.netUnit}</span>
+        </div>
+        <p className="jh__note">{t.netLine}</p>
+      </section>
+
       <section className="section reveal">
         <p className="eyebrow">{visa.title[lang]}</p>
         <p className="jh__visa-intro">{visa.intro[lang]}</p>
         <ul className="jh__visa">
-          {visa.points.map((p) => (
-            <li key={p.en}>{p[lang]}</li>
-          ))}
+          {visa.points.map((p) => <li key={p.en}>{p[lang]}</li>)}
         </ul>
         <p className="jh__visa-src">
-          {visa.sourcesLabel[lang]}: {visa.sources} · {t.checked} {fmtDate(visa.checkedAt, lang)}
+          {visa.sourcesLabel[lang]}: {visa.sources} · {t.checked} {fmt(visa.checkedAt, lang)}
         </p>
       </section>
 
-      {/* Market vs reality - only once the people behind the numbers have said yes */}
-      {benchmark.show && (
-        <section className="section reveal">
-          <p className="eyebrow">{t.benchTitle}</p>
-          <p className="jh__bench-intro">{t.benchIntro}</p>
-          <p className="jh__bench-line">
-            <strong>{benchmark.applied}</strong> {t.benchApplied}
-            <span className="jh__arrow"> → </span>
-            <strong>{benchmark.offers}</strong> {t.benchOffer}
-            <span className="jh__bench-months"> · {t.benchMonths}</span>
-          </p>
-          <p className="jh__bench-profile">{benchmark.profile[lang]}{' '}{benchmark.via[lang]}</p>
-          <p className="jh__takeaway">{t.takeaway}</p>
-        </section>
-      )}
-
-      {/* Trend over time */}
-      {snapshots.length > 1 && (
-        <section className="section reveal">
-          <p className="eyebrow">{t.trendTitle}</p>
-          <table className="jh__table jh__table--trend">
-            <thead>
-              <tr>
-                <th>{t.trendCols.date}</th>
-                <th className="jh__num">{t.trendCols.applied}</th>
-                <th className="jh__num">{t.trendCols.interviews}</th>
-                <th className="jh__num">{t.trendCols.offers}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {snapshots.map((s) => (
-                <tr key={s.date}>
-                  <th scope="row">{fmtDate(s.date, lang)}</th>
-                  <td className="jh__num">{s.applied}</td>
-                  <td className="jh__num">{s.interviews}</td>
-                  <td className="jh__num">{s.offer || <span className="jh__zero">0</span>}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-      )}
+      <section className="section reveal">
+        <p className="eyebrow">{method.title[lang]}</p>
+        <ul className="jh__method">
+          {method.points.map((p) => <li key={p.en}>{p[lang]}</li>)}
+        </ul>
+      </section>
 
       <footer className="jh__foot reveal">
-        <p className="jh__disclaimer">{t.disclaimer}</p>
-        <p className="jh__updated">{t.updated} {fmtDate(meta.updated, lang)}</p>
+        <p className="jh__updated">{t.updated} {fmt(meta.updated, lang)}</p>
         <a className="ilink ilink--sm" href={lang === 'ru' ? '/ru/' : '/'}>{t.back}</a>
       </footer>
     </div>

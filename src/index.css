@@ -14,6 +14,7 @@
   --line-strong: rgba(243, 238, 230, 0.18);
 
   --accent: #e8865a;
+  --chart: #d9744a; /* validated: lightness band + >=3:1 vs #100e0c */
   --accent-text: #e8865a; /* accent used for small TEXT (own value per theme for AA) */
   --accent-soft: rgba(232, 134, 90, 0.14);
   --ok: #86b97f;
@@ -822,148 +823,34 @@ a.proj-icon-slot:hover .proj-icon {
 }
 
 /* tables (funnel + trend) */
-.jh__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.92rem;
-}
 .jh__table th,
-.jh__table td {
-  padding: 0.6rem 0.5rem;
-  text-align: left;
-  border-top: 1px solid var(--line);
-}
-.jh__table thead th {
-  border-top: none;
-  font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-  font-weight: 500;
-}
-.jh__table tbody th[scope='row'] {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: 1.1rem;
-  letter-spacing: -0.005em;
-  color: var(--text);
-}
 /* trend table keeps mono dates (data, not names) */
-.jh__table--trend tbody th[scope='row'] {
-  font-family: var(--mono);
-  font-size: 0.86rem;
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--muted);
-}
 .jh__note {
   margin: 0.9rem 0 0;
   max-width: 58ch;
   font-size: 0.84rem;
   color: var(--faint);
 }
-.jh__note b { color: var(--muted); font-weight: 500; }
-.jh__num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); }
-.jh__num--total { color: var(--text); font-weight: 600; }
-.jh__zero { color: var(--faint); }
 .jh__hint { color: var(--faint); font-weight: 400; font-size: 0.82em; }
 .jh__hint--block { display: block; margin: -0.6rem 0 1.1rem; font-family: var(--mono); font-size: 0.78rem; }
 .jh__row--note th[scope='row'],
-.jh__row--note .jh__num { color: var(--faint); font-weight: 400; }
-.jh__row--term th[scope='row'] { color: var(--muted); }
-.jh__row--term .jh__num--total { color: var(--muted); }
 
 /* depth funnel bars */
-.jh__bars { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; }
-.jh__bar {
-  display: grid;
-  grid-template-columns: 9.5rem 1fr 2.2rem;
-  align-items: center;
-  gap: 0.8rem;
-}
-.jh__bar-lbl { font-family: var(--serif); font-size: 1rem; letter-spacing: -0.005em; color: var(--text); }
-.jh__bar-track {
-  height: 12px;
-  border-radius: 999px;
-  background: var(--bg-soft);
-  border: 1px solid var(--line);
-  overflow: hidden;
-}
-.jh__bar-fill {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--accent), #f0a877);
-  min-width: 2px;
-}
-.jh__bar-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 0.86rem; color: var(--text); text-align: right; }
 
 /* benchmark — market vs reality */
-.jh__bench-intro { margin: 0 0 0.7rem; color: var(--muted); }
-.jh__bench-line {
-  margin: 0;
-  font-family: var(--serif);
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  color: var(--text);
-}
-.jh__bench-line strong { color: var(--accent-text); font-weight: 600; }
-.jh__arrow { color: var(--faint); }
-.jh__bench-months { font-family: var(--mono); font-size: 0.9rem; font-weight: 400; color: var(--faint); letter-spacing: 0; }
-.jh__bench-profile { margin: 0.9rem 0 0; max-width: 60ch; color: var(--muted); font-size: 0.98rem; }
-.jh__takeaway {
-  margin: 1.3rem 0 0;
-  padding: 0.9rem 1.1rem;
-  border-left: 3px solid var(--accent);
-  border-radius: 0 12px 12px 0;
-  background: var(--accent-soft);
-  max-width: 64ch;
-  color: var(--text);
-  font-size: 0.99rem;
-}
 
 /* footer */
 /* the metric line under the headline cards */
-.jh__metric {
-  margin: 1.1rem 0 0;
-  max-width: 62ch;
-  color: var(--muted);
-  font-size: 0.98rem;
-}
 
 /* current-phase note */
-.jh__phase {
-  margin: 0;
-  max-width: 68ch;
-  padding: 1rem 1.15rem;
-  border-radius: 16px;
-  background: var(--glass-fill);
-  border: 1px solid var(--glass-stroke);
-  color: var(--muted);
-  font-size: 0.96rem;
-}
 
 /* the networking channel — aggregate, deliberately not a funnel */
-.jh__net-lead { margin: 0 0 1.2rem; max-width: 62ch; color: var(--muted); }
 .jh__net {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 1.6rem 2.6rem;
 }
-.jh__net-item { display: flex; flex-direction: column; gap: 0.2rem; }
-.jh__net-val {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: clamp(1.7rem, 5vw, 2.3rem);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--text);
-}
-.jh__net-item--quiet .jh__net-val { font-size: clamp(1.2rem, 3.4vw, 1.5rem); color: var(--muted); }
-.jh__net-lbl { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.04em; color: var(--faint); }
 
 /* what hiring me involves */
 .jh__visa-intro { margin: 0 0 1.1rem; max-width: 66ch; color: var(--muted); }
@@ -1036,3 +923,134 @@ a.proj-icon-slot:hover .proj-icon {
 }
 .jh-mini__cta { margin-left: auto; color: var(--accent-text); font-weight: 600; }
 @media (max-width: 480px) { .jh-mini__cta { margin-left: 0; } }
+
+/* ---------- job-hunt: hero ---------- */
+.jh__hero {
+  margin: 0.5rem 0 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.7rem, 5.2vw, 2.9rem);
+  line-height: 1.15;
+  letter-spacing: -0.022em;
+  color: var(--muted);
+  max-width: 20ch;
+}
+.jh__hero-n { color: var(--text); font-size: 1.35em; }
+.jh__hero-d { color: var(--text); }
+.jh__thesis { margin: 1rem 0 0; max-width: 58ch; color: var(--muted); font-size: 1.02rem; }
+.jh__card-sub {
+  margin-top: 0.15rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--chart);
+}
+
+/* ---------- job-hunt: stage ladder (the one chart) ---------- */
+.jh__ladder { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+.jh__step {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr 2.4rem;
+  align-items: center;
+  gap: 0.85rem;
+}
+.jh__step-lbl { font-size: 0.94rem; color: var(--muted); }
+.jh__step-track {
+  position: relative;
+  height: 15px;
+  border-radius: 3px;
+  background: var(--line);
+}
+.jh__step-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 2px 4px 4px 2px;
+  background: var(--chart);
+  box-shadow: 0 0 0 2px var(--bg);
+}
+.jh__step-zero {
+  position: absolute;
+  left: 0; top: 50%;
+  width: 4px; height: 4px;
+  margin-top: -2px;
+  border-radius: 50%;
+  background: var(--faint);
+}
+.jh__step-n {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+  text-align: right;
+  color: var(--text);
+}
+.jh__step-n--zero { color: var(--faint); }
+
+/* ---------- job-hunt: timeline ---------- */
+.jh__tl { position: relative; height: 128px; margin: 0.4rem 0 0.2rem; }
+.jh__tl-axis { position: absolute; left: 0; right: 0; top: 62px; height: 1px; background: var(--line-strong); }
+.jh__tl-gap {
+  position: absolute; top: 58px; height: 9px;
+  border-top: 1px dashed var(--line-strong);
+  border-bottom: 1px dashed var(--line-strong);
+  background: repeating-linear-gradient(135deg, transparent 0 5px, var(--line) 5px 6px);
+}
+.jh__tl-pt { position: absolute; top: 0; transform: translateX(-50%); text-align: center; white-space: nowrap; }
+/* edge points hug the container so their labels cannot overflow it */
+.jh__tl-pt--first { transform: none; text-align: left; }
+.jh__tl-pt--first .jh__tl-dot { margin-left: 0; margin-right: auto; }
+.jh__tl-pt--last { transform: translateX(-100%); text-align: right; }
+.jh__tl-pt--last .jh__tl-dot { margin-left: auto; margin-right: 0; }
+/* odd points render their labels above the axis so neighbours a few days apart do not overlap */
+.jh__tl-pt--up { display: flex; flex-direction: column-reverse; }
+.jh__tl-pt--up .jh__tl-dot { margin: 0 auto 0; }
+.jh__tl-pt--up .jh__tl-v { margin: 0 0 0.1rem; }
+.jh__tl-dot {
+  display: block; width: 9px; height: 9px; margin: 58px auto 0;
+  border-radius: 50%; background: var(--chart);
+  box-shadow: 0 0 0 3px var(--bg);
+}
+.jh__tl-v {
+  display: block; margin-top: 0.45rem;
+  font-family: var(--mono); font-variant-numeric: tabular-nums;
+  font-size: 0.9rem; color: var(--text);
+}
+.jh__tl-d { display: block; font-family: var(--mono); font-size: 0.68rem; color: var(--faint); }
+
+/* ---------- job-hunt: day log ---------- */
+.jh__log { list-style: none; margin: 0; padding: 0; }
+.jh__log-row {
+  display: grid;
+  grid-template-columns: 4.6rem 1fr;
+  gap: 0.9rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--line);
+  align-items: baseline;
+}
+.jh__log-row:last-child { border-bottom: 1px solid var(--line); }
+.jh__log-d { font-family: var(--mono); font-size: 0.76rem; color: var(--faint); }
+.jh__log-ev { display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; }
+.jh__chip { font-size: 0.88rem; color: var(--muted); }
+.jh__chip b {
+  font-family: var(--mono); font-variant-numeric: tabular-nums;
+  font-weight: 500; color: var(--text);
+}
+
+/* ---------- job-hunt: one number, and method ---------- */
+.jh__net { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; }
+.jh__net-val {
+  font-family: var(--serif); font-weight: 500;
+  font-size: clamp(2.2rem, 6vw, 3.1rem); line-height: 1;
+  letter-spacing: -0.02em; color: var(--chart);
+}
+.jh__net-lbl { font-size: 0.98rem; color: var(--muted); }
+.jh__method { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.7rem; max-width: 72ch; }
+.jh__method li { position: relative; padding-left: 1.15rem; color: var(--muted); font-size: 0.95rem; line-height: 1.55; }
+.jh__method li::before {
+  content: ''; position: absolute; left: 0; top: 0.6em;
+  width: 4px; height: 4px; border-radius: 50%; background: var(--faint);
+}
+
+@media (max-width: 560px) {
+  .jh__step { grid-template-columns: 6.4rem 1fr 2rem; gap: 0.5rem; }
+  .jh__step-lbl { font-size: 0.84rem; }
+  .jh__log-row { grid-template-columns: 1fr; gap: 0.25rem; }
+}

@@ -124,11 +124,11 @@ export const SITE: Record<Locale, SiteContent> = {
     },
     jobHunt: {
       title: 'Job hunt - in the open',
-      lead: 'I track my senior backend search publicly - the real funnel, updated as it moves.',
+      lead: 'I publish the real numbers from my search for a backend job in Germany, updated as it moves.',
       applied: 'applied',
       calls: 'first calls',
-      offers: 'offers',
-      cta: 'See the full funnel',
+      offers: 'job offers',
+      cta: 'See all the numbers',
     },
     contact: {
       title: 'Say hi',
@@ -195,11 +195,11 @@ export const SITE: Record<Locale, SiteContent> = {
     },
     jobHunt: {
       title: 'Поиск работы - в открытую',
-      lead: 'Веду поиск senior backend-роли публично - реальная воронка, обновляется по ходу.',
+      lead: 'Публикую настоящие цифры своего поиска работы в Германии. Обновляется по ходу.',
       applied: 'подано',
       calls: 'первых созвонов',
-      offers: 'офферов',
-      cta: 'Вся воронка',
+      offers: 'предложений работы',
+      cta: 'Все цифры',
     },
     contact: {
       title: 'Напиши',

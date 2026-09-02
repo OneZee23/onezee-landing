@@ -6,13 +6,13 @@
     "startDate": "2026-06-02",
     "updated": "2026-09-02",
     "thesis": {
-      "en": "Applications are not the lever. What decides the outcome is a warm introduction and answering the visa question before it is asked.",
-      "ru": "Отклики не рычаг. Решают тёплое интро и снятый визовый вопрос до того, как его задали."
+      "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
+      "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
     }
   },
   "network": {
-    "conversations": 15,
-    "referralOffers": 2
+    "conversations": 16,
+    "referralOffers": 3
   },
   "visa": {
     "title": {
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 3,
-    "applied": 44,
-    "callRatePct": 7
+    "applied": 47,
+    "callRatePct": 6
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 44
+      "n": 47
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 33,
-    "boards": 10,
+    "boards": 13,
     "referral": 1
   },
   "outcomes": {
     "rejected": 15,
     "rejectedIsFloor": true,
-    "awaiting": 29
+    "awaiting": 32
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 44
+      "applied": 47
     }
   ],
   "gap": {
@@ -156,36 +156,39 @@
     },
     {
       "date": "2026-09-02",
-      "msg": 1,
-      "ref": 1,
-      "reply": 3
+      "acc": 1,
+      "applied": 3,
+      "dead": 1,
+      "msg": 2,
+      "ref": 2,
+      "reply": 4
     }
   ],
   "method": {
     "title": {
-      "en": "Method, and what is not published",
-      "ru": "Метод и что не публикуется"
+      "en": "How these numbers are made",
+      "ru": "Как собраны эти цифры"
     },
     "points": [
       {
-        "en": "Every number is generated from a private plain-text tracker by a script. The JSON on this page is never edited by hand.",
-        "ru": "Все числа собираются скриптом из приватного текстового трекера. JSON этой страницы руками не правится."
+        "en": "A script builds these numbers from a private plain-text file. I never edit them by hand.",
+        "ru": "Числа на странице собирает скрипт из моего личного текстового файла. Руками я их не правлю."
       },
       {
-        "en": "Day-level logging started on 24 August 2026. Before that only aggregate snapshots exist, and between 5 June and 24 August nothing was logged at all. The search was running; the record was not.",
-        "ru": "Посуточный учёт начат 24 августа 2026. До этого есть только агрегатные снимки, а с 5 июня по 24 августа не записывалось ничего. Поиск шёл, учёт не вёлся."
+        "en": "Day-by-day logging started 24 August 2026. Before that only totals exist, and between 5 June and 24 August I logged nothing: I kept searching and stopped recording.",
+        "ru": "По дням записываю с 24 августа 2026. Раньше есть только общие срезы, а с 5 июня по 24 августа я не записывал ничего: искал, но не фиксировал."
       },
       {
-        "en": "The 15 rejections are a floor, not an exact count: rejections on the Russian board stopped being logged after 5 June.",
-        "ru": "15 отказов это пол, а не точное число: отказы на российской доске перестали фиксироваться после 5 июня."
+        "en": "The rejection count is a minimum. I stopped logging rejections on the Russian job board after 5 June.",
+        "ru": "Число отказов это минимум. Отказы на российском сайте вакансий я перестал записывать после 5 июня."
       },
       {
-        "en": "A percentage is printed only when the denominator is at least 10. Everything else is shown as counts.",
-        "ru": "Процент печатается только если знаменатель не меньше 10. Всё остальное показано числами."
+        "en": "A percentage appears only when the denominator is at least 10. Everything else is a count.",
+        "ru": "Процент показываю, только если знаменатель не меньше 10. Всё остальное просто числа."
       },
       {
-        "en": "Not published: names of anyone I talk to, company names, salaries, the per-batch invitation tallies, and the reference funnels of two people who shared their numbers privately - those wait for their consent.",
-        "ru": "Не публикуется: имена людей, с которыми я говорю, названия компаний, зарплаты, тэлли приглашений и контрольные воронки двух человек, давших свои цифры приватно. Эти ждут их согласия."
+        "en": "Not here: names of people I talk to, company names, salaries, and the numbers two people shared with me privately. Those wait for their consent.",
+        "ru": "Здесь нет: имён людей, с которыми я говорю, названий компаний, зарплат и цифр, которые два человека дали мне приватно. Эти ждут их согласия."
       }
     ]
   }

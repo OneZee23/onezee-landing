@@ -117,3 +117,64 @@ export const plural = (n: number, one: string, few: string, many: string): strin
   if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
   return many;
 };
+
+/** Every calendar day from a to b inclusive, as ISO strings. For the coverage strip. */
+export const daySpan = (a: string, b: string): string[] => {
+  const out: string[] = [];
+  for (let t = Date.parse(a); t <= Date.parse(b); t += 864e5) {
+    out.push(new Date(t).toISOString().slice(0, 10));
+  }
+  return out;
+};
+
+export type Grain = 'day' | 'week' | 'month';
+export interface Bucket {
+  key: string;
+  showLabel: boolean;
+  from: string;
+  to: string;
+  sent: number;
+  got: number;
+}
+
+const mondayOf = (iso: string): string => {
+  const d = new Date(iso + 'T00:00:00Z');
+  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7));
+  return d.toISOString().slice(0, 10);
+};
+
+/**
+ * The page is static HTML with no hydration, so there is no day/week/month control to
+ * offer the reader. The grain is chosen at build time from how long the search has run:
+ * daily columns stay legible to about eight weeks, weekly to about eight months, then
+ * monthly. Labels thin out on a stride rather than colliding.
+ *
+ * An empty bucket keeps its slot and draws no bar. A zero is never drawn as a mark.
+ */
+export const bucketDays = (
+  days: { date: string; sent: number; got: number }[],
+): { grain: Grain; buckets: Bucket[] } => {
+  // Switch points are picked so the new grain never starts out sparse: 8 weeks of days
+  // becomes 8 weekly columns, and ~34 weeks becomes ~8 monthly ones.
+  const grain: Grain = days.length <= 56 ? 'day' : days.length <= 240 ? 'week' : 'month';
+  const keyOf = (iso: string) =>
+    grain === 'day' ? iso : grain === 'week' ? mondayOf(iso) : iso.slice(0, 7) + '-01';
+
+  const acc = new Map<string, Bucket>();
+  for (const d of days) {
+    const key = keyOf(d.date);
+    const b = acc.get(key);
+    if (b) { b.sent += d.sent; b.got += d.got; b.to = d.date; }
+    else acc.set(key, {
+      key, from: d.date, to: d.date, sent: d.sent, got: d.got, showLabel: false,
+    });
+  }
+
+  const buckets = [...acc.values()];
+  const stride = Math.max(1, Math.ceil(buckets.length / 12));
+  buckets.forEach((b, i) => {
+    // Anchor the stride to the end so the newest column is always labelled.
+    b.showLabel = (buckets.length - 1 - i) % stride === 0;
+  });
+  return { grain, buckets };
+};

@@ -1,26 +1,76 @@
 import React from 'react';
 import type { Locale } from '../content/site';
-import { jobHunt, stage, pct, weeksBetween, plural, type LogDay } from '../content/job-hunt';
+import { bucketDays, type Grain, jobHunt, stage, pct, plural, daySpan, type LogDay } from '../content/job-hunt';
 
-// Static, no hydration. Hover affordances are CSS + native title attributes.
+// Static, no hydration. Every figure comes from src/data/job-hunt.json, which is generated.
+
+const N: React.FC<{ v: number }> = ({ v }) => <b>{v}</b>;
+
+/**
+ * One logged day, as sentences. Chips were unreadable to a first-time visitor:
+ * "3 ответа" names an object with no actor and no direction. Grammar carries
+ * direction for free, in both languages, and survives a screen reader.
+ * Clauses stay independent: on 24 Aug three accepted and three replied, but they
+ * may be different people, so never "of whom" / "из них".
+ */
+function sentences(d: LogDay, lang: Locale): React.ReactNode[] {
+  const out: React.ReactNode[] = [];
+  const ru = lang === 'ru';
+  const { applied: a = 0, invites: i = 0, acc = 0, reply = 0, msg = 0, ref = 0 } = d;
+
+  if (a || i) {
+    const parts: React.ReactNode[] = [];
+    if (a) parts.push(<><N v={a} /> {ru ? plural(a, 'отклик', 'отклика', 'откликов') : `application${a === 1 ? '' : 's'}`}</>);
+    if (i) parts.push(<><N v={i} /> {ru ? `${plural(i, 'приглашение', 'приглашения', 'приглашений')} в LinkedIn` : `LinkedIn connection request${i === 1 ? '' : 's'}`}</>);
+    out.push(
+      <>{ru ? 'Отправил ' : 'I sent '}{parts[0]}{parts[1] ? <>{ru ? ' и ' : ' and '}{parts[1]}</> : null}.</>
+    );
+  }
+  if (acc) {
+    out.push(ru
+      ? <>{acc === 1 ? <>Приглашение принял <N v={1} /> человек.</> : <>Приглашение приняли <N v={acc} /> {plural(acc, 'человек', 'человека', 'человек')}.</>}</>
+      : <><N v={acc} /> {acc === 1 ? 'person' : 'people'} accepted my connection request.</>);
+  }
+  if (reply) {
+    out.push(ru
+      ? <>{reply === 1 ? <>Мне ответил <N v={1} /> человек.</> : <>Мне ответили <N v={reply} /> {plural(reply, 'человек', 'человека', 'человек')}.</>}</>
+      : <><N v={reply} /> {reply === 1 ? 'person' : 'people'} replied.</>);
+  }
+  if (msg) {
+    out.push(ru
+      ? <>Написал <N v={msg} /> {plural(msg, 'сообщение', 'сообщения', 'сообщений')}.</>
+      : <>I sent <N v={msg} /> message{msg === 1 ? '' : 's'}.</>);
+  }
+  if (ref) {
+    out.push(ru
+      ? <>{ref === 1 ? 'Один предложил' : <><N v={ref} /> предложили</>} рекомендацию в свою компанию.</>
+      : <>{ref === 1 ? 'One' : <N v={ref} />} offered to recommend me at their company.</>);
+  }
+  return out;
+}
 
 type Copy = {
   eyebrow: string;
-  hero: (calls: number, applied: number) => React.ReactNode;
+  hero: (c: number, a: number) => React.ReactNode;
   tiles: { calls: string; second: string; offers: string; awaiting: string };
+  ofApplied: string;
   ladderTitle: string;
   ladderHint: string;
   stages: Record<string, string>;
   outcomeLine: (r: number, a: number) => string;
   channelsLine: (hh: number, b: number, r: number) => string;
-  timelineTitle: string;
-  gapLine: (w: number) => string;
+  noReferralLine: (a: number) => string;
+  whenTitle: string;
+  whenLead: (early: number, total: number, late: number) => string;
+  whenTiles: { by: string; on: string };
+  chartLegend: { sent: string; got: string };
+  grainWords: Record<Grain, { one: string; empty: string }>;
+  chartHint: (unit: string, empty: string) => string;
+  gapNote: string;
+  loggedDays: (n: number) => string;
   logTitle: string;
-  logHint: string;
-  ev: Record<string, (n: number) => string>;
-  netTitle: string;
-  netUnit: (n: number) => string;
-  netLine: (refs: number, applied: number) => string;
+  logLead: string;
+  netLine: (conv: number, refs: number) => string;
   metaRole: string;
   metaTarget: string;
   updated: string;
@@ -30,44 +80,48 @@ type Copy = {
 
 const COPY: Record<Locale, Copy> = {
   en: {
-    eyebrow: 'Job hunt, in the open',
+    eyebrow: 'Job hunt in the open',
     hero: (c, a) => (
       <>
         <span className="jh__hero-n">{c}</span> first call{c === 1 ? '' : 's'} out of{' '}
         <span className="jh__hero-d">{a}</span> application{a === 1 ? '' : 's'}
       </>
     ),
-    tiles: { calls: 'First calls', second: 'Second rounds', offers: 'Offers', awaiting: 'No answer yet' },
-    ladderTitle: 'How far applications get',
-    ladderHint: 'Same scale across all stages. A dot marks a real zero.',
-    stages: { applied: 'Applied', call1: 'First call', call2: 'Second round', final: 'Final', offer: 'Offer' },
+    tiles: { calls: 'Invited to a call', second: 'Second interview', offers: 'Job offers', awaiting: 'No answer yet' },
+    ofApplied: 'of applications',
+    ladderTitle: 'What happened to the applications',
+    ladderHint: 'The rows follow the hiring stages on one shared scale. A zero here is a real zero, not missing data.',
+    stages: { applied: 'Applied', call1: 'Invited to a call', call2: 'Second interview', final: 'Final interview', offer: 'Job offer' },
     outcomeLine: (r, a) =>
-      `${r} rejection${r === 1 ? '' : 's'} (a floor - they stopped being logged after 5 June), ${a} still without an answer.`,
-    channelsLine: (hh, b, r) => `By channel: ${hh} on a Russian job board, ${b} on LinkedIn and EU boards, ${r} through a referral.`,
-    timelineTitle: 'Applications over time',
-    gapLine: (w) => `${w} week${w === 1 ? '' : 's'} with no records. The search was running; the log was not.`,
-    logTitle: 'Logged days',
-    logHint: 'Day-level logging started 24 August. A day with no entry is a day with nothing logged.',
-    ev: {
-      applied: (n) => `application${n === 1 ? '' : 's'}`,
-      invites: (n) => `invitation${n === 1 ? '' : 's'}`,
-      acc: () => 'accepted',
-      reply: (n) => (n === 1 ? 'reply' : 'replies'),
-      msg: (n) => `message${n === 1 ? '' : 's'}`,
-      ref: (n) => `referral offer${n === 1 ? '' : 's'}`,
+      `${r} rejections, and that is a minimum: I stopped logging them after 5 June. Another ${a} applications have no answer.`,
+    channelsLine: (hh, b, r) =>
+      `Where they went: ${hh} to a Russian job board, ${b} to LinkedIn and European sites, ${r} through a personal recommendation.`,
+    noReferralLine: (a) => `Not one of those ${a} applications led to a recommendation.`,
+    whenTitle: 'When the applications went out',
+    whenLead: (e, t, l) => `${e} of the ${t} applications were out by 5 June. The other ${l} went out on 1 September.`,
+    whenTiles: { by: 'by 5 June', on: 'on 1 September' },
+    chartLegend: { sent: 'I sent', got: 'came back' },
+    grainWords: {
+      day: { one: 'day', empty: 'A day with no column is a day with nothing logged.' },
+      week: { one: 'week', empty: 'A week with no column is a week with nothing logged.' },
+      month: { one: 'month', empty: 'A month with no column is a month with nothing logged.' },
     },
-    netTitle: 'The other channel',
-    netUnit: (n) => `real conversation${n === 1 ? '' : 's'} with engineers in Europe`,
-    netLine: (r, a) =>
-      `One number on purpose. These are conversations, not leads: no names, no per-person tracking, no funnel, no conversion rate. So far they have ruled out two companies and produced ${r} referral offer${r === 1 ? '' : 's'}, none of which had to be asked for. ${a} applications have produced none.`,
+    chartHint: (unit, empty) =>
+      `One column per ${unit}. The two rows have separate scales: I sent far more than came back, so a shared scale would flatten the replies to nothing. ${empty}`,
+    gapNote: 'Between 5 June and 24 August there are no records at all. I kept applying and stopped writing it down.',
+    loggedDays: (n) => `${n} logged day${n === 1 ? '' : 's'}`,
+    logTitle: 'Day by day',
+    logLead: '24 August to 2 September. Requests, replies and messages are all LinkedIn.',
+    netLine: (c, r) =>
+      `${c} conversations in total. In ${r} of them the other person offered to recommend me. I never had to ask.`,
     metaRole: 'Role',
-    metaTarget: 'Target',
+    metaTarget: 'Where',
     updated: 'Updated',
     checked: 'checked against primary sources',
     back: '← onezee.dev',
   },
   ru: {
-    eyebrow: 'Поиск работы, в открытую',
+    eyebrow: 'Поиск работы в открытую',
     hero: (c, a) => (
       <>
         <span className="jh__hero-n">{c}</span>{' '}
@@ -75,35 +129,44 @@ const COPY: Record<Locale, Copy> = {
         <span className="jh__hero-d">{a}</span> откликов
       </>
     ),
-    tiles: { calls: 'Первых созвонов', second: 'Вторых этапов', offers: 'Офферов', awaiting: 'Без ответа' },
-    ladderTitle: 'Докуда доходят отклики',
-    ladderHint: 'Единый масштаб по всем стадиям. Точка отмечает настоящий ноль.',
-    stages: { applied: 'Подано', call1: 'Первый созвон', call2: 'Второй этап', final: 'Финал', offer: 'Оффер' },
+    tiles: { calls: 'Позвали на созвон', second: 'Второе интервью', offers: 'Предложений работы', awaiting: 'Откликов без ответа' },
+    ofApplied: 'откликов',
+    ladderTitle: 'Что стало с откликами',
+    ladderHint: 'Строки идут по порядку отбора, шкала общая. Ноль здесь настоящий, а не пропуск в данных.',
+    stages: { applied: 'Отправлено', call1: 'Позвали на созвон', call2: 'Второе интервью', final: 'Финальное интервью', offer: 'Предложение работы' },
     outcomeLine: (r, a) =>
-      `${r} ${plural(r, 'отказ', 'отказа', 'отказов')} (это пол: после 5 июня они перестали фиксироваться), ${a} без ответа.`,
-    channelsLine: (hh, b, r) => `По каналам: ${hh} на российской доске, ${b} на LinkedIn и европейских бордах, ${r} через реферал.`,
-    timelineTitle: 'Отклики во времени',
-    gapLine: (w) => `${w} ${plural(w, 'неделя', 'недели', 'недель')} без записей. Поиск шёл, учёт не вёлся.`,
-    logTitle: 'Записанные дни',
-    logHint: 'Посуточный учёт начат 24 августа. День без строки это день, за который ничего не записано.',
-    ev: {
-      applied: (n) => plural(n, 'отклик', 'отклика', 'откликов'),
-      invites: (n) => plural(n, 'приглашение', 'приглашения', 'приглашений'),
-      acc: (n) => plural(n, 'принял', 'приняли', 'приняли'),
-      reply: (n) => plural(n, 'ответ', 'ответа', 'ответов'),
-      msg: (n) => plural(n, 'сообщение', 'сообщения', 'сообщений'),
-      ref: (n) => plural(n, 'реферал', 'реферала', 'рефералов'),
+      `${r} отказов, и это минимум: после 5 июня я перестал их записывать. Ещё ${a} откликов без ответа.`,
+    channelsLine: (hh, b, r) =>
+      `Куда отправлял: ${hh} на российский сайт вакансий, ${b} на LinkedIn и европейские сайты, ${r} по рекомендации знакомого.`,
+    noReferralLine: (a) => `Ни один из этих ${a} откликов не привёл к рекомендации.`,
+    whenTitle: 'Когда уходили отклики',
+    whenLead: (e, t, l) => `К 5 июня было отправлено ${e} откликов из ${t}. Остальные ${l} ушли 1 сентября.`,
+    whenTiles: { by: 'к 5 июня', on: '1 сентября' },
+    chartLegend: { sent: 'отправил', got: 'пришло в ответ' },
+    grainWords: {
+      day: { one: 'день', empty: 'День без столбца это день, за который ничего не записано.' },
+      week: { one: 'неделя', empty: 'Неделя без столбца это неделя, за которую ничего не записано.' },
+      month: { one: 'месяц', empty: 'Месяц без столбца это месяц, за который ничего не записано.' },
     },
-    netTitle: 'Второй канал',
-    netUnit: (n) => `${plural(n, 'живой разговор', 'живых разговора', 'живых разговоров')} с инженерами в Европе`,
-    netLine: (r, a) =>
-      `Одно число намеренно. Это разговоры, а не лиды: ни имён, ни поимённого учёта, ни воронки, ни конверсии. Пока они вычеркнули из списка две компании и принесли ${r} ${plural(r, 'реферал', 'реферала', 'рефералов')}, и ни одного не пришлось просить. ${a} ${plural(a, 'отклик', 'отклика', 'откликов')} не принесли ни одного.`,
-    metaRole: 'Роль',
-    metaTarget: 'Цель',
+    chartHint: (unit, empty) =>
+      `Один столбец это ${unit}. У рядов разные шкалы: отправляю я намного больше, чем приходит в ответ, и на общей шкале ответы схлопнулись бы в ничто. ${empty}`,
+    gapNote: 'С 5 июня по 24 августа записей нет вообще. Я продолжал откликаться и перестал записывать.',
+    loggedDays: (n) => `${n} ${plural(n, 'день', 'дня', 'дней')} с записями`,
+    logTitle: 'Что было по дням',
+    logLead: 'С 24 августа по 2 сентября. Приглашения, ответы и сообщения это LinkedIn.',
+    netLine: (c, r) =>
+      `Всего ${c} ${plural(c, 'разговор', 'разговора', 'разговоров')}. В ${r} из них мне сами предложили рекомендацию, просить не пришлось ни разу.`,
+    metaRole: 'Специальность',
+    metaTarget: 'Куда ищу',
     updated: 'Обновлено',
     checked: 'сверено с первоисточниками',
     back: '← onezee.dev',
   },
+};
+
+const MONTHS: Record<Locale, string[]> = {
+  en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  ru: ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'],
 };
 
 const fmt = (iso: string, lang: Locale) =>
@@ -111,17 +174,37 @@ const fmt = (iso: string, lang: Locale) =>
     day: 'numeric', month: 'short', timeZone: 'UTC',
   });
 
-const EV_ORDER: (keyof LogDay)[] = ['applied', 'invites', 'acc', 'reply', 'msg', 'ref'];
-
 export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
   const t = COPY[lang];
-  const { meta, headline, ladder, channels, outcomes, timeline, gap, log, network, visa, method } = jobHunt;
+  const { meta, headline, ladder, channels, outcomes, timeline, log, network, visa, method } = jobHunt;
   const max = ladder[0].n;
 
-  // timeline positions on a real, evenly-scaled date axis
-  const t0 = Date.parse(timeline[0].date);
-  const t1 = Date.parse(timeline[timeline.length - 1].date);
-  const at = (d: string) => ((Date.parse(d) - t0) / (t1 - t0)) * 100;
+  // Coverage strip: which days have records. A binary presence encoding cannot be
+  // interpolated, so a twelve-week hole is structurally incapable of reading as a value.
+  const days = daySpan(meta.startDate, meta.updated);
+  const logged = new Set([...timeline.map((p) => p.date), ...log.map((d) => d.date)]);
+
+  // Daily activity: every calendar day from the first logged day to today.
+  // A day with no record renders no column at all - never a zero, never interpolated.
+  const byDate = new Map(log.map((d) => [d.date, d]));
+  const chartDays = daySpan(log[0].date, meta.updated).map((date) => {
+    const d = byDate.get(date);
+    return {
+      date,
+      sent: d ? (d.applied ?? 0) + (d.invites ?? 0) + (d.msg ?? 0) : 0,
+      got: d ? (d.acc ?? 0) + (d.reply ?? 0) + (d.ref ?? 0) : 0,
+    };
+  });
+  // Static page, no hydration: no day/week/month control to offer, so the grain is
+  // resolved here at build time and widens on its own as the search gets longer.
+  const { grain, buckets } = bucketDays(chartDays);
+  const gw = t.grainWords[grain];
+  const tick = (b: { key: string }) =>
+    grain === 'month' ? MONTHS[lang][Number(b.key.slice(5, 7)) - 1]
+                      : String(Number(b.key.slice(8, 10)));
+
+  const early = timeline[1].applied;
+  const late = headline.applied - early;
 
   return (
     <div className="jh content">
@@ -137,13 +220,13 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
 
         <div className="jh__cards">
           {[
-            { v: `${headline.calls}`, l: t.tiles.calls, sub: headline.callRatePct !== null ? pct(headline.callRatePct) : null },
-            { v: `${stage('call2')}`, l: t.tiles.second, sub: null },
-            { v: `${stage('offer')}`, l: t.tiles.offers, sub: null, accent: true },
-            { v: `${outcomes.awaiting}`, l: t.tiles.awaiting, sub: null },
+            { v: headline.calls, l: t.tiles.calls, sub: headline.callRatePct !== null ? `${pct(headline.callRatePct)} ${t.ofApplied}` : null },
+            { v: stage('call2'), l: t.tiles.second, sub: null },
+            { v: stage('offer'), l: t.tiles.offers, sub: null },
+            { v: outcomes.awaiting, l: t.tiles.awaiting, sub: null },
           ].map((c) => (
-            <div className={`jh__card${c.accent ? ' jh__card--accent' : ''}`} key={c.l}>
-              <span className="jh__card-val">{c.v}</span>
+            <div className="jh__card" key={c.l}>
+              <span className={`jh__card-val${c.v === 0 ? ' jh__card-val--zero' : ''}`}>{c.v}</span>
               <span className="jh__card-lbl">{c.l}</span>
               {c.sub && <span className="jh__card-sub">{c.sub}</span>}
             </div>
@@ -151,94 +234,109 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
         </div>
       </header>
 
-      {/* The one chart that earns its place: the collapse from 44 to 0. */}
+      {/* The one chart. No tracks: five full-width tubs were 78% of the ink and none of it
+          was data. One hairline baseline instead. The input bar is grey, outcomes are accent. */}
       <section className="section reveal">
         <p className="eyebrow">{t.ladderTitle}</p>
         <p className="jh__hint jh__hint--block">{t.ladderHint}</p>
-        <ul className="jh__ladder">
-          {ladder.map((s) => {
-            const w = (s.n / max) * 100;
-            return (
-              <li className="jh__step" key={s.key} title={`${t.stages[s.key]}: ${s.n}`}>
-                <span className="jh__step-lbl">{t.stages[s.key]}</span>
-                <span className="jh__step-track">
-                  {s.n > 0
-                    ? <span className="jh__step-fill" style={{ width: `${Math.max(w, 1.2)}%` }} />
-                    : <span className="jh__step-zero" aria-hidden="true" />}
-                </span>
-                <span className={`jh__step-n${s.n === 0 ? ' jh__step-n--zero' : ''}`}>{s.n}</span>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="jh__ladder">
+          {ladder.map((s, i) => (
+            <div className={`jh__row${s.n === 0 ? ' jh__row--zero' : ''}`} key={s.key}>
+              <span className="jh__row-lbl">{t.stages[s.key]}</span>
+              <span className="jh__row-plot">
+                {s.n > 0 && (
+                  <i
+                    className={`jh__bar${i === 0 ? ' jh__bar--ctx' : ''}`}
+                    style={{ width: `${(s.n / max) * 100}%` }}
+                  />
+                )}
+                <b className="jh__row-n">{s.n}</b>
+              </span>
+            </div>
+          ))}
+        </div>
         <p className="jh__note">{t.outcomeLine(outcomes.rejected, outcomes.awaiting)}</p>
         <p className="jh__note">{t.channelsLine(channels.hh, channels.boards, channels.referral)}</p>
+        <p className="jh__note jh__note--strong">{t.noReferralLine(headline.applied)}</p>
       </section>
 
-      {/* Three real points on a real axis. The emptiness is the message. */}
+      {/* Three points on a 93-day axis is not a series. Two numbers say it better,
+          and a presence strip shows the hole without ever drawing a value across it. */}
       <section className="section reveal">
-        <p className="eyebrow">{t.timelineTitle}</p>
-        <div className="jh__tl">
-          <span className="jh__tl-axis" aria-hidden="true" />
-          <span
-            className="jh__tl-gap"
-            style={{ left: `${at(gap.from)}%`, width: `${at(gap.to) - at(gap.from)}%` }}
-            aria-hidden="true"
-          />
-          {timeline.map((p, i) => (
-            // 2 and 5 June sit three days apart on a 92-day axis. Dots stay at true
-            // positions; labels alternate above/below so they cannot collide.
-            <span
-              className={
-                'jh__tl-pt' +
-                (i % 2 ? ' jh__tl-pt--up' : '') +
-                (i === 0 ? ' jh__tl-pt--first' : '') +
-                (i === timeline.length - 1 ? ' jh__tl-pt--last' : '')
-              }
-              key={p.date}
-              style={{ left: `${at(p.date)}%` }}
-            >
-              <span className="jh__tl-dot" />
-              <span className="jh__tl-v">{p.applied}</span>
-              <span className="jh__tl-d">{fmt(p.date, lang)}</span>
-            </span>
-          ))}
+        <p className="eyebrow">{t.whenTitle}</p>
+        <p className="jh__lead">{t.whenLead(early, headline.applied, late)}</p>
+        <div className="jh__stats">
+          <div className="jh__stat">
+            <span className="jh__stat-v">{early} / {headline.applied}</span>
+            <span className="jh__stat-l">{t.whenTiles.by}</span>
+          </div>
+          <div className="jh__stat">
+            <span className="jh__stat-v">{late}</span>
+            <span className="jh__stat-l">{t.whenTiles.on}</span>
+          </div>
         </div>
-        <p className="jh__note">{t.gapLine(weeksBetween(gap.from, gap.to))}</p>
+        <p className="jh__note">{t.gapNote}</p>
       </section>
 
-      {/* A log, not a chart: seven days is a journal, not a trend. */}
+      {/* Sentences, not chips. */}
       <section className="section reveal">
         <p className="eyebrow">{t.logTitle}</p>
-        <p className="jh__hint jh__hint--block">{t.logHint}</p>
-        <ul className="jh__log">
-          {[...log].reverse().map((d) => (
-            <li className="jh__log-row" key={d.date}>
-              <span className="jh__log-d">{fmt(d.date, lang)}</span>
-              <span className="jh__log-ev">
-                {EV_ORDER.filter((k) => d[k]).map((k) => (
-                  <span className="jh__chip" key={k}>
-                    <b>{d[k]}</b> {t.ev[k as string](d[k] as number)}
-                  </span>
-                ))}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <p className="jh__lead">{t.loggedDays(log.length)}. {t.logLead}</p>
 
-      <section className="section reveal">
-        <p className="eyebrow">{t.netTitle}</p>
-        <div className="jh__net">
-          <span className="jh__net-val">{network.conversations}</span>
-          <span className="jh__net-lbl">{t.netUnit(network.conversations)}</span>
+        {/* Two rows, each on its own scale. Sent peaks at 33, replies at 7: on one shared
+            scale the replies collapse into invisible stubs. Small multiples, never a dual axis. */}
+        <div className="jh__chart">
+          {([
+            { key: 'sent' as const, label: t.chartLegend.sent },
+            { key: 'got' as const, label: t.chartLegend.got },
+          ]).map(({ key, label }) => {
+            const rowMax = Math.max(...buckets.map((b) => b[key]));
+            return (
+              <div className="jh__crow" key={key}>
+                <div className="jh__crow-head">
+                  <span className={`jh__key jh__key--${key}`} />
+                  <span className="jh__crow-lbl">{label}</span>
+                  <span className="jh__crow-max">max {rowMax}</span>
+                </div>
+                <div className="jh__plot">
+                  {buckets.map((b) => (
+                    <div className="jh__col" key={b.key}>
+                      {b[key] > 0 && (
+                        <i
+                          className={`jh__b jh__b--${key}`}
+                          style={{ height: `${(b[key] / rowMax) * 100}%` }}
+                          title={`${b.from === b.to ? fmt(b.from, lang) : `${fmt(b.from, lang)} - ${fmt(b.to, lang)}`}: ${label} ${b[key]}`}
+                        >
+                          <em>{b[key]}</em>
+                        </i>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="jh__axis">
+                  {buckets.map((b) => <span key={b.key}>{b.showLabel ? tick(b) : ''}</span>)}
+                </div>
+              </div>
+            );
+          })}
         </div>
-        <p className="jh__note">{t.netLine(network.referralOffers, headline.applied)}</p>
+        <p className="jh__note">{t.chartHint(gw.one, gw.empty)}</p>
+        <div className="jh__log">
+          {[...log].reverse().map((d) => (
+            <div className="jh__log-row" key={d.date}>
+              <span className="jh__log-d">{fmt(d.date, lang)}</span>
+              <p className="jh__log-t">
+                {sentences(d, lang).map((s, i) => <React.Fragment key={i}>{s}{' '}</React.Fragment>)}
+              </p>
+            </div>
+          ))}
+        </div>
+        <p className="jh__note jh__note--strong">{t.netLine(network.conversations, network.referralOffers)}</p>
       </section>
 
       <section className="section reveal">
         <p className="eyebrow">{visa.title[lang]}</p>
-        <p className="jh__visa-intro">{visa.intro[lang]}</p>
+        <p className="jh__lead">{visa.intro[lang]}</p>
         <ul className="jh__visa">
           {visa.points.map((p) => <li key={p.en}>{p[lang]}</li>)}
         </ul>

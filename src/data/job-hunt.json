@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 3,
-    "applied": 79,
+    "applied": 82,
     "callRatePct": 4
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 79
+      "n": 82
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 33,
-    "boards": 45,
+    "boards": 48,
     "referral": 1
   },
   "outcomes": {
     "rejected": 19,
     "rejectedIsFloor": true,
-    "awaiting": 60
+    "awaiting": 63
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 79
+      "applied": 82
     }
   ],
   "gap": {
@@ -165,7 +165,7 @@
     },
     {
       "date": "2026-09-03",
-      "applied": 28,
+      "applied": 31,
       "reply": 1
     }
   ],
@@ -229,25 +229,25 @@
       "rejected": 0
     },
     {
+      "key": "ashby",
+      "applied": 3,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "direct",
+      "applied": 2,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "referral",
       "applied": 1,
       "call1": 1,
       "rejected": 1
     },
     {
-      "key": "direct",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
       "key": "recruiter",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "ashby",
       "applied": 1,
       "call1": 0,
       "rejected": 0

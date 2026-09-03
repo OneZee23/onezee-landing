@@ -199,9 +199,15 @@
   "platforms": [
     {
       "key": "hh",
-      "applied": 5,
+      "applied": 38,
+      "call1": 2,
+      "rejected": 13
+    },
+    {
+      "key": "не записано",
+      "applied": 6,
       "call1": 0,
-      "rejected": 1
+      "rejected": 3
     },
     {
       "key": "getmatch",
@@ -216,10 +222,10 @@
       "rejected": 0
     },
     {
-      "key": "не записано",
-      "applied": 2,
-      "call1": 0,
-      "rejected": 0
+      "key": "referral",
+      "applied": 1,
+      "call1": 1,
+      "rejected": 1
     },
     {
       "key": "recruiter",

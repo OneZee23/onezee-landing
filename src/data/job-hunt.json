@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 3,
-    "applied": 51,
-    "callRatePct": 6
+    "applied": 79,
+    "callRatePct": 4
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 51
+      "n": 79
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 33,
-    "boards": 17,
+    "boards": 45,
     "referral": 1
   },
   "outcomes": {
-    "rejected": 17,
+    "rejected": 19,
     "rejectedIsFloor": true,
-    "awaiting": 34
+    "awaiting": 60
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 51
+      "applied": 79
     }
   ],
   "gap": {
@@ -165,6 +165,7 @@
     },
     {
       "date": "2026-09-03",
+      "applied": 28,
       "reply": 1
     }
   ],
@@ -199,9 +200,9 @@
   "platforms": [
     {
       "key": "hh",
-      "applied": 38,
+      "applied": 58,
       "call1": 2,
-      "rejected": 13
+      "rejected": 14
     },
     {
       "key": "не записано",
@@ -210,14 +211,20 @@
       "rejected": 3
     },
     {
+      "key": "hirehi",
+      "applied": 4,
+      "call1": 0,
+      "rejected": 1
+    },
+    {
       "key": "getmatch",
-      "applied": 3,
+      "applied": 4,
       "call1": 0,
       "rejected": 0
     },
     {
       "key": "greenhouse",
-      "applied": 2,
+      "applied": 3,
       "call1": 0,
       "rejected": 0
     },
@@ -228,7 +235,19 @@
       "rejected": 1
     },
     {
+      "key": "direct",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "recruiter",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "ashby",
       "applied": 1,
       "call1": 0,
       "rejected": 0

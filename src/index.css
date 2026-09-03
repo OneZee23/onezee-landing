@@ -789,6 +789,7 @@ a.proj-icon-slot:hover .proj-icon {
 }
 .jh__meta dd { display: inline; margin: 0; color: var(--muted); }
 .jh__meta > div { white-space: nowrap; }
+@media (max-width: 700px) { .jh__meta > div { white-space: normal; } }
 
 /* headline stat cards */
 .jh__cards {
@@ -1017,12 +1018,6 @@ a.proj-icon-slot:hover .proj-icon {
   .jh__stats { gap: 16px; }
 }
 
-/* ================= job-hunt: daily activity ================= */
-
-
-  .jh__col-d { font-size: 0.6rem; }
-}
-
 /* ================= job-hunt: daily activity, two small multiples ================= */
 .jh__chart { display: grid; gap: 1.9rem; margin: 0.2rem 0 1.1rem; }
 
@@ -1066,4 +1061,58 @@ a.proj-icon-slot:hover .proj-icon {
   .jh__plot { height: 74px; padding-top: 14px; }
   .jh__axis span { font-size: 0.56rem; }
   .jh__b em { font-size: 0.6rem; }
+}
+
+/* ================= job-hunt: где уходили отклики ================= */
+.jh__src { display: grid; margin: 0.2rem 0 1.1rem; }
+.jh__src-h, .jh__src-r {
+  display: grid; grid-template-columns: 1fr 5.5rem 8rem;
+  column-gap: 12px; align-items: baseline;
+  padding: 11px 0; border-top: 1px solid var(--line);
+}
+.jh__src-h {
+  border-top: 0; padding-top: 0; padding-bottom: 8px;
+  font: 500 0.72rem/1.4 var(--mono); letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--faint);
+}
+.jh__src-r { font: 400 0.94rem/1.45 var(--sans); color: var(--text); }
+/* Counts sit in columns, so they need tabular figures to line up. */
+.jh__src-r span + span { font-variant-numeric: tabular-nums; }
+/* A zero is not a result yet: it recedes rather than reading as a verdict. */
+.jh__src-z { color: var(--faint); }
+
+@media (max-width: 560px) {
+  .jh__src-h, .jh__src-r { grid-template-columns: 1fr 3.6rem 4.4rem; column-gap: 8px; }
+  .jh__src-h { font-size: 0.62rem; }
+  .jh__src-r { font-size: 0.86rem; }
+}
+
+/* ================= защита от горизонтального переполнения =================
+   В вёрстке не было ни overflow-wrap, ни max-width на медиа, ни min-width: 0
+   у элементов сеток. Из-за этого длинная ссылка в тексте или неразрывная
+   строка растягивали страницу шире экрана: на телефоне это выглядит как
+   съехавшая вёрстка с обрезанным левым краем. */
+
+html, body { overflow-x: clip; }
+
+/* Ломать слово можно только когда иначе оно не влезает. */
+body { overflow-wrap: break-word; }
+
+/* Ссылка и код - главные источники неразрывных длинных строк. */
+a, code, pre { overflow-wrap: anywhere; }
+pre { overflow-x: auto; }
+
+img, svg, video, canvas, iframe { max-width: 100%; }
+
+/* Элемент сетки по умолчанию не сжимается уже своего содержимого:
+   min-width auto - это и есть причина, по которой одна длинная строка
+   раздвигает всю колонку. */
+.feed__body > *, .feed__item > *, .stacklist__row > *, .jh__row > *,
+.jh__log-row > *, .jh__src-r > *, .jh__src-h > * { min-width: 0; }
+
+/* Таблица площадок: на узком экране ужимаем колонки чисел до предела,
+   а не отдаём им фиксированные rem. */
+@media (max-width: 380px) {
+  .jh__src-h, .jh__src-r { grid-template-columns: 1fr 2.8rem 3.4rem; column-gap: 6px; }
+  .jh__src-h { font-size: 0.56rem; letter-spacing: 0.02em; }
 }

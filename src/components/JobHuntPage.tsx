@@ -63,13 +63,17 @@ type Copy = {
   whenTitle: string;
   whenLead: (early: number, total: number, late: number) => string;
   whenTiles: { by: string; on: string };
+  platformsTitle: string;
+  platformsCols: { src: string; applied: string; calls: string };
+  platformsHint: string;
+  platformNames: Record<string, string>;
   chartLegend: { sent: string; got: string };
   grainWords: Record<Grain, { one: string; empty: string }>;
   chartHint: (unit: string, empty: string) => string;
   gapNote: string;
   loggedDays: (n: number) => string;
   logTitle: string;
-  logLead: string;
+  logLead: (from: string, to: string) => string;
   netLine: (conv: number, refs: number) => string;
   metaRole: string;
   metaTarget: string;
@@ -98,8 +102,16 @@ const COPY: Record<Locale, Copy> = {
       `Where they went: ${hh} to a Russian job board, ${b} to LinkedIn and European sites, ${r} through a personal recommendation.`,
     noReferralLine: (a) => `Not one of those ${a} applications led to a recommendation.`,
     whenTitle: 'When the applications went out',
-    whenLead: (e, t, l) => `${e} of the ${t} applications were out by 5 June. The other ${l} went out on 1 September.`,
+    whenLead: (e, t, l) => `${e} of the ${t} applications were out by 5 June. The other ${l} have gone out since 1 September.`,
     whenTiles: { by: 'by 5 June', on: 'on 1 September' },
+    platformsTitle: 'Where the applications went out',
+    platformsCols: { src: 'Source', applied: 'Applied', calls: 'First calls' },
+    platformsHint: 'Too early to read anything into this. A reply takes one to three weeks, so a zero here is a lag, not a verdict. I will switch a source off once it has enough applications behind it and still nothing.',
+    platformNames: {
+      hh: 'hh.ru', getmatch: 'getmatch', greenhouse: 'Company boards (Greenhouse)',
+      recruiter: 'Inbound recruiter', referral: 'Referral', linkedin: 'LinkedIn',
+      'не записано': 'Not recorded',
+    },
     chartLegend: { sent: 'I sent', got: 'came back' },
     grainWords: {
       day: { one: 'day', empty: 'A day with no column is a day with nothing logged.' },
@@ -111,7 +123,8 @@ const COPY: Record<Locale, Copy> = {
     gapNote: 'Between 5 June and 24 August there are no records at all. I kept applying and stopped writing it down.',
     loggedDays: (n) => `${n} logged day${n === 1 ? '' : 's'}`,
     logTitle: 'Day by day',
-    logLead: '24 August to 2 September. Requests, replies and messages are all LinkedIn.',
+    // Derived from the log itself: a hardcoded range goes stale every single day.
+    logLead: (from, to) => `${from} to ${to}. Requests, replies and messages are all LinkedIn.`,
     netLine: (c, r) =>
       `${c} conversations in total. In ${r} of them the other person offered to recommend me. I never had to ask.`,
     metaRole: 'Role',
@@ -140,8 +153,21 @@ const COPY: Record<Locale, Copy> = {
       `Куда отправлял: ${hh} на российский сайт вакансий, ${b} на LinkedIn и европейские сайты, ${r} по рекомендации знакомого.`,
     noReferralLine: (a) => `Ни один из этих ${a} откликов не привёл к рекомендации.`,
     whenTitle: 'Когда уходили отклики',
-    whenLead: (e, t, l) => `К 5 июня было отправлено ${e} откликов из ${t}. Остальные ${l} ушли 1 сентября.`,
+    // «с 1 сентября», а не «1 сентября»: отклики уходят каждый день кампании.
+    // plural обязателен - число меняется и проходит через 1-4.
+    whenLead: (e, t, l) =>
+      `К 5 июня было отправлено ${e} ${plural(e, 'отклик', 'отклика', 'откликов')} из ${t}. `
+      + `${plural(l, 'Оставшийся', 'Оставшиеся', 'Оставшиеся')} ${l} `
+      + `${plural(l, 'ушёл', 'ушли', 'ушли')} с 1 сентября.`,
     whenTiles: { by: 'к 5 июня', on: '1 сентября' },
+    platformsTitle: 'Откуда уходили отклики',
+    platformsCols: { src: 'Площадка', applied: 'Откликов', calls: 'Первых созвонов' },
+    platformsHint: 'Выводов пока никаких. Ответ идёт от одной до трёх недель, поэтому ноль здесь это задержка, а не приговор. Площадку выключу, когда за ней накопится достаточно откликов и всё равно будет пусто.',
+    platformNames: {
+      hh: 'hh.ru', getmatch: 'getmatch', greenhouse: 'Сайты компаний (Greenhouse)',
+      recruiter: 'Входящий рекрутер', referral: 'Реферал', linkedin: 'LinkedIn',
+      'не записано': 'Не записано',
+    },
     chartLegend: { sent: 'отправил', got: 'пришло в ответ' },
     grainWords: {
       day: { one: 'день', empty: 'День без столбца это день, за который ничего не записано.' },
@@ -153,7 +179,7 @@ const COPY: Record<Locale, Copy> = {
     gapNote: 'С 5 июня по 24 августа записей нет вообще. Я продолжал откликаться и перестал записывать.',
     loggedDays: (n) => `${n} ${plural(n, 'день', 'дня', 'дней')} с записями`,
     logTitle: 'Что было по дням',
-    logLead: 'С 24 августа по 2 сентября. Приглашения, ответы и сообщения это LinkedIn.',
+    logLead: (from, to) => `С ${from} по ${to}. Приглашения, ответы и сообщения это LinkedIn.`,
     netLine: (c, r) =>
       `Всего ${c} ${plural(c, 'разговор', 'разговора', 'разговоров')}. В ${r} из них мне сами предложили рекомендацию, просить не пришлось ни разу.`,
     metaRole: 'Специальность',
@@ -169,6 +195,13 @@ const MONTHS: Record<Locale, string[]> = {
   ru: ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'],
 };
 
+/* Полный месяц для текста в предложении: короткая форма в русском несёт свою
+   точку («3 сент.»), и рядом с точкой предложения выходит двойная. */
+const fmtLong = (iso: string, lang: Locale) =>
+  new Date(iso + 'T00:00:00Z').toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-GB', {
+    day: 'numeric', month: 'long', timeZone: 'UTC',
+  });
+
 const fmt = (iso: string, lang: Locale) =>
   new Date(iso + 'T00:00:00Z').toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-GB', {
     day: 'numeric', month: 'short', timeZone: 'UTC',
@@ -176,7 +209,7 @@ const fmt = (iso: string, lang: Locale) =>
 
 export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
   const t = COPY[lang];
-  const { meta, headline, ladder, channels, outcomes, timeline, log, network, visa, method } = jobHunt;
+  const { meta, headline, ladder, channels, outcomes, timeline, log, network, platforms, visa, method } = jobHunt;
   const max = ladder[0].n;
 
   // Coverage strip: which days have records. A binary presence encoding cannot be
@@ -199,9 +232,14 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
   // resolved here at build time and widens on its own as the search gets longer.
   const { grain, buckets } = bucketDays(chartDays);
   const gw = t.grainWords[grain];
-  const tick = (b: { key: string }) =>
-    grain === 'month' ? MONTHS[lang][Number(b.key.slice(5, 7)) - 1]
-                      : String(Number(b.key.slice(8, 10)));
+  // A week label has to carry its month: bare day numbers across a month boundary
+  // read as noise (15, 22, 29, 6, 13...), and the range in the section subtitle
+  // is not enough to decode them.
+  const tick = (b: { key: string }) => {
+    const mon = MONTHS[lang][Number(b.key.slice(5, 7)) - 1];
+    const day = String(Number(b.key.slice(8, 10)));
+    return grain === 'month' ? mon : grain === 'week' ? `${day} ${mon}` : day;
+  };
 
   const early = timeline[1].applied;
   const late = headline.applied - early;
@@ -262,6 +300,27 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
 
       {/* Three points on a 93-day axis is not a series. Two numbers say it better,
           and a presence strip shows the hole without ever drawing a value across it. */}
+      {/* Table, not a chart: five rows of which four are zero is noise, and with
+          fewer than ten applications behind a source a percentage would lie. */}
+      <section className="section reveal">
+        <p className="eyebrow">{t.platformsTitle}</p>
+        <div className="jh__src">
+          <div className="jh__src-h">
+            <span>{t.platformsCols.src}</span>
+            <span>{t.platformsCols.applied}</span>
+            <span>{t.platformsCols.calls}</span>
+          </div>
+          {platforms.map((p) => (
+            <div className="jh__src-r" key={p.key}>
+              <span>{t.platformNames[p.key] ?? p.key}</span>
+              <span>{p.applied}</span>
+              <span className={p.call1 === 0 ? 'jh__src-z' : undefined}>{p.call1}</span>
+            </div>
+          ))}
+        </div>
+        <p className="jh__note">{t.platformsHint}</p>
+      </section>
+
       <section className="section reveal">
         <p className="eyebrow">{t.whenTitle}</p>
         <p className="jh__lead">{t.whenLead(early, headline.applied, late)}</p>
@@ -281,7 +340,7 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
       {/* Sentences, not chips. */}
       <section className="section reveal">
         <p className="eyebrow">{t.logTitle}</p>
-        <p className="jh__lead">{t.loggedDays(log.length)}. {t.logLead}</p>
+        <p className="jh__lead">{t.loggedDays(log.length)}. {t.logLead(fmtLong(log[0].date, lang), fmtLong(log[log.length - 1].date, lang))}</p>
 
         {/* Two rows, each on its own scale. Sent peaks at 33, replies at 7: on one shared
             scale the replies collapse into invisible stubs. Small multiples, never a dual axis. */}

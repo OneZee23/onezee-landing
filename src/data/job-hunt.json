@@ -4,14 +4,14 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-09-02",
+    "updated": "2026-09-03",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
     }
   },
   "network": {
-    "conversations": 17,
+    "conversations": 18,
     "referralOffers": 3
   },
   "visa": {
@@ -123,10 +123,6 @@
   },
   "log": [
     {
-      "date": "2026-06-15",
-      "reply": 1
-    },
-    {
       "date": "2026-08-24",
       "acc": 3,
       "invites": 30,
@@ -163,9 +159,13 @@
       "acc": 3,
       "applied": 7,
       "dead": 1,
-      "msg": 2,
+      "msg": 3,
       "ref": 2,
       "reply": 5
+    },
+    {
+      "date": "2026-09-03",
+      "reply": 1
     }
   ],
   "method": {
@@ -195,5 +195,37 @@
         "ru": "Здесь нет: имён людей, с которыми я говорю, названий компаний, зарплат и цифр, которые два человека дали мне приватно. Эти ждут их согласия."
       }
     ]
-  }
+  },
+  "platforms": [
+    {
+      "key": "hh",
+      "applied": 5,
+      "call1": 0,
+      "rejected": 1
+    },
+    {
+      "key": "getmatch",
+      "applied": 3,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "greenhouse",
+      "applied": 2,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "не записано",
+      "applied": 2,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "recruiter",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    }
+  ]
 }

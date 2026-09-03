@@ -61,6 +61,13 @@ export interface LogDay {
  * ONE number by design. People are not a funnel: no stage ladder, no conversion
  * rate, no per-batch tallies. Do not add fields here without re-reading that rule.
  */
+export interface Platform {
+  key: string;
+  applied: number;
+  call1: number;
+  rejected: number;
+}
+
 export interface Network {
   conversations: number;
   referralOffers: number;
@@ -90,6 +97,7 @@ export interface JobHuntData {
   gap: Gap;
   log: LogDay[];
   network: Network;
+  platforms: Platform[];
   visa: VisaBlock;
   method: Method;
 }

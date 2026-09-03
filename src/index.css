@@ -444,6 +444,9 @@ body.theme-glass ::selection {
   width: 44px;
   height: 44px;
   align-self: start;
+  /* В .dayjob__head слот лежит внутри flex рядом с длинным заголовком.
+     Без этого flex сжимал иконку по горизонтали, и она выходила овалом. */
+  flex: 0 0 auto;
 }
 a.proj-icon-slot {
   transition: transform 0.18s ease;

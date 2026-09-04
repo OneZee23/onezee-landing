@@ -4,14 +4,14 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-09-03",
+    "updated": "2026-09-04",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
     }
   },
   "network": {
-    "conversations": 18,
+    "conversations": 19,
     "referralOffers": 3
   },
   "visa": {
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 3,
-    "applied": 82,
-    "callRatePct": 4
+    "applied": 96,
+    "callRatePct": 3
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 82
+      "n": 96
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 33,
-    "boards": 48,
+    "boards": 62,
     "referral": 1
   },
   "outcomes": {
-    "rejected": 19,
+    "rejected": 21,
     "rejectedIsFloor": true,
-    "awaiting": 63
+    "awaiting": 75
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 82
+      "applied": 96
     }
   ],
   "gap": {
@@ -166,7 +166,12 @@
     {
       "date": "2026-09-03",
       "applied": 31,
-      "reply": 1
+      "msg": 2,
+      "reply": 2
+    },
+    {
+      "date": "2026-09-04",
+      "applied": 14
     }
   ],
   "method": {
@@ -200,15 +205,33 @@
   "platforms": [
     {
       "key": "hh",
-      "applied": 58,
+      "applied": 59,
       "call1": 2,
-      "rejected": 14
+      "rejected": 15
+    },
+    {
+      "key": "ashby",
+      "applied": 8,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "direct",
+      "applied": 7,
+      "call1": 0,
+      "rejected": 0
     },
     {
       "key": "не записано",
       "applied": 6,
       "call1": 0,
-      "rejected": 3
+      "rejected": 4
+    },
+    {
+      "key": "getmatch",
+      "applied": 5,
+      "call1": 0,
+      "rejected": 0
     },
     {
       "key": "hirehi",
@@ -217,25 +240,13 @@
       "rejected": 1
     },
     {
-      "key": "getmatch",
-      "applied": 4,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
       "key": "greenhouse",
       "applied": 3,
       "call1": 0,
       "rejected": 0
     },
     {
-      "key": "ashby",
-      "applied": 3,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "direct",
+      "key": "lever",
       "applied": 2,
       "call1": 0,
       "rejected": 0
@@ -251,6 +262,13 @@
       "applied": 1,
       "call1": 0,
       "rejected": 0
+    }
+  ],
+  "letters": [
+    {
+      "key": "без письма",
+      "applied": 58,
+      "call1": 0
     }
   ]
 }

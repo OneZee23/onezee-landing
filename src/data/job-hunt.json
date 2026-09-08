@@ -67,7 +67,7 @@
     }
   },
   "headline": {
-    "calls": 3,
+    "calls": 4,
     "applied": 180,
     "callRatePct": 2
   },
@@ -78,7 +78,7 @@
     },
     {
       "key": "call1",
-      "n": 3
+      "n": 4
     },
     {
       "key": "call2",
@@ -99,9 +99,9 @@
     "referral": 1
   },
   "outcomes": {
-    "rejected": 23,
+    "rejected": 47,
     "rejectedIsFloor": true,
-    "awaiting": 157
+    "awaiting": 133
   },
   "timeline": [
     {
@@ -227,20 +227,20 @@
     {
       "key": "hh",
       "applied": 96,
-      "call1": 2,
-      "rejected": 15
+      "call1": 3,
+      "rejected": 25
     },
     {
       "key": "ashby",
       "applied": 30,
       "call1": 0,
-      "rejected": 0
+      "rejected": 10
     },
     {
       "key": "direct",
       "applied": 29,
       "call1": 0,
-      "rejected": 0
+      "rejected": 4
     },
     {
       "key": "не записано",
@@ -295,7 +295,7 @@
     {
       "key": "без письма",
       "applied": 142,
-      "call1": 0
+      "call1": 1
     }
   ]
 }

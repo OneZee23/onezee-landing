@@ -16,7 +16,7 @@ const N: React.FC<{ v: number }> = ({ v }) => <b>{v}</b>;
 function sentences(d: LogDay, lang: Locale): React.ReactNode[] {
   const out: React.ReactNode[] = [];
   const ru = lang === 'ru';
-  const { applied: a = 0, invites: i = 0, acc = 0, reply = 0, msg = 0, ref = 0 } = d;
+  const { applied: a = 0, invites: i = 0, acc = 0, reply = 0, msg = 0, ref = 0, rejected: rej = 0 } = d;
 
   if (a || i) {
     const parts: React.ReactNode[] = [];
@@ -45,6 +45,14 @@ function sentences(d: LogDay, lang: Locale): React.ReactNode[] {
     out.push(ru
       ? <>{ref === 1 ? 'Один предложил' : <><N v={ref} /> предложили</>} рекомендацию в свою компанию.</>
       : <>{ref === 1 ? 'One' : <N v={ref} />} offered to recommend me at their company.</>);
+  }
+  // Отказ идёт последним предложением дня: он приходит по чужому решению,
+  // а не по моему действию. Без него дни, в которые пришли только отказы,
+  // рендерились пустой датой без единой строки.
+  if (rej) {
+    out.push(ru
+      ? <>{rej === 1 ? <>Пришёл <N v={1} /> отказ.</> : <>Пришло <N v={rej} /> {plural(rej, 'отказ', 'отказа', 'отказов')}.</>}</>
+      : <><N v={rej} /> rejection{rej === 1 ? '' : 's'} came in.</>);
   }
   return out;
 }
@@ -241,6 +249,14 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
     return grain === 'month' ? mon : grain === 'week' ? `${day} ${mon}` : day;
   };
 
+  // Один источник и для заголовка «N дней с записями», и для самих строк:
+  // иначе счётчик обещает день, которого в списке нет. День без единой фразы
+  // отбрасываем - в логе есть события вроде закрытого контакта, которые
+  // наружу не идут, и такой день рендерился пустой строкой с одной датой.
+  const shownLog = log
+    .map((d) => ({ d, said: sentences(d, lang) }))
+    .filter(({ said }) => said.length > 0);
+
   const early = timeline[1].applied;
   const late = headline.applied - early;
 
@@ -340,7 +356,7 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
       {/* Sentences, not chips. */}
       <section className="section reveal">
         <p className="eyebrow">{t.logTitle}</p>
-        <p className="jh__lead">{t.loggedDays(log.length)}. {t.logLead(fmtLong(log[0].date, lang), fmtLong(log[log.length - 1].date, lang))}</p>
+        <p className="jh__lead">{t.loggedDays(shownLog.length)}. {t.logLead(fmtLong(shownLog[0].d.date, lang), fmtLong(shownLog[shownLog.length - 1].d.date, lang))}</p>
 
         {/* Two rows, each on its own scale. Sent peaks at 33, replies at 7: on one shared
             scale the replies collapse into invisible stubs. Small multiples, never a dual axis. */}
@@ -381,14 +397,16 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
         </div>
         <p className="jh__note">{t.chartHint(gw.one, gw.empty)}</p>
         <div className="jh__log">
-          {[...log].reverse().map((d) => (
-            <div className="jh__log-row" key={d.date}>
-              <span className="jh__log-d">{fmt(d.date, lang)}</span>
-              <p className="jh__log-t">
-                {sentences(d, lang).map((s, i) => <React.Fragment key={i}>{s}{' '}</React.Fragment>)}
-              </p>
-            </div>
-          ))}
+          {[...shownLog]
+            .reverse()
+            .map(({ d, said }) => (
+              <div className="jh__log-row" key={d.date}>
+                <span className="jh__log-d">{fmt(d.date, lang)}</span>
+                <p className="jh__log-t">
+                  {said.map((s, i) => <React.Fragment key={i}>{s}{' '}</React.Fragment>)}
+                </p>
+              </div>
+            ))}
         </div>
         <p className="jh__note jh__note--strong">{t.netLine(network.conversations, network.referralOffers)}</p>
       </section>

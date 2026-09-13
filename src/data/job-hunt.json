@@ -4,7 +4,7 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-09-09",
+    "updated": "2026-09-13",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 4,
-    "applied": 195,
+    "applied": 200,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 195
+      "n": 200
     },
     {
       "key": "call1",
@@ -94,14 +94,14 @@
     }
   ],
   "channels": {
-    "hh": 47,
-    "boards": 147,
+    "hh": 48,
+    "boards": 151,
     "referral": 1
   },
   "outcomes": {
-    "rejected": 53,
+    "rejected": 59,
     "rejectedIsFloor": true,
-    "awaiting": 142
+    "awaiting": 141
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 195
+      "applied": 200
     }
   ],
   "gap": {
@@ -166,42 +166,66 @@
       "dead": 1,
       "msg": 3,
       "ref": 2,
+      "rejected": 1,
       "reply": 5
     },
     {
       "date": "2026-09-03",
       "applied": 31,
       "msg": 2,
+      "rejected": 2,
       "reply": 2
     },
     {
       "date": "2026-09-04",
-      "applied": 30
+      "applied": 30,
+      "rejected": 3
     },
     {
       "date": "2026-09-05",
       "applied": 43,
-      "msg": 1
+      "msg": 1,
+      "rejected": 1
     },
     {
       "date": "2026-09-06",
       "msg": 8,
+      "rejected": 1,
       "reply": 2
     },
     {
       "date": "2026-09-07",
       "applied": 25,
       "msg": 3,
+      "rejected": 20,
       "reply": 2
     },
     {
       "date": "2026-09-08",
-      "msg": 1
+      "msg": 1,
+      "rejected": 3
     },
     {
       "date": "2026-09-09",
-      "applied": 14,
+      "applied": 17,
+      "rejected": 7,
       "reply": 1
+    },
+    {
+      "date": "2026-09-10",
+      "rejected": 3
+    },
+    {
+      "date": "2026-09-11",
+      "rejected": 2
+    },
+    {
+      "date": "2026-09-12",
+      "applied": 1
+    },
+    {
+      "date": "2026-09-13",
+      "dead": 1
     }
   ],
   "method": {
@@ -237,23 +261,23 @@
       "key": "hh",
       "applied": 96,
       "call1": 3,
-      "rejected": 25
+      "rejected": 26
     },
     {
       "key": "direct",
-      "applied": 30,
+      "applied": 31,
       "call1": 0,
-      "rejected": 8
+      "rejected": 10
     },
     {
       "key": "ashby",
       "applied": 30,
       "call1": 0,
-      "rejected": 11
+      "rejected": 13
     },
     {
       "key": "не записано",
-      "applied": 20,
+      "applied": 22,
       "call1": 0,
       "rejected": 4
     },
@@ -262,6 +286,12 @@
       "applied": 5,
       "call1": 0,
       "rejected": 0
+    },
+    {
+      "key": "greenhouse",
+      "applied": 4,
+      "call1": 0,
+      "rejected": 1
     },
     {
       "key": "hirehi",
@@ -276,12 +306,6 @@
       "rejected": 1
     },
     {
-      "key": "greenhouse",
-      "applied": 3,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
       "key": "referral",
       "applied": 1,
       "call1": 1,
@@ -294,6 +318,12 @@
       "rejected": 1
     },
     {
+      "key": "opento_dev",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "tg",
       "applied": 1,
       "call1": 0,
@@ -303,7 +333,7 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 157,
+      "applied": 162,
       "call1": 1
     }
   ]

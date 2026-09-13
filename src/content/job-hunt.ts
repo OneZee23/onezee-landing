@@ -55,6 +55,9 @@ export interface LogDay {
   reply?: number;
   msg?: number;
   ref?: number;
+  /** Приходит по чужому решению, не по моему действию - в график «отправил»
+   *  не идёт, но день без него исчезал бы из лога целиком. */
+  rejected?: number;
 }
 
 /**

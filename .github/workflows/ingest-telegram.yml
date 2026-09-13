@@ -3,9 +3,19 @@ name: Ingest Telegram posts
 # Reads the public Telegram channel, turns #site-tagged posts into blog content,
 # commits them, and triggers a deploy. Runs on a schedule (default branch only)
 # and on demand. Use the manual run with "backfill" to import the whole history.
+#
+# Schedule: every third day at 06:00 UTC.
+# It used to be '*/15 * * * *', which GitHub throttled down to a run every two
+# to four hours anyway - 1960 runs by 13 Sep 2026, drowning every other workflow
+# in the Actions history. Nothing here needs that: posts are rare, and a new one
+# reaches the site by hand in a minute.
+#
+# After publishing a post you want live now, do not wait for the schedule:
+#   gh workflow run ingest-telegram.yml
+# or the "Run workflow" button on the Actions tab.
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '0 6 */3 * *'
   workflow_dispatch:
     inputs:
       backfill:

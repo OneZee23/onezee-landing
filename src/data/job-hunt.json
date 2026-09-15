@@ -4,7 +4,7 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-09-13",
+    "updated": "2026-09-15",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 4,
-    "applied": 200,
+    "applied": 258,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 200
+      "n": 258
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 151,
+    "boards": 209,
     "referral": 1
   },
   "outcomes": {
-    "rejected": 59,
+    "rejected": 66,
     "rejectedIsFloor": true,
-    "awaiting": 141
+    "awaiting": 192
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 200
+      "applied": 258
     }
   ],
   "gap": {
@@ -225,7 +225,18 @@
     },
     {
       "date": "2026-09-13",
-      "dead": 1
+      "applied": 2,
+      "dead": 3
+    },
+    {
+      "date": "2026-09-14",
+      "applied": 52,
+      "rejected": 6
+    },
+    {
+      "date": "2026-09-15",
+      "applied": 4,
+      "rejected": 1
     }
   ],
   "method": {
@@ -259,9 +270,15 @@
   "platforms": [
     {
       "key": "hh",
-      "applied": 96,
+      "applied": 147,
       "call1": 3,
-      "rejected": 26
+      "rejected": 27
+    },
+    {
+      "key": "ashby",
+      "applied": 32,
+      "call1": 0,
+      "rejected": 17
     },
     {
       "key": "direct",
@@ -270,28 +287,22 @@
       "rejected": 10
     },
     {
-      "key": "ashby",
-      "applied": 30,
-      "call1": 0,
-      "rejected": 13
-    },
-    {
       "key": "не записано",
       "applied": 22,
       "call1": 0,
       "rejected": 4
     },
     {
+      "key": "greenhouse",
+      "applied": 5,
+      "call1": 0,
+      "rejected": 2
+    },
+    {
       "key": "getmatch",
       "applied": 5,
       "call1": 0,
       "rejected": 0
-    },
-    {
-      "key": "greenhouse",
-      "applied": 4,
-      "call1": 0,
-      "rejected": 1
     },
     {
       "key": "hirehi",
@@ -303,7 +314,7 @@
       "key": "lever",
       "applied": 4,
       "call1": 0,
-      "rejected": 1
+      "rejected": 2
     },
     {
       "key": "referral",
@@ -324,16 +335,40 @@
       "rejected": 0
     },
     {
+      "key": "wantapply",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "nodejs_jobs+CryptoBlockchainJobs",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "tg",
       "applied": 1,
       "call1": 0,
       "rejected": 1
+    },
+    {
+      "key": "hcareers",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "huntflow",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
     }
   ],
   "letters": [
     {
       "key": "без письма",
-      "applied": 162,
+      "applied": 220,
       "call1": 1
     }
   ]

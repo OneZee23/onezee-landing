@@ -4,7 +4,7 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-09-16",
+    "updated": "2026-09-24",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
@@ -67,18 +67,18 @@
     }
   },
   "headline": {
-    "calls": 4,
-    "applied": 310,
-    "callRatePct": 1
+    "calls": 5,
+    "applied": 315,
+    "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 310
+      "n": 315
     },
     {
       "key": "call1",
-      "n": 4
+      "n": 5
     },
     {
       "key": "call2",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 261,
+    "boards": 266,
     "referral": 1
   },
   "outcomes": {
-    "rejected": 89,
+    "rejected": 105,
     "rejectedIsFloor": true,
-    "awaiting": 221
+    "awaiting": 210
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 310
+      "applied": 315
     }
   ],
   "gap": {
@@ -237,13 +237,43 @@
     },
     {
       "date": "2026-09-15",
-      "applied": 43,
+      "applied": 45,
       "rejected": 11
     },
     {
       "date": "2026-09-16",
       "applied": 6,
       "rejected": 5
+    },
+    {
+      "date": "2026-09-17",
+      "applied": 1,
+      "rejected": 6
+    },
+    {
+      "date": "2026-09-18",
+      "applied": 2,
+      "rejected": 3
+    },
+    {
+      "date": "2026-09-19",
+      "rejected": 1
+    },
+    {
+      "date": "2026-09-21",
+      "rejected": 3
+    },
+    {
+      "date": "2026-09-22",
+      "rejected": 1
+    },
+    {
+      "date": "2026-09-23",
+      "rejected": 1
+    },
+    {
+      "date": "2026-09-24",
+      "rejected": 1
     }
   ],
   "method": {
@@ -283,9 +313,9 @@
     },
     {
       "key": "xing",
-      "applied": 38,
+      "applied": 41,
       "call1": 0,
-      "rejected": 4
+      "rejected": 16
     },
     {
       "key": "ashby",
@@ -301,21 +331,21 @@
     },
     {
       "key": "не записано",
-      "applied": 22,
+      "applied": 24,
       "call1": 0,
-      "rejected": 4
+      "rejected": 6
     },
     {
       "key": "stepstone",
       "applied": 6,
       "call1": 0,
-      "rejected": 1
+      "rejected": 2
     },
     {
       "key": "greenhouse",
       "applied": 5,
       "call1": 0,
-      "rejected": 2
+      "rejected": 3
     },
     {
       "key": "getmatch",
@@ -387,8 +417,8 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 272,
-      "call1": 1
+      "applied": 277,
+      "call1": 2
     }
   ]
 }

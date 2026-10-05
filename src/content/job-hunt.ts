@@ -50,6 +50,8 @@ export interface Gap {
 export interface LogDay {
   date: string;
   applied?: number;
+  /** Completed first interviews, excluding invitations and scheduled calls. */
+  call1?: number;
   invites?: number;
   acc?: number;
   reply?: number;

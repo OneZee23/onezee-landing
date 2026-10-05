@@ -16,7 +16,7 @@ const N: React.FC<{ v: number }> = ({ v }) => <b>{v}</b>;
 function sentences(d: LogDay, lang: Locale): React.ReactNode[] {
   const out: React.ReactNode[] = [];
   const ru = lang === 'ru';
-  const { applied: a = 0, invites: i = 0, acc = 0, reply = 0, msg = 0, ref = 0, rejected: rej = 0 } = d;
+  const { applied: a = 0, call1 = 0, invites: i = 0, acc = 0, reply = 0, msg = 0, ref = 0, rejected: rej = 0 } = d;
 
   if (a || i) {
     const parts: React.ReactNode[] = [];
@@ -25,6 +25,11 @@ function sentences(d: LogDay, lang: Locale): React.ReactNode[] {
     out.push(
       <>{ru ? 'Отправил ' : 'I sent '}{parts[0]}{parts[1] ? <>{ru ? ' и ' : ' and '}{parts[1]}</> : null}.</>
     );
+  }
+  if (call1) {
+    out.push(ru
+      ? <>Состоялось <N v={call1} /> {plural(call1, 'первое собеседование', 'первых собеседования', 'первых собеседований')}.</>
+      : <>I had <N v={call1} /> first interview{call1 === 1 ? '' : 's'}.</>);
   }
   if (acc) {
     out.push(ru
@@ -103,7 +108,7 @@ const COPY: Record<Locale, Copy> = {
     ofApplied: 'of applications',
     ladderTitle: 'What happened to the applications',
     ladderHint: 'The rows follow the hiring stages on one shared scale. A zero here is a real zero, not missing data.',
-    stages: { applied: 'Applied', call1: 'Invited to a call', call2: 'Second interview', final: 'Final interview', offer: 'Job offer' },
+    stages: { applied: 'Applied', call1: 'First interview', call2: 'Second interview', final: 'Final interview', offer: 'Job offer' },
     outcomeLine: (r, a) =>
       `${r} rejections, and that is a minimum: I stopped logging them after 5 June. Another ${a} applications have no answer.`,
     channelsLine: (hh, b, r) =>
@@ -154,7 +159,7 @@ const COPY: Record<Locale, Copy> = {
     ofApplied: 'откликов',
     ladderTitle: 'Что стало с откликами',
     ladderHint: 'Строки идут по порядку отбора, шкала общая. Ноль здесь настоящий, а не пропуск в данных.',
-    stages: { applied: 'Отправлено', call1: 'Позвали на созвон', call2: 'Второе интервью', final: 'Финальное интервью', offer: 'Предложение работы' },
+    stages: { applied: 'Отправлено', call1: 'Первое собеседование', call2: 'Второе интервью', final: 'Финальное интервью', offer: 'Предложение работы' },
     outcomeLine: (r, a) =>
       `${r} отказов, и это минимум: после 5 июня я перестал их записывать. Ещё ${a} откликов без ответа.`,
     channelsLine: (hh, b, r) =>

@@ -67,18 +67,18 @@
     }
   },
   "headline": {
-    "calls": 6,
-    "applied": 320,
+    "calls": 7,
+    "applied": 321,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 320
+      "n": 321
     },
     {
       "key": "call1",
-      "n": 6
+      "n": 7
     },
     {
       "key": "call2",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 270,
+    "boards": 271,
     "referral": 2
   },
   "outcomes": {
     "rejected": 107,
     "rejectedIsFloor": true,
-    "awaiting": 213
+    "awaiting": 214
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 320
+      "applied": 321
     }
   ],
   "gap": {
@@ -294,11 +294,11 @@
     },
     {
       "date": "2026-10-02",
-      "applied": 1
+      "applied": 2
     },
     {
       "date": "2026-10-05",
-      "call1": 1
+      "call1": 2
     }
   ],
   "method": {
@@ -397,6 +397,12 @@
       "rejected": 3
     },
     {
+      "key": "tg",
+      "applied": 2,
+      "call1": 1,
+      "rejected": 1
+    },
+    {
       "key": "hirify",
       "applied": 1,
       "call1": 0,
@@ -427,12 +433,6 @@
       "rejected": 0
     },
     {
-      "key": "tg",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 1
-    },
-    {
       "key": "hcareers",
       "applied": 1,
       "call1": 0,
@@ -459,8 +459,8 @@
     },
     {
       "key": "с письмом",
-      "applied": 4,
-      "call1": 0
+      "applied": 5,
+      "call1": 1
     }
   ]
 }

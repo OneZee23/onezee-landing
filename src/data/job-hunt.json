@@ -67,7 +67,7 @@
     }
   },
   "headline": {
-    "calls": 9,
+    "calls": 10,
     "applied": 324,
     "callRatePct": 3
   },
@@ -78,7 +78,7 @@
     },
     {
       "key": "call1",
-      "n": 9
+      "n": 10
     },
     {
       "key": "call2",
@@ -304,7 +304,7 @@
     },
     {
       "date": "2026-10-06",
-      "call1": 1,
+      "call1": 2,
       "ref": 1,
       "reply": 1
     }
@@ -461,7 +461,7 @@
     {
       "key": "vacancy",
       "applied": 1,
-      "call1": 1,
+      "call1": 2,
       "rejected": 0
     }
   ],
@@ -469,7 +469,7 @@
     {
       "key": "без письма",
       "applied": 279,
-      "call1": 4
+      "call1": 5
     },
     {
       "key": "с письмом",

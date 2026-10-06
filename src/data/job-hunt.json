@@ -11,7 +11,7 @@
     }
   },
   "network": {
-    "conversations": 27,
+    "conversations": 28,
     "referralOffers": 4
   },
   "visa": {
@@ -304,7 +304,8 @@
     },
     {
       "date": "2026-10-06",
-      "call1": 1
+      "call1": 1,
+      "reply": 1
     }
   ],
   "method": {

@@ -2,7 +2,7 @@ import React from 'react';
 import { useSite } from '../i18n/context';
 import { Reveal } from './Reveal';
 import { Icon } from './Icon';
-import { jobHunt, stage } from '../content/job-hunt';
+import { jobHunt, stage, offerLabel } from '../content/job-hunt';
 
 // Compact homepage teaser for the public funnel. Numbers come straight from the
 // shared job-hunt data; the full page lives at /job-hunt (+ /ru/job-hunt).
@@ -13,7 +13,7 @@ export const JobHunt: React.FC = () => {
   const stats = [
     { v: h.calls, l: c.jobHunt.calls },
     { v: h.applied, l: c.jobHunt.applied },
-    { v: stage('offer'), l: c.jobHunt.offers },
+    { v: stage('offer'), l: offerLabel(stage('offer'), lang) },
   ];
   return (
     <section className="section" id="job-hunt">

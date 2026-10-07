@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Locale } from '../content/site';
-import { bucketDays, type Grain, jobHunt, stage, pct, plural, daySpan, type LogDay } from '../content/job-hunt';
+import { bucketDays, type Grain, jobHunt, stage, pct, plural, offerLabel, daySpan, type LogDay } from '../content/job-hunt';
 
 // Static, no hydration. Every figure comes from src/data/job-hunt.json, which is generated.
 
@@ -281,7 +281,7 @@ export const JobHuntPage: React.FC<{ lang: Locale }> = ({ lang }) => {
           {[
             { v: headline.calls, l: t.tiles.calls, sub: headline.callRatePct !== null ? `${pct(headline.callRatePct)} ${t.ofApplied}` : null },
             { v: stage('call2'), l: t.tiles.second, sub: null },
-            { v: stage('offer'), l: t.tiles.offers, sub: null },
+            { v: stage('offer'), l: offerLabel(stage('offer'), lang), sub: null },
             { v: outcomes.awaiting, l: t.tiles.awaiting, sub: null },
           ].map((c) => (
             <div className="jh__card" key={c.l}>

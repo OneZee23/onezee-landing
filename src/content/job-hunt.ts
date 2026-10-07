@@ -131,6 +131,11 @@ export const plural = (n: number, one: string, few: string, many: string): strin
   return many;
 };
 
+export const offerLabel = (n: number, lang: Locale): string =>
+  lang === 'ru'
+    ? plural(n, 'предложение работы', 'предложения работы', 'предложений работы')
+    : n === 1 ? 'job offer' : 'job offers';
+
 /** Every calendar day from a to b inclusive, as ISO strings. For the coverage strip. */
 export const daySpan = (a: string, b: string): string[] => {
   const out: string[] = [];

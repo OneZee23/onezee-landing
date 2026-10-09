@@ -11,8 +11,8 @@
     }
   },
   "network": {
-    "conversations": 32,
-    "referralOffers": 5
+    "conversations": 33,
+    "referralOffers": 6
   },
   "visa": {
     "title": {
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 327,
+    "applied": 375,
     "callRatePct": 3
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 327
+      "n": 375
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 276,
-    "referral": 3
+    "boards": 321,
+    "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 219
+    "awaiting": 267
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 327
+      "applied": 375
     }
   ],
   "gap": {
@@ -326,9 +326,10 @@
     {
       "date": "2026-10-09",
       "acc": 1,
-      "applied": 2,
-      "msg": 11,
-      "reply": 1
+      "applied": 50,
+      "msg": 12,
+      "ref": 1,
+      "reply": 2
     }
   ],
   "method": {
@@ -368,37 +369,55 @@
     },
     {
       "key": "xing",
-      "applied": 43,
+      "applied": 46,
       "call1": 0,
       "rejected": 16
     },
     {
       "key": "ashby",
-      "applied": 34,
+      "applied": 41,
       "call1": 0,
       "rejected": 17
     },
     {
       "key": "direct",
-      "applied": 31,
+      "applied": 39,
       "call1": 0,
       "rejected": 10
     },
     {
       "key": "не записано",
-      "applied": 24,
+      "applied": 26,
       "call1": 0,
       "rejected": 6
     },
     {
-      "key": "stepstone",
-      "applied": 6,
+      "key": "linkedin",
+      "applied": 14,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "greenhouse",
+      "applied": 8,
       "call1": 0,
       "rejected": 3
     },
     {
-      "key": "greenhouse",
-      "applied": 5,
+      "key": "personio",
+      "applied": 7,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "referral",
+      "applied": 6,
+      "call1": 1,
+      "rejected": 3
+    },
+    {
+      "key": "stepstone",
+      "applied": 6,
       "call1": 0,
       "rejected": 3
     },
@@ -421,12 +440,6 @@
       "rejected": 2
     },
     {
-      "key": "referral",
-      "applied": 3,
-      "call1": 1,
-      "rejected": 3
-    },
-    {
       "key": "tg",
       "applied": 3,
       "call1": 2,
@@ -439,7 +452,13 @@
       "rejected": 0
     },
     {
-      "key": "linkedin",
+      "key": "smartrecruiters",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "teamtailor",
       "applied": 1,
       "call1": 0,
       "rejected": 0
@@ -490,12 +509,12 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 280,
+      "applied": 302,
       "call1": 5
     },
     {
       "key": "с письмом",
-      "applied": 9,
+      "applied": 35,
       "call1": 3
     }
   ]

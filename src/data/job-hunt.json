@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 325,
+    "applied": 327,
     "callRatePct": 3
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 325
+      "n": 327
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 274,
+    "boards": 276,
     "referral": 3
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 217
+    "awaiting": 219
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 325
+      "applied": 327
     }
   ],
   "gap": {
@@ -326,7 +326,8 @@
     {
       "date": "2026-10-09",
       "acc": 1,
-      "msg": 10,
+      "applied": 2,
+      "msg": 11,
       "reply": 1
     }
   ],
@@ -367,13 +368,13 @@
     },
     {
       "key": "xing",
-      "applied": 42,
+      "applied": 43,
       "call1": 0,
       "rejected": 16
     },
     {
       "key": "ashby",
-      "applied": 33,
+      "applied": 34,
       "call1": 0,
       "rejected": 17
     },
@@ -494,7 +495,7 @@
     },
     {
       "key": "с письмом",
-      "applied": 7,
+      "applied": 9,
       "call1": 3
     }
   ]

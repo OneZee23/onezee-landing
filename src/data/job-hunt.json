@@ -509,12 +509,12 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 302,
+      "applied": 301,
       "call1": 5
     },
     {
       "key": "с письмом",
-      "applied": 35,
+      "applied": 36,
       "call1": 3
     }
   ]

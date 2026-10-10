@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 431,
+    "applied": 436,
     "callRatePct": 3
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 431
+      "n": 436
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 377,
+    "boards": 382,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 323
+    "awaiting": 328
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 431
+      "applied": 436
     }
   ],
   "gap": {
@@ -339,7 +339,7 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 10,
+      "applied": 15,
       "msg": 10
     }
   ],
@@ -379,26 +379,26 @@
       "rejected": 45
     },
     {
+      "key": "ashby",
+      "applied": 46,
+      "call1": 0,
+      "rejected": 17
+    },
+    {
       "key": "xing",
       "applied": 46,
       "call1": 0,
       "rejected": 16
     },
     {
-      "key": "ashby",
-      "applied": 44,
-      "call1": 0,
-      "rejected": 17
-    },
-    {
       "key": "application",
-      "applied": 41,
+      "applied": 42,
       "call1": 0,
       "rejected": 0
     },
     {
       "key": "direct",
-      "applied": 40,
+      "applied": 41,
       "call1": 0,
       "rejected": 10
     },
@@ -463,6 +463,12 @@
       "rejected": 1
     },
     {
+      "key": "teamtailor",
+      "applied": 2,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "email",
       "applied": 2,
       "call1": 0,
@@ -482,12 +488,6 @@
     },
     {
       "key": "smartrecruiters",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "teamtailor",
       "applied": 1,
       "call1": 0,
       "rejected": 0
@@ -538,12 +538,12 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 348,
+      "applied": 349,
       "call1": 5
     },
     {
       "key": "с письмом",
-      "applied": 45,
+      "applied": 49,
       "call1": 3
     }
   ]

@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 441,
+    "applied": 446,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 441
+      "n": 446
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 387,
+    "boards": 392,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 333
+    "awaiting": 338
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 441
+      "applied": 446
     }
   ],
   "gap": {
@@ -339,7 +339,7 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 20,
+      "applied": 25,
       "msg": 10
     }
   ],
@@ -379,6 +379,12 @@
       "rejected": 45
     },
     {
+      "key": "direct",
+      "applied": 46,
+      "call1": 0,
+      "rejected": 10
+    },
+    {
       "key": "ashby",
       "applied": 46,
       "call1": 0,
@@ -389,12 +395,6 @@
       "applied": 46,
       "call1": 0,
       "rejected": 16
-    },
-    {
-      "key": "direct",
-      "applied": 43,
-      "call1": 0,
-      "rejected": 10
     },
     {
       "key": "application",
@@ -422,7 +422,7 @@
     },
     {
       "key": "personio",
-      "applied": 9,
+      "applied": 10,
       "call1": 0,
       "rejected": 0
     },
@@ -463,6 +463,12 @@
       "rejected": 1
     },
     {
+      "key": "smartrecruiters",
+      "applied": 2,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "teamtailor",
       "applied": 2,
       "call1": 0,
@@ -488,12 +494,6 @@
     },
     {
       "key": "personio/email",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "smartrecruiters",
       "applied": 1,
       "call1": 0,
       "rejected": 0
@@ -549,7 +549,7 @@
     },
     {
       "key": "с письмом",
-      "applied": 54,
+      "applied": 59,
       "call1": 3
     }
   ]

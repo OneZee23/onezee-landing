@@ -104,13 +104,13 @@ const COPY: Record<Locale, Copy> = {
         <span className="jh__hero-d">{a}</span> application{a === 1 ? '' : 's'}
       </>
     ),
-    tiles: { calls: 'Invited to a call', second: 'Second interview', offers: 'Job offers', awaiting: 'No answer yet' },
+    tiles: { calls: 'First calls completed', second: 'Second interview', offers: 'Job offers', awaiting: 'No rejection recorded' },
     ofApplied: 'of applications',
     ladderTitle: 'What happened to the applications',
     ladderHint: 'The rows follow the hiring stages on one shared scale. A zero here is a real zero, not missing data.',
     stages: { applied: 'Applied', call1: 'First interview', call2: 'Second interview', final: 'Final interview', offer: 'Job offer' },
     outcomeLine: (r, a) =>
-      `${r} rejections, and that is a minimum: I stopped logging them after 5 June. Another ${a} applications have no answer.`,
+      `${r} recorded rejections, a minimum because some were not logged. The other ${a} applications have no recorded rejection; this includes ongoing conversations, an offer and unanswered applications.`,
     channelsLine: (hh, b, r) =>
       `Where they went: ${hh} to a Russian job board, ${b} to LinkedIn and European sites, ${r} through a personal recommendation.`,
     noReferralLine: (a) => `Not one of those ${a} applications led to a recommendation.`,
@@ -139,7 +139,7 @@ const COPY: Record<Locale, Copy> = {
     // Derived from the log itself: a hardcoded range goes stale every single day.
     logLead: (from, to) => `${from} to ${to}. Requests, replies and messages are all LinkedIn.`,
     netLine: (c, r) =>
-      `${c} conversations in total. In ${r} of them the other person offered to recommend me. I never had to ask.`,
+      `${c} conversations in total. In ${r} of them the other person offered to recommend me.`,
     metaRole: 'Role',
     metaTarget: 'Where',
     updated: 'Updated',
@@ -155,13 +155,13 @@ const COPY: Record<Locale, Copy> = {
         <span className="jh__hero-d">{a}</span> откликов
       </>
     ),
-    tiles: { calls: 'Позвали на созвон', second: 'Второе интервью', offers: 'Предложений работы', awaiting: 'Откликов без ответа' },
+    tiles: { calls: 'Проведено первых созвонов', second: 'Второе интервью', offers: 'Предложений работы', awaiting: 'Без записанного отказа' },
     ofApplied: 'откликов',
     ladderTitle: 'Что стало с откликами',
     ladderHint: 'Строки идут по порядку отбора, шкала общая. Ноль здесь настоящий, а не пропуск в данных.',
     stages: { applied: 'Отправлено', call1: 'Первое собеседование', call2: 'Второе интервью', final: 'Финальное интервью', offer: 'Предложение работы' },
     outcomeLine: (r, a) =>
-      `${r} отказов, и это минимум: после 5 июня я перестал их записывать. Ещё ${a} откликов без ответа.`,
+      `${r} записанных отказов, и это минимум: часть отказов не фиксировалась. У остальных ${a} откликов нет записанного отказа. Сюда входят текущие разговоры, оффер и заявки без ответа.`,
     channelsLine: (hh, b, r) =>
       `Куда отправлял: ${hh} на российский сайт вакансий, ${b} на LinkedIn и европейские сайты, ${r} по рекомендации знакомого.`,
     noReferralLine: (a) => `Ни один из этих ${a} откликов не привёл к рекомендации.`,

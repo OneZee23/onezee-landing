@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 428,
+    "applied": 431,
     "callRatePct": 3
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 428
+      "n": 431
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 374,
+    "boards": 377,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 320
+    "awaiting": 323
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 428
+      "applied": 431
     }
   ],
   "gap": {
@@ -339,7 +339,7 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 7,
+      "applied": 10,
       "msg": 10
     }
   ],
@@ -386,13 +386,13 @@
     },
     {
       "key": "ashby",
-      "applied": 43,
+      "applied": 44,
       "call1": 0,
       "rejected": 17
     },
     {
       "key": "application",
-      "applied": 40,
+      "applied": 41,
       "call1": 0,
       "rejected": 0
     },
@@ -416,7 +416,7 @@
     },
     {
       "key": "greenhouse",
-      "applied": 10,
+      "applied": 11,
       "call1": 0,
       "rejected": 3
     },
@@ -538,12 +538,12 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 347,
+      "applied": 348,
       "call1": 5
     },
     {
       "key": "с письмом",
-      "applied": 43,
+      "applied": 45,
       "call1": 3
     }
   ]

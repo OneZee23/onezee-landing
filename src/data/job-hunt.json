@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 446,
+    "applied": 450,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 446
+      "n": 450
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 392,
+    "boards": 396,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 338
+    "awaiting": 342
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 446
+      "applied": 450
     }
   ],
   "gap": {
@@ -339,7 +339,7 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 25,
+      "applied": 29,
       "msg": 10
     }
   ],
@@ -380,13 +380,13 @@
     },
     {
       "key": "direct",
-      "applied": 46,
+      "applied": 49,
       "call1": 0,
       "rejected": 10
     },
     {
       "key": "ashby",
-      "applied": 46,
+      "applied": 47,
       "call1": 0,
       "rejected": 17
     },
@@ -544,12 +544,12 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 349,
+      "applied": 350,
       "call1": 5
     },
     {
       "key": "с письмом",
-      "applied": 59,
+      "applied": 62,
       "call1": 3
     }
   ]

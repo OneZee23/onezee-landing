@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 521,
+    "applied": 518,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 521
+      "n": 518
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 467,
+    "boards": 464,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 413
+    "awaiting": 410
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 521
+      "applied": 518
     }
   ],
   "gap": {
@@ -339,8 +339,8 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 100,
-      "msg": 56
+      "applied": 97,
+      "msg": 57
     }
   ],
   "method": {
@@ -379,16 +379,16 @@
       "rejected": 45
     },
     {
+      "key": "direct",
+      "applied": 56,
+      "call1": 0,
+      "rejected": 10
+    },
+    {
       "key": "linkedin",
       "applied": 56,
       "call1": 0,
       "rejected": 0
-    },
-    {
-      "key": "direct",
-      "applied": 55,
-      "call1": 0,
-      "rejected": 10
     },
     {
       "key": "ashby",
@@ -415,16 +415,16 @@
       "rejected": 6
     },
     {
-      "key": "email",
-      "applied": 17,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
       "key": "greenhouse",
       "applied": 16,
       "call1": 0,
       "rejected": 3
+    },
+    {
+      "key": "email",
+      "applied": 13,
+      "call1": 0,
+      "rejected": 0
     },
     {
       "key": "personio",
@@ -549,7 +549,7 @@
     },
     {
       "key": "с письмом",
-      "applied": 89,
+      "applied": 86,
       "call1": 3
     }
   ]

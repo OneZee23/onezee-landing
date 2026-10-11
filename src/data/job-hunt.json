@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 453,
+    "applied": 461,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 453
+      "n": 461
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 399,
+    "boards": 407,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 345
+    "awaiting": 353
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 453
+      "applied": 461
     }
   ],
   "gap": {
@@ -339,8 +339,8 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 32,
-      "msg": 13
+      "applied": 40,
+      "msg": 17
     }
   ],
   "method": {
@@ -386,7 +386,7 @@
     },
     {
       "key": "ashby",
-      "applied": 47,
+      "applied": 48,
       "call1": 0,
       "rejected": 17
     },
@@ -410,13 +410,13 @@
     },
     {
       "key": "linkedin",
-      "applied": 18,
+      "applied": 23,
       "call1": 0,
       "rejected": 0
     },
     {
       "key": "greenhouse",
-      "applied": 13,
+      "applied": 14,
       "call1": 0,
       "rejected": 3
     },
@@ -457,6 +457,12 @@
       "rejected": 2
     },
     {
+      "key": "teamtailor",
+      "applied": 3,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "tg",
       "applied": 3,
       "call1": 2,
@@ -464,12 +470,6 @@
     },
     {
       "key": "smartrecruiters",
-      "applied": 2,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "teamtailor",
       "applied": 2,
       "call1": 0,
       "rejected": 0
@@ -544,12 +544,12 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 352,
+      "applied": 358,
       "call1": 5
     },
     {
       "key": "с письмом",
-      "applied": 63,
+      "applied": 65,
       "call1": 3
     }
   ]

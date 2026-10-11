@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 483,
+    "applied": 487,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 483
+      "n": 487
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 429,
+    "boards": 433,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 375
+    "awaiting": 379
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 483
+      "applied": 487
     }
   ],
   "gap": {
@@ -339,8 +339,8 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 62,
-      "msg": 33
+      "applied": 66,
+      "msg": 34
     }
   ],
   "method": {
@@ -391,16 +391,16 @@
       "rejected": 10
     },
     {
+      "key": "linkedin",
+      "applied": 46,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "xing",
       "applied": 46,
       "call1": 0,
       "rejected": 16
-    },
-    {
-      "key": "linkedin",
-      "applied": 42,
-      "call1": 0,
-      "rejected": 0
     },
     {
       "key": "application",
@@ -544,7 +544,7 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 376,
+      "applied": 380,
       "call1": 5
     },
     {

@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 469,
+    "applied": 470,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 469
+      "n": 470
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 415,
+    "boards": 416,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 361
+    "awaiting": 362
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 469
+      "applied": 470
     }
   ],
   "gap": {
@@ -339,8 +339,8 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 48,
-      "msg": 21
+      "applied": 49,
+      "msg": 23
     }
   ],
   "method": {
@@ -422,7 +422,7 @@
     },
     {
       "key": "personio",
-      "applied": 11,
+      "applied": 12,
       "call1": 0,
       "rejected": 0
     },
@@ -544,7 +544,7 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 365,
+      "applied": 366,
       "call1": 5
     },
     {

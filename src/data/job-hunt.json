@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 518,
+    "applied": 521,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 518
+      "n": 521
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 464,
+    "boards": 467,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 410
+    "awaiting": 413
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 518
+      "applied": 521
     }
   ],
   "gap": {
@@ -339,7 +339,7 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 97,
+      "applied": 100,
       "msg": 57
     }
   ],
@@ -392,7 +392,7 @@
     },
     {
       "key": "ashby",
-      "applied": 52,
+      "applied": 54,
       "call1": 0,
       "rejected": 17
     },
@@ -451,6 +451,12 @@
       "rejected": 0
     },
     {
+      "key": "teamtailor",
+      "applied": 4,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "hirehi",
       "applied": 4,
       "call1": 0,
@@ -461,12 +467,6 @@
       "applied": 4,
       "call1": 0,
       "rejected": 2
-    },
-    {
-      "key": "teamtailor",
-      "applied": 3,
-      "call1": 0,
-      "rejected": 0
     },
     {
       "key": "tg",
@@ -549,7 +549,7 @@
     },
     {
       "key": "с письмом",
-      "applied": 86,
+      "applied": 89,
       "call1": 3
     }
   ]

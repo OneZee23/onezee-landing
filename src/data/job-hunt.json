@@ -11,7 +11,7 @@
     }
   },
   "network": {
-    "conversations": 38,
+    "conversations": 39,
     "referralOffers": 6
   },
   "visa": {
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 461,
+    "applied": 463,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 461
+      "n": 463
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 407,
+    "boards": 409,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 353
+    "awaiting": 355
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 461
+      "applied": 463
     }
   ],
   "gap": {
@@ -132,7 +132,7 @@
       "acc": 3,
       "invites": 30,
       "msg": 1,
-      "reply": 3
+      "reply": 4
     },
     {
       "date": "2026-08-25",
@@ -167,7 +167,7 @@
       "msg": 3,
       "ref": 2,
       "rejected": 1,
-      "reply": 5
+      "reply": 6
     },
     {
       "date": "2026-09-03",
@@ -339,8 +339,8 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 40,
-      "msg": 17
+      "applied": 42,
+      "msg": 19
     }
   ],
   "method": {
@@ -410,7 +410,7 @@
     },
     {
       "key": "linkedin",
-      "applied": 23,
+      "applied": 25,
       "call1": 0,
       "rejected": 0
     },
@@ -544,7 +544,7 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 358,
+      "applied": 360,
       "call1": 5
     },
     {

@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 544,
+    "applied": 546,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 544
+      "n": 546
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 490,
+    "boards": 492,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 436
+    "awaiting": 438
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 544
+      "applied": 546
     }
   ],
   "gap": {
@@ -339,7 +339,7 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 123,
+      "applied": 125,
       "msg": 57
     }
   ],
@@ -416,7 +416,7 @@
     },
     {
       "key": "greenhouse",
-      "applied": 17,
+      "applied": 18,
       "call1": 0,
       "rejected": 3
     },
@@ -428,7 +428,7 @@
     },
     {
       "key": "personio",
-      "applied": 12,
+      "applied": 13,
       "call1": 0,
       "rejected": 0
     },
@@ -555,7 +555,7 @@
     },
     {
       "key": "с письмом",
-      "applied": 99,
+      "applied": 101,
       "call1": 3
     }
   ]

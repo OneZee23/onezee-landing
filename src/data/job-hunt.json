@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 521,
+    "applied": 527,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 521
+      "n": 527
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 467,
+    "boards": 473,
     "referral": 6
   },
   "outcomes": {
     "rejected": 108,
     "rejectedIsFloor": true,
-    "awaiting": 413
+    "awaiting": 419
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 521
+      "applied": 527
     }
   ],
   "gap": {
@@ -339,7 +339,7 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 100,
+      "applied": 106,
       "msg": 57
     }
   ],
@@ -379,6 +379,12 @@
       "rejected": 45
     },
     {
+      "key": "ashby",
+      "applied": 56,
+      "call1": 0,
+      "rejected": 17
+    },
+    {
       "key": "direct",
       "applied": 56,
       "call1": 0,
@@ -389,12 +395,6 @@
       "applied": 56,
       "call1": 0,
       "rejected": 0
-    },
-    {
-      "key": "ashby",
-      "applied": 54,
-      "call1": 0,
-      "rejected": 17
     },
     {
       "key": "xing",
@@ -415,16 +415,16 @@
       "rejected": 6
     },
     {
+      "key": "email",
+      "applied": 16,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "greenhouse",
       "applied": 16,
       "call1": 0,
       "rejected": 3
-    },
-    {
-      "key": "email",
-      "applied": 13,
-      "call1": 0,
-      "rejected": 0
     },
     {
       "key": "personio",
@@ -487,6 +487,12 @@
       "rejected": 0
     },
     {
+      "key": "manatal",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "recruitee",
       "applied": 1,
       "call1": 0,
@@ -544,12 +550,12 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 394,
+      "applied": 395,
       "call1": 5
     },
     {
       "key": "с письмом",
-      "applied": 89,
+      "applied": 94,
       "call1": 3
     }
   ]

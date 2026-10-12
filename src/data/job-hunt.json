@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 572,
+    "applied": 574,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 572
+      "n": 574
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 518,
+    "boards": 520,
     "referral": 6
   },
   "outcomes": {
     "rejected": 112,
     "rejectedIsFloor": true,
-    "awaiting": 460
+    "awaiting": 462
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 572
+      "applied": 574
     }
   ],
   "gap": {
@@ -350,8 +350,8 @@
     {
       "date": "2026-10-12",
       "acc": 24,
-      "applied": 24,
-      "msg": 44,
+      "applied": 26,
+      "msg": 46,
       "rejected": 4,
       "reply": 20
     }
@@ -428,6 +428,12 @@
       "rejected": 6
     },
     {
+      "key": "email",
+      "applied": 19,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "telegram",
       "applied": 18,
       "call1": 0,
@@ -438,12 +444,6 @@
       "applied": 18,
       "call1": 0,
       "rejected": 3
-    },
-    {
-      "key": "email",
-      "applied": 17,
-      "call1": 0,
-      "rejected": 0
     },
     {
       "key": "personio",
@@ -574,7 +574,7 @@
     },
     {
       "key": "с письмом",
-      "applied": 101,
+      "applied": 103,
       "call1": 3
     }
   ]

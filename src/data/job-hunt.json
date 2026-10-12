@@ -11,7 +11,7 @@
     }
   },
   "network": {
-    "conversations": 53,
+    "conversations": 54,
     "referralOffers": 6
   },
   "visa": {
@@ -349,10 +349,11 @@
     },
     {
       "date": "2026-10-12",
+      "acc": 24,
       "applied": 24,
-      "msg": 15,
+      "msg": 38,
       "rejected": 4,
-      "reply": 13
+      "reply": 14
     }
   ],
   "method": {

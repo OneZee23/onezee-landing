@@ -4,14 +4,14 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-10-11",
+    "updated": "2026-10-12",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
     }
   },
   "network": {
-    "conversations": 39,
+    "conversations": 52,
     "referralOffers": 6
   },
   "visa": {
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 546,
+    "applied": 552,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 546
+      "n": 552
     },
     {
       "key": "call1",
@@ -82,7 +82,7 @@
     },
     {
       "key": "call2",
-      "n": 2
+      "n": 3
     },
     {
       "key": "final",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 492,
+    "boards": 498,
     "referral": 6
   },
   "outcomes": {
-    "rejected": 108,
+    "rejected": 112,
     "rejectedIsFloor": true,
-    "awaiting": 438
+    "awaiting": 440
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 546
+      "applied": 552
     }
   ],
   "gap": {
@@ -275,8 +275,12 @@
     },
     {
       "date": "2026-09-24",
-      "applied": 2,
+      "applied": 3,
       "rejected": 1
+    },
+    {
+      "date": "2026-09-25",
+      "applied": 1
     },
     {
       "date": "2026-09-26",
@@ -339,8 +343,16 @@
     },
     {
       "date": "2026-10-11",
-      "applied": 125,
-      "msg": 57
+      "applied": 124,
+      "msg": 57,
+      "reply": 1
+    },
+    {
+      "date": "2026-10-12",
+      "applied": 5,
+      "msg": 14,
+      "rejected": 4,
+      "reply": 12
     }
   ],
   "method": {
@@ -388,13 +400,13 @@
       "key": "direct",
       "applied": 56,
       "call1": 0,
-      "rejected": 10
+      "rejected": 11
     },
     {
       "key": "linkedin",
       "applied": 56,
       "call1": 0,
-      "rejected": 0
+      "rejected": 1
     },
     {
       "key": "xing",
@@ -406,7 +418,7 @@
       "key": "application",
       "applied": 43,
       "call1": 0,
-      "rejected": 0
+      "rejected": 1
     },
     {
       "key": "не записано",
@@ -422,7 +434,7 @@
     },
     {
       "key": "email",
-      "applied": 17,
+      "applied": 16,
       "call1": 0,
       "rejected": 0
     },
@@ -430,7 +442,7 @@
       "key": "personio",
       "applied": 13,
       "call1": 0,
-      "rejected": 0
+      "rejected": 1
     },
     {
       "key": "referral",
@@ -457,6 +469,12 @@
       "rejected": 0
     },
     {
+      "key": "vacancy",
+      "applied": 5,
+      "call1": 2,
+      "rejected": 0
+    },
+    {
       "key": "hirehi",
       "applied": 4,
       "call1": 0,
@@ -469,21 +487,27 @@
       "rejected": 2
     },
     {
+      "key": "hirify",
+      "applied": 3,
+      "call1": 2,
+      "rejected": 0
+    },
+    {
       "key": "tg",
       "applied": 3,
       "call1": 2,
       "rejected": 1
     },
     {
+      "key": "recruiter",
+      "applied": 3,
+      "call1": 0,
+      "rejected": 1
+    },
+    {
       "key": "smartrecruiters",
       "applied": 2,
       "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "hirify",
-      "applied": 2,
-      "call1": 2,
       "rejected": 0
     },
     {
@@ -503,12 +527,6 @@
       "applied": 1,
       "call1": 0,
       "rejected": 0
-    },
-    {
-      "key": "recruiter",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 1
     },
     {
       "key": "opento_dev",
@@ -539,23 +557,17 @@
       "applied": 1,
       "call1": 0,
       "rejected": 0
-    },
-    {
-      "key": "vacancy",
-      "applied": 1,
-      "call1": 2,
-      "rejected": 0
     }
   ],
   "letters": [
     {
       "key": "без письма",
-      "applied": 407,
+      "applied": 414,
       "call1": 5
     },
     {
       "key": "с письмом",
-      "applied": 101,
+      "applied": 100,
       "call1": 3
     }
   ]

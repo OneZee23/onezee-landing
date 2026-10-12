@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 557,
+    "applied": 571,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 557
+      "n": 571
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 503,
+    "boards": 517,
     "referral": 6
   },
   "outcomes": {
     "rejected": 112,
     "rejectedIsFloor": true,
-    "awaiting": 445
+    "awaiting": 459
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 557
+      "applied": 571
     }
   ],
   "gap": {
@@ -349,7 +349,7 @@
     },
     {
       "date": "2026-10-12",
-      "applied": 9,
+      "applied": 23,
       "msg": 14,
       "rejected": 4,
       "reply": 12
@@ -427,6 +427,12 @@
       "rejected": 6
     },
     {
+      "key": "telegram",
+      "applied": 18,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "greenhouse",
       "applied": 18,
       "call1": 0,
@@ -472,12 +478,6 @@
       "key": "vacancy",
       "applied": 5,
       "call1": 2,
-      "rejected": 0
-    },
-    {
-      "key": "telegram",
-      "applied": 4,
-      "call1": 0,
       "rejected": 0
     },
     {
@@ -568,7 +568,7 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 419,
+      "applied": 433,
       "call1": 5
     },
     {

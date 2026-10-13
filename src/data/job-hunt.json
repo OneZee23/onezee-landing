@@ -11,7 +11,7 @@
     }
   },
   "network": {
-    "conversations": 65,
+    "conversations": 66,
     "referralOffers": 7
   },
   "visa": {
@@ -99,9 +99,9 @@
     "referral": 6
   },
   "outcomes": {
-    "rejected": 129,
+    "rejected": 130,
     "rejectedIsFloor": true,
-    "awaiting": 445
+    "awaiting": 444
   },
   "timeline": [
     {
@@ -357,10 +357,11 @@
     },
     {
       "date": "2026-10-13",
-      "msg": 7,
+      "dead": 1,
+      "msg": 8,
       "ref": 1,
-      "rejected": 9,
-      "reply": 3
+      "rejected": 10,
+      "reply": 4
     }
   ],
   "method": {
@@ -516,7 +517,7 @@
       "key": "recruiter",
       "applied": 3,
       "call1": 0,
-      "rejected": 1
+      "rejected": 2
     },
     {
       "key": "smartrecruiters",

@@ -11,8 +11,8 @@
     }
   },
   "network": {
-    "conversations": 63,
-    "referralOffers": 6
+    "conversations": 65,
+    "referralOffers": 7
   },
   "visa": {
     "title": {
@@ -99,9 +99,9 @@
     "referral": 6
   },
   "outcomes": {
-    "rejected": 113,
+    "rejected": 129,
     "rejectedIsFloor": true,
-    "awaiting": 461
+    "awaiting": 445
   },
   "timeline": [
     {
@@ -352,13 +352,15 @@
       "acc": 24,
       "applied": 26,
       "msg": 46,
-      "rejected": 4,
+      "rejected": 12,
       "reply": 22
     },
     {
       "date": "2026-10-13",
-      "rejected": 1,
-      "reply": 1
+      "msg": 7,
+      "ref": 1,
+      "rejected": 9,
+      "reply": 3
     }
   ],
   "method": {
@@ -400,13 +402,13 @@
       "key": "ashby",
       "applied": 69,
       "call1": 0,
-      "rejected": 17
+      "rejected": 24
     },
     {
       "key": "direct",
       "applied": 56,
       "call1": 0,
-      "rejected": 11
+      "rejected": 12
     },
     {
       "key": "linkedin",
@@ -424,7 +426,7 @@
       "key": "application",
       "applied": 44,
       "call1": 0,
-      "rejected": 1
+      "rejected": 3
     },
     {
       "key": "не записано",
@@ -448,7 +450,7 @@
       "key": "greenhouse",
       "applied": 18,
       "call1": 0,
-      "rejected": 3
+      "rejected": 4
     },
     {
       "key": "personio",
@@ -460,7 +462,7 @@
       "key": "referral",
       "applied": 6,
       "call1": 1,
-      "rejected": 3
+      "rejected": 5
     },
     {
       "key": "stepstone",
@@ -472,7 +474,7 @@
       "key": "teamtailor",
       "applied": 5,
       "call1": 0,
-      "rejected": 0
+      "rejected": 3
     },
     {
       "key": "getmatch",

@@ -99,9 +99,9 @@
     "referral": 6
   },
   "outcomes": {
-    "rejected": 130,
+    "rejected": 131,
     "rejectedIsFloor": true,
-    "awaiting": 444
+    "awaiting": 443
   },
   "timeline": [
     {
@@ -360,7 +360,7 @@
       "dead": 1,
       "msg": 8,
       "ref": 1,
-      "rejected": 10,
+      "rejected": 11,
       "reply": 4
     }
   ],
@@ -517,7 +517,7 @@
       "key": "recruiter",
       "applied": 3,
       "call1": 0,
-      "rejected": 2
+      "rejected": 3
     },
     {
       "key": "smartrecruiters",

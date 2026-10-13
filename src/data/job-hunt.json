@@ -99,9 +99,9 @@
     "referral": 6
   },
   "outcomes": {
-    "rejected": 131,
+    "rejected": 135,
     "rejectedIsFloor": true,
-    "awaiting": 443
+    "awaiting": 439
   },
   "timeline": [
     {
@@ -360,7 +360,7 @@
       "dead": 1,
       "msg": 11,
       "ref": 1,
-      "rejected": 11,
+      "rejected": 15,
       "reply": 5
     }
   ],
@@ -403,7 +403,7 @@
       "key": "ashby",
       "applied": 69,
       "call1": 0,
-      "rejected": 24
+      "rejected": 26
     },
     {
       "key": "direct",
@@ -415,7 +415,7 @@
       "key": "linkedin",
       "applied": 56,
       "call1": 0,
-      "rejected": 2
+      "rejected": 3
     },
     {
       "key": "xing",
@@ -427,7 +427,7 @@
       "key": "application",
       "applied": 44,
       "call1": 0,
-      "rejected": 3
+      "rejected": 4
     },
     {
       "key": "не записано",

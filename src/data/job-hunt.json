@@ -11,7 +11,7 @@
     }
   },
   "network": {
-    "conversations": 66,
+    "conversations": 67,
     "referralOffers": 7
   },
   "visa": {
@@ -358,10 +358,10 @@
     {
       "date": "2026-10-13",
       "dead": 1,
-      "msg": 8,
+      "msg": 11,
       "ref": 1,
       "rejected": 11,
-      "reply": 4
+      "reply": 5
     }
   ],
   "method": {

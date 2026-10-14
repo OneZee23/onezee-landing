@@ -99,9 +99,9 @@
     "referral": 6
   },
   "outcomes": {
-    "rejected": 135,
+    "rejected": 136,
     "rejectedIsFloor": true,
-    "awaiting": 441
+    "awaiting": 440
   },
   "timeline": [
     {
@@ -185,7 +185,7 @@
       "date": "2026-09-05",
       "applied": 43,
       "msg": 1,
-      "rejected": 1
+      "rejected": 2
     },
     {
       "date": "2026-09-06",
@@ -365,7 +365,8 @@
     },
     {
       "date": "2026-10-14",
-      "applied": 2
+      "applied": 2,
+      "msg": 1
     }
   ],
   "method": {
@@ -443,7 +444,7 @@
       "key": "greenhouse",
       "applied": 19,
       "call1": 0,
-      "rejected": 4
+      "rejected": 5
     },
     {
       "key": "email",

@@ -4,7 +4,7 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-10-13",
+    "updated": "2026-10-14",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 574,
+    "applied": 576,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 574
+      "n": 576
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 520,
+    "boards": 522,
     "referral": 6
   },
   "outcomes": {
     "rejected": 135,
     "rejectedIsFloor": true,
-    "awaiting": 439
+    "awaiting": 441
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 574
+      "applied": 576
     }
   ],
   "gap": {
@@ -362,6 +362,10 @@
       "ref": 1,
       "rejected": 15,
       "reply": 5
+    },
+    {
+      "date": "2026-10-14",
+      "applied": 2
     }
   ],
   "method": {
@@ -436,6 +440,12 @@
       "rejected": 6
     },
     {
+      "key": "greenhouse",
+      "applied": 19,
+      "call1": 0,
+      "rejected": 4
+    },
+    {
       "key": "email",
       "applied": 19,
       "call1": 0,
@@ -446,12 +456,6 @@
       "applied": 18,
       "call1": 0,
       "rejected": 0
-    },
-    {
-      "key": "greenhouse",
-      "applied": 18,
-      "call1": 0,
-      "rejected": 4
     },
     {
       "key": "personio",
@@ -520,6 +524,12 @@
       "rejected": 3
     },
     {
+      "key": "recruitee",
+      "applied": 2,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "smartrecruiters",
       "applied": 2,
       "call1": 0,
@@ -527,12 +537,6 @@
     },
     {
       "key": "manatal",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "recruitee",
       "applied": 1,
       "call1": 0,
       "rejected": 0
@@ -582,7 +586,7 @@
     },
     {
       "key": "с письмом",
-      "applied": 103,
+      "applied": 105,
       "call1": 3
     }
   ]

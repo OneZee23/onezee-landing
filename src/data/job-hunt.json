@@ -4,7 +4,7 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-10-14",
+    "updated": "2026-10-15",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 578,
+    "applied": 582,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 578
+      "n": 582
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 524,
+    "boards": 528,
     "referral": 6
   },
   "outcomes": {
     "rejected": 136,
     "rejectedIsFloor": true,
-    "awaiting": 442
+    "awaiting": 446
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 578
+      "applied": 582
     }
   ],
   "gap": {
@@ -368,6 +368,11 @@
       "applied": 4,
       "msg": 10,
       "reply": 1
+    },
+    {
+      "date": "2026-10-15",
+      "applied": 4,
+      "msg": 1
     }
   ],
   "method": {
@@ -407,21 +412,21 @@
     },
     {
       "key": "ashby",
-      "applied": 70,
+      "applied": 71,
       "call1": 0,
       "rejected": 26
+    },
+    {
+      "key": "linkedin",
+      "applied": 57,
+      "call1": 0,
+      "rejected": 3
     },
     {
       "key": "direct",
       "applied": 56,
       "call1": 0,
       "rejected": 12
-    },
-    {
-      "key": "linkedin",
-      "applied": 56,
-      "call1": 0,
-      "rejected": 3
     },
     {
       "key": "xing",
@@ -584,17 +589,29 @@
       "applied": 1,
       "call1": 0,
       "rejected": 0
+    },
+    {
+      "key": "bamboohr",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "workday",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
     }
   ],
   "letters": [
     {
       "key": "без письма",
-      "applied": 434,
+      "applied": 436,
       "call1": 5
     },
     {
       "key": "с письмом",
-      "applied": 106,
+      "applied": 108,
       "call1": 3
     }
   ]

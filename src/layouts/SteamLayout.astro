@@ -43,10 +43,10 @@ const langs: Locale[] = ['en', 'ru'];
   <body id="top">
     <header class="gh">
       <div class="w">
-        <a class="logo" href={home}><img src="/icons/onezee.png" alt="" width="28" height="28" /><span>ONEZEE</span></a>
+        <a class="logo" href={home} data-nav="profile"><img src="/icons/onezee.png" alt="" width="28" height="28" /><span>ONEZEE</span></a>
         <nav aria-label={t.nav.aria}>
           {links.map((l) => (
-            <a href={l.href} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a>
+            <a href={l.href} data-nav={l.key} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a>
           ))}
         </nav>
         <div class="end">
@@ -68,15 +68,40 @@ const langs: Locale[] = ['en', 'ru'];
 
     <footer>
       <div class="w">
-        <span>{t.foot.copy}</span>
+        <span data-shell="copy">{t.foot.copy}</span>
         <nav aria-label={t.foot.aria}>
-          <a href="/blog">{t.nav.blog}</a>
-          <a href="https://t.me/onezee_co">{t.foot.tg}</a>
+          <a href="/blog" data-shell="blog">{t.nav.blog}</a>
+          <a href="https://t.me/onezee_co" data-shell="tg">{t.foot.tg}</a>
           <a href="https://www.youtube.com/@onezee_dev">YouTube</a>
           <a href="https://github.com/OneZee23">GitHub</a>
         </nav>
       </div>
     </footer>
+
+    <script is:inline define:vars={{ pageLang: lang, bilingual: Object.keys(switchTo).length > 1, shell: { en: { profile: COPY.en.nav.profile, jobs: COPY.en.nav.jobs, blog: COPY.en.nav.blog, copy: COPY.en.foot.copy, tg: COPY.en.foot.tg, city: COPY.en.city }, ru: { profile: COPY.ru.nav.profile, jobs: COPY.ru.nav.jobs, blog: COPY.ru.nav.blog, copy: COPY.ru.foot.copy, tg: COPY.ru.foot.tg, city: COPY.ru.city } } }}>
+      // The visitor's language: a page that exists in both languages records it;
+      // a single-language page (blog, Germany) keeps its text but points the shell
+      // (header and footer links, labels) to the language the visitor came from.
+      try {
+        if (bilingual) localStorage.setItem('lang', pageLang);
+        var chosen = localStorage.getItem('lang');
+        if (!bilingual && (chosen === 'en' || chosen === 'ru') && chosen !== pageLang) {
+          var s = shell[chosen];
+          var href = { profile: chosen === 'ru' ? '/ru/' : '/', jobs: chosen === 'ru' ? '/ru/job-hunt' : '/en/job-hunt' };
+          document.querySelectorAll('[data-nav]').forEach(function (a) {
+            var key = a.getAttribute('data-nav');
+            if (href[key]) a.setAttribute('href', href[key]);
+            if (a.closest('nav') && s[key]) a.textContent = s[key];
+          });
+          document.querySelectorAll('[data-shell]').forEach(function (el) {
+            var key = el.getAttribute('data-shell');
+            if (s[key]) el.textContent = s[key];
+          });
+          var clock = document.querySelector('.clock');
+          if (clock) { clock.setAttribute('data-city', s.city); clock.setAttribute('data-locale', chosen === 'ru' ? 'ru-RU' : 'en-GB'); }
+        }
+      } catch (e) {}
+    </script>
 
     <script>
       // Header clock (Krasnodar time) and the profile status: online 07:00–22:00

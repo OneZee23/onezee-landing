@@ -1,0 +1,77 @@
+---
+// /ru/job-hunt and /en/job-hunt: the job search as a Community Market item page.
+// The listing is the same as on the homepage; below it come the parts that
+// only the full stats page carries: sources, the visa facts and the method.
+import type { Locale } from './copy';
+import { jobHunt } from '../content/job-hunt';
+import { COPY, LOCALE } from './copy';
+import Market from './Market.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const t = COPY[lang].market;
+const p = t.page;
+const nf = new Intl.NumberFormat(LOCALE[lang]);
+// Russian adds " г." after the year; the line reads cleaner without it.
+const date = (iso: string) => new Intl.DateTimeFormat(LOCALE[lang], { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${iso}T12:00Z`)).replace(/\s?г\.$/, '');
+const home = lang === 'ru' ? '/ru/' : '/';
+
+// The biggest sources by name; the long tail of one-off boards folds into one row.
+const TOP = 8;
+const named = jobHunt.platforms.slice(0, TOP);
+const rest = jobHunt.platforms.slice(TOP);
+const restRow = rest.reduce((s, r) => ({ applied: s.applied + r.applied, call1: s.call1 + r.call1 }), { applied: 0, call1: 0 });
+const { visa, method } = jobHunt;
+---
+
+<div class="bgband bgband--short">
+  <main class="w">
+    <p class="crumbs crumbs--top"><a href={`${home}#market`}>{t.crumbs[0]}</a><i aria-hidden="true">›</i><span>{t.crumbs[1]}</span><i aria-hidden="true">›</i><span class="cur">Senior Backend / Product Engineer</span></p>
+    <h1 class="sr">{p.title}</h1>
+    <p class="thesis">{p.thesis} <span class="small">{p.updated(date(jobHunt.meta.updated))}</span></p>
+    <Market lang={lang} />
+
+    <section>
+      <div class="sh"><h2>{p.platforms}</h2><span>{p.platformsSub}</span></div>
+      <div class="panel">
+        <div class="book book--wide">
+          <table>
+            <thead><tr><th>{p.platform}</th><th>{p.platformApplied}</th><th>{p.platformCalls}</th></tr></thead>
+            <tbody>
+              {named.map((r) => (
+                <tr><td>{p.platformNames[r.key] ?? r.key}</td><td>{nf.format(r.applied)}</td><td class={r.call1 ? undefined : 'z'}><b>{r.call1}</b></td></tr>
+              ))}
+              {rest.length > 0 && (
+                <tr><td>{p.other} <span class="small">({rest.length})</span></td><td>{nf.format(restRow.applied)}</td><td class={restRow.call1 ? undefined : 'z'}><b>{restRow.call1}</b></td></tr>
+              )}
+            </tbody>
+          </table>
+          <p class="sub after">{p.platformsNote}</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sh"><h2>{visa.title[lang]}</h2></div>
+      <div class="panel">
+        <div class="book book--wide">
+          <p class="lead">{visa.intro[lang]}</p>
+          <ul class="facts">{visa.points.map((pt) => <li>{pt[lang]}</li>)}</ul>
+          <p class="sub after">{visa.sourcesLabel[lang]}: {visa.sources}. {p.visaChecked(date(visa.checkedAt))}.</p>
+          {lang === 'ru' && p.germany && <p class="after"><a href="/germany">{p.germany} →</a></p>}
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sh"><h2>{method.title[lang]}</h2></div>
+      <div class="panel">
+        <div class="book book--wide">
+          <ul class="facts">{method.points.map((pt) => <li>{pt[lang]}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

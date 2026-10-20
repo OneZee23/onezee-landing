@@ -2,29 +2,29 @@
 // Германия для бэкендера с паспортом РФ: собранные факты моего поиска.
 // Страница вне навигации - доступ по прямой ссылке. Обновляется руками
 // по мере того, как факты проверяются в бою. Не юридическая консультация.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import '../styles/blog.css';
+import SteamLayout from '../layouts/SteamLayout.astro';
 
 const UPDATED = '9 сентября 2026';
 ---
 
-<BaseLayout
+<SteamLayout
   lang="ru"
-  theme="glass"
-  reading
+  section="jobs"
   title="Работа в Германии с паспортом РФ: проверенные факты - Nikita Shevelev"
   description="Что я узнал, пока ищу бэкенд-позицию в Германии из России: Blue Card, §81a, реальные конверсии откликов, подача через Тбилиси. Факты с источниками, без мотивационной воды."
 >
-  <article class="post" lang="ru">
-    <a class="bloghead__back" href="/ru/job-hunt">← мой дашборд поиска</a>
-    <div class="post__meta">
-      <span class="series-badge">Германия</span>
-      <time class="post__date">Обновлено {UPDATED}</time>
-      <span class="lang-tag">ru</span>
-    </div>
-    <h1 class="post__title">Работа в Германии с паспортом РФ: что я проверил на себе</h1>
+  <div class="bgband bgband--short">
+  <main class="w blog">
+  <p class="crumbs crumbs--top crumbs--post"><a href="/ru/job-hunt">Поиск работы</a><i aria-hidden="true">›</i><span class="cur">Германия</span></p>
+  <article class="panel post" lang="ru">
+    <header class="post-head">
+      <div>
+        <h1>Работа в Германии с паспортом РФ: что я проверил на себе</h1>
+        <p class="small post-meta"><time>Обновлено {UPDATED}</time><span class="lang-chip">RU</span></p>
+      </div>
+    </header>
 
-    <div class="prose-article">
+    <div class="prose">
       <p>
         Я senior backend-разработчик (Node.js/TypeScript/NestJS), ищу работу в Германии из России.
         Эта страница - конспект фактов, которые я собрал и проверил за время поиска: по визе,
@@ -183,8 +183,10 @@ const UPDATED = '9 сентября 2026';
       </p>
     </div>
 
-    <footer class="post__footer">
-      <a class="ilink ilink--sm" href="/ru/">← onezee.dev</a>
+    <footer class="post-foot">
+      <a class="btn dark" href="/ru/job-hunt"><span>Мой поиск в цифрах</span></a>
     </footer>
   </article>
-</BaseLayout>
+  </main>
+  </div>
+</SteamLayout>

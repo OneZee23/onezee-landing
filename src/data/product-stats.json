@@ -1,0 +1,23 @@
+{
+  "updatedAt": "2026-10-20T06:33:21.800Z",
+  "teachtrack": {
+    "teachers": 470,
+    "teachersSeen7d": 150,
+    "students": 1775,
+    "lessonsCompleted": 7260,
+    "source": "https://stats.teachtrack.ru/d/public-stats"
+  },
+  "triptrack": {
+    "users": 144,
+    "activeUsers7d": 35,
+    "trips": 1062,
+    "distanceKm": 68496,
+    "source": "https://stats.trip-track.app/d/triptrack-public-stats"
+  },
+  "lifetrack": {
+    "rating": 5,
+    "ratings": 2,
+    "version": "0.6.0",
+    "source": "https://apps.apple.com/app/id6759284836"
+  }
+}

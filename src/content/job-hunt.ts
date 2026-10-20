@@ -2,7 +2,7 @@
 // Raw data: src/data/job-hunt.json - GENERATED, never hand-edited.
 // Source of truth is onezee-workspace/job-search/funnel.md via to-public.py.
 import raw from '../data/job-hunt.json';
-import type { Locale } from './site';
+import type { Locale } from '../steam/copy';
 
 export type L10n = Record<Locale, string>;
 
@@ -52,6 +52,10 @@ export interface LogDay {
   applied?: number;
   /** Completed first interviews, excluding invitations and scheduled calls. */
   call1?: number;
+  /** Later interview stages on the day they happened; undated tokens are not logged. */
+  call2?: number;
+  final?: number;
+  offer?: number;
   invites?: number;
   acc?: number;
   reply?: number;
@@ -96,6 +100,8 @@ export interface JobHuntData {
   meta: Meta;
   headline: Headline;
   ladder: LadderStep[];
+  /** The summer wave as one number per stage: it has no daily log. */
+  summer: Record<StageKey | 'rejected', number>;
   channels: { hh: number; boards: number; referral: number };
   outcomes: Outcomes;
   timeline: TimelinePoint[];

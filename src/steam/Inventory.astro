@@ -1,0 +1,128 @@
+---
+// Web inventory: a grid of product slots and the item card beside it.
+// Every card is rendered at build time; the script only switches which one is
+// visible and filters the grid by stack, so the page works without JS too.
+import type { Locale } from './copy';
+import { COPY } from './copy';
+import { RARITY, STATTRAK, items, productsUpdated } from './data';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const t = COPY[lang].inv;
+const list = items(lang);
+// 6×7 on desktop: about as tall as the longest item card, so the panel doesn't jump between items.
+const SLOTS = 42;
+---
+
+<section id="inventory">
+  <div class="sh"><h2>{t.title}</h2><span>{t.updated(productsUpdated(lang))}</span></div>
+  <div class="panel inventory" data-nothing={t.nothing} data-hint={t.hint}>
+    <div class="inv-top">
+      <div class="game"><img src="/icons/onezee.png" alt="" width="26" height="26" /><span>OneZee</span><span class="small">{t.count(list.length)}</span></div>
+      <label class="search">
+        <span class="sr">{t.search}</span>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="7" cy="7" r="5"></circle><path d="M11 11l4 4"></path></svg>
+        <input type="search" placeholder={t.search} autocomplete="off" />
+      </label>
+    </div>
+    <div class="inv">
+      <div class="inv-left">
+        <div class="grid" role="listbox" aria-label={t.aria}>
+          {list.map((it, i) => (
+            <button
+              type="button"
+              class:list={['slot', { sel: i === 0 }]}
+              role="option"
+              aria-selected={i === 0 ? 'true' : 'false'}
+              tabindex={i === 0 ? 0 : -1}
+              style={`--rar:${RARITY[it.rarity].stripe}`}
+              data-i={i}
+              data-find={`${it.name} ${it.tags.join(' ')} ${it.kind}`.toLowerCase()}
+              aria-label={it.name}
+            ><img src={it.img} alt="" width="64" height="64" /></button>
+          ))}
+          {Array.from({ length: SLOTS - list.length }, () => <div class="slot empty" aria-hidden="true"></div>)}
+        </div>
+        <p class="pager">{t.pager[0]}&nbsp;<b>1</b>&nbsp;{t.pager[1]}&nbsp;1</p>
+      </div>
+      <div class="info">
+        {list.map((it, i) => (
+          <div class="card" data-card={i} hidden={i !== 0}>
+            <div class="pic"><img src={it.img} alt="" width="108" height="108" loading="lazy" /></div>
+            <h3 class="iname" style={`color:${it.stattrak ? STATTRAK : RARITY[it.rarity].text}`}>{it.stattrak ? 'StatTrak™ ' : ''}{it.name}</h3>
+            <p class="itype small"><span style={`color:${RARITY[it.rarity].text}`}>{t.rarity[it.rarity]}</span>, {it.kind}</p>
+            <p class="idesc">{it.desc}</p>
+            <div class="tags">{it.tags.map((tag) => <span>{tag}</span>)}</div>
+            {it.live && (
+              <div class="live">
+                <div class="live-h"><span>{t.live}</span>{it.source && <a href={it.source} target="_blank" rel="noopener">{t.source}</a>}</div>
+                {it.live.map(([k, v]) => <div class="live-row"><span>{k}</span><b>{v}</b></div>)}
+              </div>
+            )}
+            {it.links.length > 0 && (
+              <div class="ibtns">
+                {it.links.map(([label, url], k) => (
+                  <a class:list={['btn', k ? 'dark' : 'blue']} href={url} target="_blank" rel="noopener"><span>{label}</span></a>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+        <div class="card none" data-none hidden><p></p><p class="small"></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.inventory').forEach((root) => {
+    const slots = [...root.querySelectorAll<HTMLButtonElement>('[data-i]')];
+    const cards = [...root.querySelectorAll<HTMLElement>('[data-card]')];
+    const none = root.querySelector<HTMLElement>('[data-none]')!;
+    const q = root.querySelector<HTMLInputElement>('input[type=search]')!;
+    let cur = 0;
+    const show = (i: number, focus = false) => {
+      cur = i;
+      slots.forEach((s, k) => {
+        const on = k === i;
+        s.classList.toggle('sel', on);
+        s.setAttribute('aria-selected', String(on));
+        s.tabIndex = on || (i < 0 && k === 0) ? 0 : -1;
+        if (on && focus) s.focus();
+      });
+      cards.forEach((c, k) => {
+        const on = k === i;
+        if (on && c.hidden) { c.classList.remove('fade'); void c.offsetWidth; c.classList.add('fade'); }
+        c.hidden = !on;
+      });
+      none.hidden = i >= 0;
+    };
+    slots.forEach((s, i) => {
+      s.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse' && i !== cur) show(i); });
+      s.addEventListener('click', () => show(i));
+      s.addEventListener('focus', () => { if (i !== cur) show(i); });
+    });
+    root.querySelector('.grid')!.addEventListener('keydown', (e) => {
+      const d = ({ ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 } as Record<string, number>)[(e as KeyboardEvent).key];
+      if (!d) return;
+      e.preventDefault();
+      show((Math.max(cur, 0) + d + slots.length) % slots.length, true);
+    });
+    q.addEventListener('input', () => {
+      const v = q.value.trim().toLowerCase();
+      let first = -1;
+      slots.forEach((s, i) => {
+        const hit = !v || s.dataset.find!.includes(v);
+        s.classList.toggle('dim', !hit);
+        if (hit && first < 0) first = i;
+      });
+      if (first >= 0) { if (first !== cur) show(first); return; }
+      const [text, hint] = none.querySelectorAll('p');
+      text.textContent = root.dataset.nothing!.replace('{q}', q.value.trim());
+      hint.textContent = root.dataset.hint!;
+      show(-1);
+    });
+  });
+</script>

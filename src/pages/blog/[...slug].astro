@@ -1,11 +1,11 @@
 ---
 import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import SteamLayout from '../../layouts/SteamLayout.astro';
 import LikeButton from '../../components/LikeButton.tsx';
 import ViewCounter from '../../components/ViewCounter.tsx';
 import { Icon } from '../../components/Icon';
 import { AUTHOR } from '../../consts';
-import '../../styles/blog.css';
+import { seriesIcon, seriesSlug } from '../../consts';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
@@ -36,8 +36,14 @@ const readMin = Math.max(1, Math.ceil(words / 150));
 
 const t =
   lang === 'ru'
-    ? { back: '← ко всем постам', read: `${readMin} мин`, tg: 'Читать в Telegram', newer: 'Новее', older: 'Старше' }
-    : { back: '← all posts', read: `${readMin} min read`, tg: 'Read on Telegram', newer: 'Newer', older: 'Older' };
+    ? { blog: 'Блог', read: `${readMin} мин чтения`, tg: 'Обсудить в Telegram', newer: 'Новее', older: 'Старше' }
+    : { blog: 'Blog', read: `${readMin} min read`, tg: 'Discuss on Telegram', newer: 'Newer', older: 'Older' };
+const icon = series ? seriesIcon(series) : null;
+// Telegram posts open with their title as a bold first line; under the page
+// heading that reads twice, so the first paragraph hides when it is the title.
+const norm = (s: string) => s.replace(/[*_~`#>\s]/g, '').toLowerCase();
+const firstLine = (post.body ?? '').trim().split('\n')[0] ?? '';
+const repeatsTitle = norm(firstLine) === norm(title);
 
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const siteUrl = Astro.site?.toString();
@@ -72,67 +78,72 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout
-  title={`${title} — ${AUTHOR}`}
+<SteamLayout
+  lang={lang}
+  section="blog"
+  title={`${title}. ${AUTHOR}`}
   description={excerpt || title}
   type="article"
-  theme="glass"
-  reading
   image={cover}
   publishedTime={date}
   modifiedTime={updated ?? date}
   tags={tags}
-  lang={lang}
 >
-  <article class="post" lang={lang}>
-    <a class="bloghead__back" href="/blog">{t.back}</a>
-    <div class="post__meta">
-      {series && <span class="series-badge">{series}</span>}
-      <time class="post__date" datetime={isoDate}>{fmtDate(date)}</time>
-      <span class="post__readtime">· {t.read}</span>
-      <ViewCounter postId={post.id} lang={lang} client:idle />
-      <span class="lang-tag">{lang}</span>
-    </div>
-    <h1 class="post__title">{title}</h1>
-    {hasProgress && (
-      <div class="pow" title={`Day ${day} of ${total}`}>
-        <span class="pow__label">День {day}/{total}{day > total ? ' · overtime' : ''}</span>
-        <span class="pow__track"><span class="pow__fill" style={`width:${progressPct}%`}></span></span>
-      </div>
-    )}
-    {cover && <img class="post__cover" src={cover} alt="" width="800" height="450" />}
-
-    <div class="prose-article">
-      <Content />
-    </div>
-
-    <footer class="post__footer">
-      <LikeButton postId={post.id} client:visible />
-      {telegramUrl && (
-        <a class="post__tg" href={telegramUrl} target="_blank" rel="noreferrer noopener">
-          <Icon name="telegram" size={15} />
-          <span>{t.tg} →</span>
-        </a>
-      )}
-    </footer>
-
-    {(newer || older) && (
-      <nav class="post__nav" aria-label="More posts">
-        {older ? (
-          <a href={`/blog/${older.id}`}>
-            <span class="post__nav-dir">{t.older}</span>
-            <span class="post__nav-title">{older.data.title}</span>
-          </a>
-        ) : <span></span>}
-        {newer && (
-          <a class="post__nav-next" href={`/blog/${newer.id}`}>
-            <span class="post__nav-dir">{t.newer}</span>
-            <span class="post__nav-title">{newer.data.title}</span>
-          </a>
+  <div class="bgband bgband--short">
+    <main class="w blog">
+      <p class="crumbs crumbs--top crumbs--post">
+        <a href="/blog">{t.blog}</a>
+        {series && <><i aria-hidden="true">›</i><a href={`/blog/series/${seriesSlug(series)}`}>{series}</a></>}
+      </p>
+      <article class="panel post" lang={lang}>
+        <header class="post-head">
+          {icon && <img src={icon} alt="" width="40" height="40" />}
+          <div>
+            <h1>{title}</h1>
+            <p class="small post-meta">
+              <time datetime={isoDate}>{fmtDate(date)}</time>
+              <span>{t.read}</span>
+              <ViewCounter postId={post.id} lang={lang} client:idle />
+              <span class="lang-chip">{lang.toUpperCase()}</span>
+            </p>
+          </div>
+        </header>
+        {hasProgress && (
+          <div class="pow" title={`Day ${day} of ${total}`}>
+            <span class="small">День {day}/{total}{day > total ? ', сверх плана' : ''}</span>
+            <span class="track"><i style={`width:${progressPct}%`}></i></span>
+          </div>
         )}
-      </nav>
-    )}
-  </article>
+        {cover && <img class="post-cover" src={cover} alt="" width="800" height="450" />}
+        <div class:list={['prose', { 'skip-first': repeatsTitle }]}>
+          <Content />
+        </div>
+        <footer class="post-foot">
+          <LikeButton postId={post.id} client:visible />
+          {telegramUrl && (
+            <a class="btn dark" href={telegramUrl} target="_blank" rel="noreferrer noopener"><span>{t.tg}</span></a>
+          )}
+        </footer>
+      </article>
+
+      {(newer || older) && (
+        <nav class="post-nav" aria-label={lang === 'ru' ? 'Другие посты' : 'More posts'}>
+          {older ? (
+            <a class="panel" href={`/blog/${older.id}`}>
+              <span class="small">← {t.older}</span>
+              <span class="post-nav-title">{older.data.title}</span>
+            </a>
+          ) : <span></span>}
+          {newer && (
+            <a class="panel post-nav-next" href={`/blog/${newer.id}`}>
+              <span class="small">{t.newer} →</span>
+              <span class="post-nav-title">{newer.data.title}</span>
+            </a>
+          )}
+        </nav>
+      )}
+    </main>
+  </div>
 
   <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
-</BaseLayout>
+</SteamLayout>

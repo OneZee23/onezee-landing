@@ -1,0 +1,42 @@
+---
+// One post in a Steam news list: cover (or project icon), project, date, title, excerpt.
+import type { CollectionEntry } from 'astro:content';
+import { seriesIcon } from '../consts';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  /** Show the project name: on mixed lists, not on a project's own page. */
+  showSeries?: boolean;
+}
+const { post, showSeries = false } = Astro.props;
+const { title, date, excerpt, cover, day, total, lang, series } = post.data;
+const icon = series ? seriesIcon(series) : null;
+const when = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' }).replace(' г.', '');
+// Telegram posts start with their title, so the excerpt repeats it: keep only
+// what comes after. A cut title ("…") continues mid-sentence, so mark that.
+const head = title.replace(/[\s.…]+$/u, '');
+let lede = excerpt;
+if (lede && head && lede.startsWith(head)) {
+  lede = lede.slice(head.length).replace(/^[\s.…:,—-]+/u, '');
+  if (/^\p{Ll}/u.test(lede)) lede = `…${lede}`;
+}
+if (lede && lede.length < 24) lede = undefined;
+---
+
+<li>
+  <a class="news" href={`/blog/${post.id}`}>
+    <span class="news-pic">
+      {cover ? <img src={cover} alt="" loading="lazy" width="120" height="120" /> : <img class="news-icon" src={icon ?? '/icons/onezee.png'} alt="" loading="lazy" width="48" height="48" />}
+    </span>
+    <span class="news-body">
+      <span class="news-meta small">
+        {showSeries && series && <span class="news-series">{series}</span>}
+        {day != null && total != null && <span>День {day}/{total}</span>}
+        <time datetime={date.toISOString()}>{when}</time>
+        <span class="lang-chip">{lang.toUpperCase()}</span>
+      </span>
+      <span class="news-title">{title}</span>
+      {lede && <span class="news-lede">{lede}</span>}
+    </span>
+  </a>
+</li>

@@ -1,28 +1,27 @@
 ---
+// Blog index as a Steam news hub: latest posts, then one collapsible group per
+// project (series), ordered by recent activity. Posts come from the Telegram
+// channel (#site) via scripts/ingest-telegram.mjs.
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
-import { Icon } from '../../components/Icon';
+import SteamLayout from '../../layouts/SteamLayout.astro';
+import PostRow from '../../steam/PostRow.astro';
+import { ruPlural } from '../../steam/copy';
 import { externalWriting, mentions } from '../../data';
 import { TELEGRAM_CHANNEL_URL, seriesSlug, seriesIcon } from '../../consts';
-import '../../styles/blog.css';
 
 const all = (await getCollection('posts', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
-// Collapsible "chapters": each project (series) groups its posts (newest first);
-// chapters are ordered by most-recent activity; ungrouped posts go to "Заметки".
 type Post = (typeof all)[number];
 const bySeries = new Map<string, Post[]>();
 for (const p of all) {
   const key = p.data.series ?? '__notes__';
   (bySeries.get(key) ?? bySeries.set(key, []).get(key)!).push(p);
 }
-
 interface Group {
   title: string;
-  slug: string | null; // topic-page slug (null for the "Заметки" bucket)
+  slug: string | null; // project page slug (null for the "Заметки" bucket)
   icon: string | null;
   posts: Post[];
   latest: number;
@@ -35,83 +34,67 @@ for (const [key, posts] of bySeries) {
 groups.sort((a, b) => b.latest - a.latest);
 const notes = bySeries.get('__notes__');
 if (notes?.length) groups.push({ title: 'Заметки', slug: null, icon: null, posts: notes, latest: 0 });
+const count = (n: number) => `${n} ${ruPlural(n, 'пост', 'поста', 'постов')}`;
 ---
 
-<BaseLayout
+<SteamLayout
   lang="ru"
-  theme="glass"
-  reading
-  title="Блог — Никита Шевелев"
-  description="Заметки о бэкенде, web3 и инди-разработке — из моего Telegram-канала."
+  section="blog"
+  title="Блог. Никита Шевелев"
+  description="Заметки о бэкенде, web3 и инди-разработке из моего Telegram-канала."
 >
-  <div class="blogwrap">
-    <a class="bloghead__back" href="/">← onezee.dev</a>
-    <p class="eyebrow">Дневник</p>
-    <h1 class="blogtitle">Заметки из канала</h1>
-    <p class="prose">
-      О бэкенде, web3 и суровой реальности инди-разработки. Посты, помеченные
-      <code>#site</code> в моём <a href={TELEGRAM_CHANNEL_URL} target="_blank" rel="noreferrer noopener">Telegram-канале</a>, попадают сюда автоматически.
-      Сгруппированы по проектам (можно свернуть); внутри — по дате. Каждый пост помечен <span class="lang-tag">RU</span> или <span class="lang-tag">EN</span>.
-    </p>
+  <div class="bgband bgband--short">
+    <main class="w blog">
+      <div class="hub-head">
+        <img src="/icons/onezee.png" alt="" width="64" height="64" />
+        <div>
+          <h1>Блог</h1>
+          <p class="small">
+            Заметки о бэкенде, web3 и инди-разработке. Посты с меткой #site из моего
+            <a href={TELEGRAM_CHANNEL_URL} target="_blank" rel="noreferrer noopener">Telegram-канала</a> попадают сюда сами.
+          </p>
+        </div>
+      </div>
 
-    {all.length === 0 && (
-      <p class="prose" style="margin-top:2rem;color:var(--faint)">Пока пусто — первый пост скоро будет.</p>
-    )}
-
-    {all.length > 0 && (
-      <section class="blog-latest">
-        <p class="eyebrow">Свежее</p>
-        <ul class="postlist" role="list">
-          {all.slice(0, 8).map((p) => <PostCard post={p} showSeries />)}
-        </ul>
-      </section>
-    )}
-
-    {groups.map((g) => (
-      <details class="blog-season" open>
-        <summary class="blog-season__head">
-          {g.icon && <img class="blog-season__logo" src={g.icon} alt="" width="30" height="30" loading="lazy" />}
-          <span class="blog-season__title">{g.title}</span>
-          <span class="blog-season__count">{g.posts.length}</span>
-        </summary>
-        <div class="blog-season__body">
-          {g.slug && (
-            <a class="blog-season__all" href={`/blog/series/${g.slug}`}>Все посты {g.title} →</a>
-          )}
-          <ul class="postlist" role="list">
-            {g.posts.map((p) => <PostCard post={p} />)}
+      {all.length > 0 && (
+        <section>
+          <div class="sh"><h2>Свежее</h2><span>{count(all.length)} всего</span></div>
+          <ul class="panel newslist" role="list">
+            {all.slice(0, 6).map((p) => <PostRow post={p} showSeries />)}
           </ul>
-        </div>
-      </details>
-    ))}
+        </section>
+      )}
 
-    {externalWriting.length > 0 && (
-      <section class="blogsection">
-        <p class="eyebrow">Где ещё пишу</p>
-        <div class="linkrow">
-          {externalWriting.map((w) => (
-            <a class="ilink" href={w.url} target="_blank" rel="noreferrer noopener">
-              <Icon name={w.kind} size={16} />
-              <span>{w.label}</span>
-            </a>
+      <section>
+        <div class="sh"><h2>По проектам</h2></div>
+        <div class="hubs">
+          {groups.map((g) => (
+            <details class="panel hub">
+              <summary>
+                <img src={g.icon ?? '/icons/onezee.png'} alt="" width="32" height="32" loading="lazy" />
+                <span class="hub-name">{g.title}</span>
+                <span class="small">{count(g.posts.length)}</span>
+              </summary>
+              <ul class="newslist" role="list">
+                {(g.slug ? g.posts.slice(0, 5) : g.posts).map((p) => <PostRow post={p} />)}
+              </ul>
+              {g.slug && <a class="hub-all" href={`/blog/series/${g.slug}`}>Все посты {g.title} по порядку →</a>}
+            </details>
           ))}
         </div>
       </section>
-    )}
 
-    {mentions.length > 0 && (
-      <section class="blogsection">
-        <p class="eyebrow">Интервью и упоминания</p>
-        <ul class="mentionlist" role="list">
-          {mentions.map((m) => (
-            <li>
-              <span class="mentionlist__outlet">{m.outlet}</span>
-              <br />
-              <a class="ilink" href={m.url} target="_blank" rel="noreferrer noopener"><span>{m.label}</span></a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
+      {(externalWriting.length > 0 || mentions.length > 0) && (
+        <section>
+          <div class="sh"><h2>Где ещё пишу</h2></div>
+          <div class="panel book book--wide">
+            <ul class="facts">
+              {externalWriting.map((w) => <li><a href={w.url} target="_blank" rel="noreferrer noopener">{w.label}</a></li>)}
+              {mentions.map((m) => <li>{m.outlet}: <a href={m.url} target="_blank" rel="noreferrer noopener">{m.label}</a></li>)}
+            </ul>
+          </div>
+        </section>
+      )}
+    </main>
   </div>
-</BaseLayout>
+</SteamLayout>

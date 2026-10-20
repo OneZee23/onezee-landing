@@ -1,0 +1,17 @@
+---
+// Public job search stats at /en/job-hunt. Old links (/job-hunt) redirect to /en/job-hunt.
+import SteamLayout from '../../layouts/SteamLayout.astro';
+import JobHunt from '../../steam/JobHunt.astro';
+import { COPY } from '../../steam/copy';
+
+const p = COPY.en.market.page;
+const alternates = [
+  { hreflang: 'en', href: new URL('/en/job-hunt', Astro.site).toString() },
+  { hreflang: 'ru', href: new URL('/ru/job-hunt', Astro.site).toString() },
+  { hreflang: 'x-default', href: new URL('/en/job-hunt', Astro.site).toString() },
+];
+---
+
+<SteamLayout lang="en" section="jobs" title={p.title} description={p.description} alternates={alternates} switchTo={{ en: '/en/job-hunt', ru: '/ru/job-hunt' }}>
+  <JobHunt lang="en" />
+</SteamLayout>

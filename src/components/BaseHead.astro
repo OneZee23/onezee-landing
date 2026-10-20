@@ -14,7 +14,6 @@ interface Props {
   lang?: 'ru' | 'en';
   alternates?: { hreflang: string; href: string }[];
   noindex?: boolean;
-  theme?: 'glass';
 }
 
 const {
@@ -28,7 +27,6 @@ const {
   lang = 'en',
   alternates = [],
   noindex = false,
-  theme,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -45,7 +43,6 @@ const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content={theme === 'glass' ? '#eceef4' : '#100e0c'} />
 <meta name="generator" content={Astro.generator} />
 <link rel="icon" href="/favicon-icon.ico" />
 <link rel="apple-touch-icon" href="/logo192.jpg" />
@@ -86,7 +83,7 @@ const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
   rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+  href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap"
 />
 
 <!-- Analytics: self-hosted Umami (cookieless, GDPR-friendly). Inert unless env set. -->

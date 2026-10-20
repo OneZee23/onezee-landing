@@ -1,0 +1,334 @@
+---
+// Community Market listing for the job search: headline figure, price-history
+// style chart with one lane per stage, funnel, channels and the weekly table.
+// Used on the homepage and on /ru/job-hunt, /en/job-hunt.
+import type { Locale } from './copy';
+import { COPY, LOCALE } from './copy';
+import { STAGES, STAGE_COLOR, chartData, chartNote, dayRange, ladder, months, totals, weeks } from './data';
+
+interface Props {
+  lang: Locale;
+  /** On the homepage the listing links on to the full stats page. */
+  more?: string;
+}
+const { lang, more } = Astro.props;
+const t = COPY[lang].market;
+const nf = new Intl.NumberFormat(LOCALE[lang]);
+const stageName = (k: (typeof STAGES)[number]) => t.stages[k][0];
+const glyph = (k: string) =>
+  k === 'applied' ? '<i class="k line"></i>' : `<i class="k dot" style="--k:${STAGE_COLOR[k as keyof typeof STAGE_COLOR]}"></i>`;
+const chart = {
+  ...chartData(),
+  lang,
+  months: months(lang),
+  long: new Intl.DateTimeFormat(LOCALE[lang], { day: 'numeric', month: 'long', timeZone: 'UTC' }).formatToParts(new Date('2026-09-01T12:00Z')).map((p) => p.type),
+  labels: {
+    applied: t.applied,
+    rejected: t.rejected,
+    ban: t.ban,
+    stages: Object.fromEntries(STAGES.map((k) => [k, t.stages[k]])),
+  },
+  colors: STAGE_COLOR,
+};
+---
+
+<div class="panel market">
+  <div class="mk-head">
+    <div class="mk-ico"><img src="/me.jpg" alt="" width="56" height="56" /></div>
+    <div class="mk-title">
+      <h3>Senior Backend / Product Engineer</h3>
+      <p>{t.since}</p>
+      <p>{t.where}</p>
+    </div>
+    <div class="mk-price">
+      <div class="p">{nf.format(totals.calls)}</div>
+      <div class="s small">{t.cap(totals.calls, totals.applied, nf.format(totals.applied))}</div>
+    </div>
+  </div>
+  <div class="chart-h">
+    <h4>{t.chart}</h4>
+    <div class="zoom" role="group" aria-label={t.zoomAria}>
+      <span>{t.zoom}</span>
+      <button type="button" data-z="7" aria-pressed="false"><span>{t.zWeek}</span></button>
+      <button type="button" data-z="30" aria-pressed="false"><span>{t.zMonth}</span></button>
+      <button type="button" data-z="0" aria-pressed="true"><span>{t.zAll}</span></button>
+    </div>
+  </div>
+  <div class="plot">
+    <svg role="img" aria-label={t.chartAria}></svg>
+    <div class="tip" aria-hidden="true"></div>
+    <script is:inline type="application/json" set:html={JSON.stringify(chart).replace(/</g, '\\u003c')} />
+  </div>
+  <div class="books">
+    <div class="book">
+      <h5>{t.funnel}</h5>
+      <p class="sub">{t.funnelSub}</p>
+      <table>
+        <thead><tr><th>{t.stage}</th><th>{t.count}</th></tr></thead>
+        <tbody>
+          {ladder().map((s) => (
+            <tr>
+              <td><span class="lab" set:html={glyph(s.key) + (s.key === 'applied' ? t.applied : stageName(s.key as (typeof STAGES)[number]))} /></td>
+              <td><b>{nf.format(s.n)}</b></td>
+            </tr>
+          ))}
+          <tr><td><span class="lab"><i class="k bar"></i>{t.rejected}</span></td><td>{nf.format(totals.rejected)}</td></tr>
+          <tr><td><span class="lab"><i class="k none"></i>{t.awaiting}</span></td><td>{nf.format(totals.awaiting)}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="book">
+      <h5>{t.noticed}</h5>
+      <p class="sub">{t.noticedSub}</p>
+      <table>
+        <thead><tr><th>{t.method}</th><th>{t.sent}</th><th>{t.calls}</th></tr></thead>
+        <tbody>
+          <tr><td>{t.tg}</td><td>~30</td><td><b>5</b></td></tr>
+          <tr><td>{t.forms}</td><td>~230</td><td><b>0</b></td></tr>
+        </tbody>
+      </table>
+      <p class="sub after">{t.noticedNote}</p>
+    </div>
+  </div>
+  <details>
+    <summary><span>{t.weekly}</span></summary>
+    <div class="tscroll">
+      <table class="wtable">
+        <thead><tr><th>{t.week}</th><th>{t.applied}</th><th>{t.rejected}</th>{STAGES.map((k) => <th>{t.stages[k][1]}</th>)}</tr></thead>
+        <tbody>
+          {weeks().map((w) => (
+            <tr><td>{dayRange(lang, w.from, w.to)}</td>{w.v.map((n) => <td class={n ? undefined : 'z'}>{n}</td>)}</tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </details>
+  <p class="mk-note">{chartNote(lang)}{more && <> <a href={more}>{t.all} →</a></>}</p>
+</div>
+
+<script>
+  // Price-history chart. Rendered at the plot's real pixel width, so 13px in
+  // the code is 13px on screen. Lanes share one time axis and each has its own
+  // scale: applications (line), rejections (bars), one row per interview stage.
+  // Never a second y-axis.
+  type Day = [string, number, number, number, number, number, number];
+  interface Payload {
+    days: Day[];
+    bans: [string, string | null][];
+    lang: 'ru' | 'en';
+    months: string[];
+    labels: { applied: string; rejected: string; ban: string; stages: Record<string, [string, string, string?]> };
+    colors: Record<string, string>;
+  }
+  const STAGES = ['call1', 'call2', 'final', 'offer'];
+  const C = { apply: '#74a32b', reject: '#7c6fd6', ink2: '#c6d4df', ink3: '#9aa6b0', grid: 'rgba(255,255,255,.07)', band: 'rgba(255,255,255,.035)', surf: '#121a24' };
+  const CH = 7.8; // JetBrains Mono advance at 13px
+  const R = 4.5;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const niceCeil = (v: number) => {
+    if (v <= 5) return 5;
+    const p = 10 ** Math.floor(Math.log10(v));
+    const n = v / p;
+    return (n <= 1 ? 1 : n <= 1.5 ? 1.5 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p;
+  };
+  function monotone(p: number[][]) {
+    const n = p.length;
+    if (n < 2) return '';
+    const dx: number[] = [], m: number[] = [], t: number[] = [];
+    for (let i = 0; i < n - 1; i++) { dx[i] = p[i + 1][0] - p[i][0]; m[i] = (p[i + 1][1] - p[i][1]) / dx[i]; }
+    t[0] = m[0]; t[n - 1] = m[n - 2];
+    for (let i = 1; i < n - 1; i++) t[i] = m[i - 1] * m[i] <= 0 ? 0 : (m[i - 1] + m[i]) / 2;
+    for (let i = 0; i < n - 1; i++) {
+      if (m[i] === 0) { t[i] = t[i + 1] = 0; continue; }
+      const a = t[i] / m[i], b = t[i + 1] / m[i], s = a * a + b * b;
+      if (s > 9) { const k = 3 / Math.sqrt(s); t[i] = k * a * m[i]; t[i + 1] = k * b * m[i]; }
+    }
+    let d = `M${p[0][0].toFixed(1)},${p[0][1].toFixed(1)}`;
+    for (let i = 0; i < n - 1; i++) {
+      const h = dx[i] / 3;
+      d += `C${(p[i][0] + h).toFixed(1)},${(p[i][1] + t[i] * h).toFixed(1)} ${(p[i + 1][0] - h).toFixed(1)},${(p[i + 1][1] - t[i + 1] * h).toFixed(1)} ${p[i + 1][0].toFixed(1)},${p[i + 1][1].toFixed(1)}`;
+    }
+    return d;
+  }
+  const roundTop = (x: number, y: number, w: number, h: number, r: number) => {
+    r = Math.min(r, h, w / 2);
+    return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
+  };
+  const T = (x: number, y: number, s: string | number, o: { c?: string; a?: string; halo?: boolean } = {}) =>
+    `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" fill="${o.c || C.ink3}" text-anchor="${o.a || 'end'}"${o.halo ? ` stroke="${C.surf}" stroke-width="4" stroke-linejoin="round" paint-order="stroke"` : ''}>${s}</text>`;
+
+  document.querySelectorAll<HTMLElement>('.market').forEach((root) => {
+    const plot = root.querySelector<HTMLElement>('.plot')!;
+    const svg = plot.querySelector('svg')!;
+    const tip = plot.querySelector<HTMLElement>('.tip')!;
+    const data: Payload = JSON.parse(plot.querySelector('script')!.textContent!);
+    const L = data.labels;
+    const days = data.days.map(([k, a, r, ...ev]) => ({ k, dow: new Date(`${k}T12:00Z`).getUTCDay(), a, r, ev: Object.fromEntries(STAGES.map((s, i) => [s, ev[i]])) as Record<string, number> }));
+    const N = days.length;
+    const idx = (k: string) => { const i = days.findIndex((d) => d.k >= k); return i < 0 ? N : i; };
+    const bands = data.bans.map(([a, b]) => [idx(a), b ? Math.min(N - 1, idx(b)) : N - 1]).filter(([a, b]) => a < N && b >= a);
+    const short = (k: string) => `${+k.slice(8)} ${data.months[+k.slice(5, 7) - 1]}`;
+    const long = (k: string) => new Intl.DateTimeFormat(data.lang === 'ru' ? 'ru-RU' : 'en-GB', { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`${k}T12:00Z`));
+    const stageName = (k: string) => L.stages[k][0], stageShort = (k: string) => L.stages[k][1], stageLane = (k: string) => L.stages[k][2] || L.stages[k][0];
+    let st = { t0: 0, ma: niceCeil(Math.max(...days.map((d) => d.a))), mr: niceCeil(Math.max(1, ...days.map((d) => d.r))) };
+    let hover = -1;
+    let G: ReturnType<typeof geometry> | null = null;
+    let geo: { X: (i: number) => number; yA: (v: number) => number } | null = null;
+
+    function geometry() {
+      const cs = getComputedStyle(plot);
+      const W = Math.round(plot.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
+      const narrow = W < 520;
+      const names = [L.applied, L.rejected, ...STAGES.map((k) => (narrow ? stageShort(k) : stageLane(k)))];
+      const PL = Math.ceil(Math.max(...names.map((n) => n.length)) * CH + (narrow ? 16 : 34));
+      const PR = narrow ? 6 : 10, TOP = 26, LINE_H = narrow ? 112 : 136, BAR_H = narrow ? 38 : 44, ROW = 26;
+      const BAR_TOP = TOP + LINE_H + 30, ST_TOP = BAR_TOP + BAR_H + 24, BOTTOM = ST_TOP + ROW * STAGES.length, AXIS_Y = BOTTOM + 22;
+      return { W, H: AXIS_Y + 6, narrow, PL, PR, PLOT: W - PL - PR, TOP, LINE_H, BAR_TOP, BAR_H, ST_TOP, ROW, BOTTOM, AXIS_Y };
+    }
+
+    function render() {
+      const g = G!, t1 = N - 1, span = Math.max(1, t1 - st.t0), dayW = g.PLOT / span, first = Math.ceil(st.t0 - 1e-6);
+      const X = (i: number) => g.PL + ((i - st.t0) / span) * g.PLOT;
+      const yA = (v: number) => g.TOP + g.LINE_H - (g.LINE_H * v) / st.ma, hR = (v: number) => (g.BAR_H * v) / st.mr;
+      const mid = [g.TOP + g.LINE_H / 2, g.BAR_TOP + g.BAR_H / 2, ...STAGES.map((_, k) => g.ST_TOP + k * g.ROW + g.ROW / 2)];
+      let s = `<defs><clipPath id="cpd"><rect x="${g.PL}" y="0" width="${g.PLOT}" height="${g.H}"/></clipPath><clipPath id="cpm"><rect x="${g.PL - 8}" y="0" width="${g.PLOT + 16}" height="${g.H}"/></clipPath><linearGradient id="wash" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${C.apply}" stop-opacity=".2"/><stop offset="1" stop-color="${C.apply}" stop-opacity="0"/></linearGradient></defs>`;
+
+      // LinkedIn restrictions: shaded behind every lane, labelled where the band is wide enough
+      s += '<g clip-path="url(#cpd)">';
+      bands.forEach(([a, b]) => { const x1 = X(a - 0.5), x2 = X(b + 0.5); s += `<rect x="${x1}" y="${g.TOP - 24}" width="${Math.max(0, x2 - x1)}" height="${g.BOTTOM - g.TOP + 28}" fill="${C.band}"/>`; });
+      s += '</g>';
+      bands.forEach(([a, b]) => {
+        const x1 = Math.max(g.PL, X(a - 0.5)), x2 = Math.min(g.W - g.PR, X(b + 0.5));
+        const label = [L.ban, 'LinkedIn'].find((t) => x2 - x1 >= t.length * CH + 16);
+        if (label) s += T(x1 + 8, g.TOP - 9, label, { a: 'start', halo: true });
+      });
+
+      // scales: max and zero only, the middle gridline stays unlabelled
+      [0, 0.5, 1].forEach((f) => { const y = yA(st.ma * f); s += `<line x1="${g.PL}" x2="${g.W - g.PR}" y1="${y}" y2="${y}" stroke="${C.grid}"/>`; if (f !== 0.5) s += T(g.PL - 10, y + 4, Math.round(st.ma * f)); });
+      s += `<line x1="${g.PL}" x2="${g.W - g.PR}" y1="${g.BAR_TOP + g.BAR_H}" y2="${g.BAR_TOP + g.BAR_H}" stroke="${C.grid}"/>` + T(g.PL - 10, g.BAR_TOP + 4, Math.round(st.mr)) + T(g.PL - 10, g.BAR_TOP + g.BAR_H + 4, 0);
+      STAGES.forEach((_, k) => { s += `<line x1="${g.PL}" x2="${g.W - g.PR}" y1="${mid[2 + k]}" y2="${mid[2 + k]}" stroke="${C.grid}"/>`; });
+
+      // lane names in the gutter double as the legend
+      const lanes: [string, string][] = [
+        [L.applied, `<line x1="0" x2="12" y1="${mid[0]}" y2="${mid[0]}" stroke="${C.apply}" stroke-width="2" stroke-linecap="round"/>`],
+        [L.rejected, `<path d="${roundTop(2, mid[1] - 6, 8, 11, 2)}" fill="${C.reject}"/>`],
+        ...STAGES.map((key, k): [string, string] => [g.narrow ? stageShort(key) : stageLane(key), `<circle cx="6" cy="${mid[2 + k]}" r="${R}" fill="${data.colors[key]}"/>`]),
+      ];
+      lanes.forEach(([name, glyph], k) => { s += (g.narrow ? '' : glyph) + T(g.narrow ? 0 : 18, mid[k] + 4, name, { a: 'start', c: C.ink2 }); });
+
+      // x axis: every day when there is room, otherwise Mondays
+      const ticks: number[] = [];
+      if (dayW >= 58) for (let i = first; i <= t1; i++) ticks.push(i);
+      else {
+        const every = Math.max(1, Math.ceil(58 / (dayW * 7)));
+        let n = 0;
+        for (let i = first; i <= t1; i++) if (days[i].dow === 1) { if (n % every === 0) ticks.push(i); n++; }
+      }
+      let tickEnd = -Infinity;
+      ticks.forEach((i) => {
+        const label = short(days[i].k), w = label.length * CH;
+        let x = X(i), a = 'middle', x0 = x - w / 2;
+        if (x + w / 2 > g.W) { x = g.W; a = 'end'; x0 = g.W - w; }
+        if (x0 < tickEnd + 12) return;
+        s += T(x, g.AXIS_Y, label, { a });
+        tickEnd = x0 + w;
+      });
+
+      // rejections and applications
+      s += '<g clip-path="url(#cpd)">';
+      const bw = Math.max(2, Math.min(14, dayW * 0.6));
+      days.forEach((d, i) => { if (!d.r) return; const h = Math.max(2, hR(d.r)); s += `<path d="${roundTop(X(i) - bw / 2, g.BAR_TOP + g.BAR_H - h, bw, h, 2)}" fill="${C.reject}" opacity="${hover < 0 || hover === i ? 1 : 0.45}"/>`; });
+      const pts = days.map((d, i) => [X(i), yA(d.a)]), path = monotone(pts);
+      s += `<path d="${path}L${pts[N - 1][0].toFixed(1)},${yA(0)}L${pts[0][0].toFixed(1)},${yA(0)}Z" fill="url(#wash)"/>`;
+      s += `<path d="${path}" fill="none" stroke="${C.apply}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+      s += '</g>';
+      if (hover >= 0) s += `<line x1="${X(hover)}" x2="${X(hover)}" y1="${g.TOP - 4}" y2="${g.BOTTOM}" stroke="rgba(255,255,255,.28)"/>`;
+
+      // stage events: a dot per day; days too close to tell apart merge into a capsule
+      s += '<g clip-path="url(#cpm)">';
+      STAGES.forEach((key, k) => {
+        const y = mid[2 + k], color = data.colors[key];
+        const groups: { x1: number; x2: number; n: number }[] = [];
+        days.forEach((d, i) => {
+          const n = d.ev[key];
+          if (!n || i < first - 1) return;
+          const x = X(i), last = groups[groups.length - 1];
+          if (last && x - last.x2 < 2 * R + 2) { last.x2 = x; last.n += n; } else groups.push({ x1: x, x2: x, n });
+        });
+        let labelEnd = -Infinity;
+        groups.forEach((c) => {
+          s += c.x2 > c.x1
+            ? `<rect x="${c.x1 - R}" y="${y - R}" width="${c.x2 - c.x1 + 2 * R}" height="${2 * R}" rx="${R}" fill="${color}" stroke="${C.surf}" stroke-width="3" paint-order="stroke"/>`
+            : `<circle cx="${c.x1}" cy="${y}" r="${R}" fill="${color}" stroke="${C.surf}" stroke-width="3" paint-order="stroke"/>`;
+          const cx = (c.x1 + c.x2) / 2, w = String(c.n).length * CH;
+          if (c.n > 1 && cx - w / 2 > labelEnd + 4) { s += T(cx, y - R - 4, c.n, { a: 'middle', c: C.ink2, halo: true }); labelEnd = cx + w / 2; }
+        });
+      });
+      s += '</g>';
+      if (hover >= 0) s += `<circle cx="${X(hover)}" cy="${yA(days[hover].a)}" r="5" fill="${C.apply}" stroke="${C.surf}" stroke-width="2"/>`;
+      svg.innerHTML = s;
+      return { X, yA };
+    }
+
+    function layout(force = false) {
+      const g = geometry();
+      if (!force && G && g.W === G.W) return;
+      G = g;
+      svg.setAttribute('viewBox', `0 0 ${G.W} ${G.H}`);
+      svg.setAttribute('width', String(G.W));
+      svg.setAttribute('height', String(G.H));
+      geo = render();
+    }
+    let frame = 0;
+    new ResizeObserver(() => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => layout()); }).observe(plot);
+
+    function animateTo(t0: number) {
+      const vis = days.slice(Math.ceil(t0));
+      const tgt = { t0, ma: niceCeil(Math.max(...vis.map((d) => d.a))), mr: niceCeil(Math.max(1, ...vis.map((d) => d.r))) };
+      if (reduce) { st = tgt; geo = render(); return; }
+      const from = { ...st }, start = performance.now(), D = 420, ease = (x: number) => 1 - Math.pow(1 - x, 3);
+      const step = (now: number) => {
+        const p = Math.min(1, (now - start) / D), k = ease(p);
+        st = { t0: from.t0 + (tgt.t0 - from.t0) * k, ma: from.ma + (tgt.ma - from.ma) * k, mr: from.mr + (tgt.mr - from.mr) * k };
+        geo = render();
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    const row = (glyph: string, name: string, n?: number) => `<div class="row"><span class="lab">${glyph}${name}</span>${n == null ? '' : `<b>${n}</b>`}</div>`;
+    function onMove(e: PointerEvent) {
+      if (!geo || !G || !N) return;
+      const r = svg.getBoundingClientRect(), px = ((e.clientX - r.left) * G.W) / r.width, span = Math.max(1, N - 1 - st.t0);
+      let i = Math.round(st.t0 + ((px - G.PL) / G.PLOT) * span);
+      i = Math.max(Math.ceil(st.t0 - 1e-6), Math.min(N - 1, i));
+      if (i !== hover) { hover = i; geo = render(); }
+      const d = days[i];
+      let html = `<div class="d">${long(d.k)}</div>` + row('<i class="k line"></i>', L.applied, d.a) + row('<i class="k bar"></i>', L.rejected, d.r);
+      STAGES.forEach((key) => { if (d.ev[key]) html += row(`<i class="k dot" style="--k:${data.colors[key]}"></i>`, stageName(key), d.ev[key]); });
+      if (bands.some(([a, b]) => i >= a && i <= b)) html += `<div class="n">${L.ban}</div>`;
+      tip.innerHTML = html;
+      const pr = plot.getBoundingClientRect(), sx = r.left - pr.left + (geo.X(i) * r.width) / G.W, tw = tip.offsetWidth, th = tip.offsetHeight;
+      let left = sx + 16;
+      if (left + tw > pr.width - 4) left = sx - tw - 16;
+      left = Math.max(4, left);
+      const top = Math.max(4, Math.min(r.top - pr.top + (geo.yA(d.a) * r.height) / G.H - 30, pr.height - th - 4));
+      tip.style.transform = `translate(${left}px,${top}px)`;
+      tip.style.opacity = '1';
+    }
+    const hideTip = () => { if (hover < 0) return; hover = -1; tip.style.opacity = '0'; if (geo) geo = render(); };
+    svg.addEventListener('pointermove', onMove);
+    svg.addEventListener('pointerdown', onMove);
+    svg.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') hideTip(); });
+    // render() replaces the svg's children, so the tapped node is already detached: ask the event path.
+    document.addEventListener('pointerdown', (e) => { if (!e.composedPath().includes(svg)) hideTip(); });
+    root.querySelectorAll<HTMLButtonElement>('.zoom button').forEach((b) =>
+      b.addEventListener('click', () => {
+        root.querySelectorAll('.zoom button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        const z = Number(b.dataset.z);
+        animateTo(z ? Math.max(0, N - z) : 0);
+      }),
+    );
+  });
+</script>

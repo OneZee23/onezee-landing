@@ -1,9 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PostCard from '../../../components/PostCard.astro';
+import SteamLayout from '../../../layouts/SteamLayout.astro';
+import PostRow from '../../../steam/PostRow.astro';
+import { ruPlural } from '../../../steam/copy';
 import { seriesIcon, seriesSlug } from '../../../consts';
-import '../../../styles/blog.css';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft && !!data.series);
@@ -29,25 +29,27 @@ const total = posts.find((p) => p.data.total != null)?.data.total;
 const icon = seriesIcon(series);
 ---
 
-<BaseLayout
+<SteamLayout
   lang="ru"
-  theme="glass"
-  reading
-  title={`${series} — дневник проекта · Никита Шевелев`}
-  description={`Все посты про ${series} — build in public.`}
+  section="blog"
+  title={`${series}, дневник проекта. Никита Шевелев`}
+  description={`Все посты про ${series}: как проект строился с первого дня.`}
 >
-  <div class="blogwrap">
-    <a class="bloghead__back" href="/blog">← все посты</a>
-    <p class="eyebrow">Проект</p>
-    <div class="topic-head">
-      {icon && <img class="topic-head__logo" src={icon} alt="" width="46" height="46" />}
-      <h1 class="blogtitle">{series}</h1>
-    </div>
-    <p class="prose">
-      {posts.length} {posts.length === 1 ? 'пост' : 'постов'}{total ? ` · ${total}-дневный спринт` : ''}. От первого дня к последнему.
-    </p>
-    <ul class="postlist" role="list">
-      {posts.map((p) => <PostCard post={p} />)}
-    </ul>
+  <div class="bgband bgband--short">
+    <main class="w blog">
+      <p class="crumbs crumbs--top"><a href="/blog">Блог</a><i aria-hidden="true">›</i><span class="cur">{series}</span></p>
+      <div class="hub-head">
+        <img src={icon ?? '/icons/onezee.png'} alt="" width="64" height="64" />
+        <div>
+          <h1>{series}</h1>
+          <p class="small">
+            {posts.length} {ruPlural(posts.length, 'пост', 'поста', 'постов')}{total ? `, ${total}-дневный спринт` : ''}. От первого дня к последнему.
+          </p>
+        </div>
+      </div>
+      <ul class="panel newslist" role="list">
+        {posts.map((p) => <PostRow post={p} />)}
+      </ul>
+    </main>
   </div>
-</BaseLayout>
+</SteamLayout>

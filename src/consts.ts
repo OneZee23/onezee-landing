@@ -26,6 +26,7 @@ const SERIES_ICON: Record<string, string> = {
   TripTrack: '/icons/triptrack.png',
   LifeTrack: '/icons/lifetrack.png',
   Fraggram: '/icons/fraggram.png',
+  FragGram: '/icons/fraggram.png',
   'onezee.dev': '/icons/onezee.png',
 };
 

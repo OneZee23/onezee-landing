@@ -11,6 +11,7 @@
     "astro": "astro",
     "check": "astro check",
     "ingest": "node scripts/ingest-telegram.mjs",
+    "stats:products": "node scripts/fetch-product-stats.mjs",
     "ingest:backfill": "BACKFILL=1 node scripts/ingest-telegram.mjs",
     "test:parser": "node scripts/test-parse.mjs"
   },

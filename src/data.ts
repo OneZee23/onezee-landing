@@ -1,5 +1,5 @@
 // Shared, locale-independent site data: types + structured links.
-// Homepage COPY (bilingual) lives in src/content/site.ts — edit wording there.
+// Page copy (bilingual) lives in src/steam/copy.ts.
 // This file holds the things that don't change between EN and RU: types,
 // profile, social/contact URLs, and the blog's link lists.
 
@@ -41,20 +41,6 @@ export const socials: SiteLink[] = [
 
 // Downloadable CV (lives at public/cv.pdf → served at /cv.pdf)
 export const resumeUrl = '/cv.pdf';
-
-export interface ShipItem {
-  year: string;
-  name: string;
-  icon?: string; // path under public/, e.g. '/icons/triptrack.png'; falls back to a monogram
-  archived?: boolean; // greyed out as a relic (dead/never launched)
-  blurb: string;
-  links: SiteLink[]; // links[0] is treated as the project's "home" (the clickable icon target)
-}
-
-export interface SkillGroup {
-  title: string;
-  items: string[];
-}
 
 // Homepage "I write" links (Habr + Telegram channel).
 export const writing: SiteLink[] = [

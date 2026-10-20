@@ -1,10 +1,10 @@
 ---
-// Homepage (English, default locale at `/`). The React landing is server-rendered
-// to static HTML (no hydration); the reveal fade-in is handled by the script in
-// BaseLayout. RU lives at /ru/.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import App from '../App';
+// Homepage (English, default locale at `/`). RU lives at /ru/.
+import SteamLayout from '../layouts/SteamLayout.astro';
+import Profile from '../steam/Profile.astro';
+import { COPY } from '../steam/copy';
 
+const t = COPY.en;
 const alternates = [
   { hreflang: 'en', href: new URL('/', Astro.site).toString() },
   { hreflang: 'ru', href: new URL('/ru/', Astro.site).toString() },
@@ -12,6 +12,6 @@ const alternates = [
 ];
 ---
 
-<BaseLayout lang="en" theme="glass" alternates={alternates}>
-  <App lang="en" />
-</BaseLayout>
+<SteamLayout lang="en" section="profile" title={t.title} description={t.description} alternates={alternates} switchTo={{ en: '/', ru: '/ru/' }}>
+  <Profile lang="en" />
+</SteamLayout>

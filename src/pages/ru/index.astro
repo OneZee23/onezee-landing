@@ -1,8 +1,10 @@
 ---
-// Homepage (Russian) at /ru/. Same React app rendered with lang="ru".
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import App from '../../App';
+// Homepage (Russian) at /ru/.
+import SteamLayout from '../../layouts/SteamLayout.astro';
+import Profile from '../../steam/Profile.astro';
+import { COPY } from '../../steam/copy';
 
+const t = COPY.ru;
 const alternates = [
   { hreflang: 'en', href: new URL('/', Astro.site).toString() },
   { hreflang: 'ru', href: new URL('/ru/', Astro.site).toString() },
@@ -10,12 +12,6 @@ const alternates = [
 ];
 ---
 
-<BaseLayout
-  lang="ru"
-  theme="glass"
-  title="Никита Шевелев — Senior Backend Engineer"
-  description="Senior backend-инженер: NestJS, TypeScript, Node.js. Высоконагруженные системы, платежи и блокчейн. Делаю бэкенд крипто/финтех super-app и выпускаю свои приложения."
-  alternates={alternates}
->
-  <App lang="ru" />
-</BaseLayout>
+<SteamLayout lang="ru" section="profile" title={t.title} description={t.description} alternates={alternates} switchTo={{ en: '/', ru: '/ru/' }}>
+  <Profile lang="ru" />
+</SteamLayout>

@@ -1,0 +1,120 @@
+---
+// Shell for every Steam-style page: global header with site sections and the
+// language switch, footer, and the "online / snooze" status script.
+// Pages pass their own alternates so the switch lands on the same page.
+import BaseHead from '../components/BaseHead.astro';
+import { COPY, type Locale } from '../steam/copy';
+import '../styles/steam.css';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  /** Which header section is current, for aria-current. */
+  section?: 'profile' | 'jobs' | 'blog';
+  /** Same page in the other language; omit when there is none. */
+  switchTo?: Partial<Record<Locale, string>>;
+  alternates?: { hreflang: string; href: string }[];
+  type?: 'website' | 'article';
+  image?: string;
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  tags?: string[];
+}
+
+const { lang, section, switchTo = {}, ...head } = Astro.props;
+const t = COPY[lang];
+const home = lang === 'ru' ? '/ru/' : '/';
+const jobs = lang === 'ru' ? '/ru/job-hunt' : '/en/job-hunt';
+const links = [
+  { key: 'profile', href: home, label: t.nav.profile },
+  { key: 'jobs', href: jobs, label: t.nav.jobs },
+  { key: 'blog', href: '/blog', label: t.nav.blog },
+];
+const langs: Locale[] = ['en', 'ru'];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <BaseHead {...head} lang={lang} />
+    <meta name="theme-color" content="#171a21" />
+  </head>
+  <body id="top">
+    <header class="gh">
+      <div class="w">
+        <a class="logo" href={home}><img src="/icons/onezee.png" alt="" width="28" height="28" /><span>ONEZEE</span></a>
+        <nav aria-label={t.nav.aria}>
+          {links.map((l) => (
+            <a href={l.href} aria-current={section === l.key ? 'page' : undefined}>{l.label}</a>
+          ))}
+        </nav>
+        <div class="end">
+          <span class="clock" data-city={t.city} data-locale={lang === 'ru' ? 'ru-RU' : 'en-GB'}>{t.city}</span>
+          {Object.keys(switchTo).length > 1 && <div class="lang" role="group" aria-label={t.nav.lang}>
+            {langs.map((l) =>
+              l === lang ? (
+                <a aria-current="true" href={switchTo[l] ?? Astro.url.pathname} hreflang={l} lang={l}><span>{l.toUpperCase()}</span></a>
+              ) : switchTo[l] ? (
+                <a href={switchTo[l]} hreflang={l} lang={l}><span>{l.toUpperCase()}</span></a>
+              ) : null,
+            )}
+          </div>}
+        </div>
+      </div>
+    </header>
+
+    <slot />
+
+    <footer>
+      <div class="w">
+        <span>{t.foot.copy}</span>
+        <nav aria-label={t.foot.aria}>
+          <a href="/blog">{t.nav.blog}</a>
+          <a href="https://t.me/onezee_co">{t.foot.tg}</a>
+          <a href="https://www.youtube.com/@onezee_dev">YouTube</a>
+          <a href="https://github.com/OneZee23">GitHub</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script>
+      // Header clock (Krasnodar time) and the profile status: online 07:00–22:00
+      // Moscow time, shown in the visitor's own time zone. Moscow has no DST,
+      // so a fixed UTC+3 offset is exact all year.
+      const clock = document.querySelector<HTMLElement>('.clock');
+      const status = document.querySelector<HTMLElement>('[data-status]');
+      const FROM = 7;
+      const TO = 22;
+      const mskAt = (hour: number, dayShift = 0) => {
+        const now = new Date(Date.now() + 3 * 36e5);
+        return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + dayShift, hour - 3));
+      };
+      const tick = () => {
+        if (clock) {
+          const time = new Intl.DateTimeFormat(clock.dataset.locale, { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' }).format(new Date());
+          clock.textContent = `${clock.dataset.city}, ${time}`;
+        }
+        if (!status) return;
+        const hour = new Date(Date.now() + 3 * 36e5).getUTCHours();
+        const online = hour >= FROM && hour < TO;
+        document.body.classList.toggle('asleep', !online);
+        const next = online ? mskAt(TO) : mskAt(FROM, hour >= TO ? 1 : 0);
+        const hm = new Intl.DateTimeFormat(status.dataset.locale, { hour: '2-digit', minute: '2-digit' }).format(next);
+        const parts: string[] = JSON.parse((online ? status.dataset.until : status.dataset.back) ?? '[]');
+        status.querySelector('b')!.textContent = (online ? status.dataset.online : status.dataset.asleep) ?? '';
+        const line = status.querySelector('[data-hours]')!;
+        line.replaceChildren(
+          ...parts.flatMap((p, i) => {
+            const span = document.createElement('span');
+            span.className = 'nw';
+            span.textContent = p.replace('{t}', hm);
+            return i ? [document.createTextNode(' '), span] : [span];
+          }),
+        );
+      };
+      tick();
+      setInterval(tick, 15000);
+    </script>
+  </body>
+</html>

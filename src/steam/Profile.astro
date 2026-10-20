@@ -1,0 +1,137 @@
+---
+// Homepage: Steam profile header, achievement showcase, inventory, the job
+// search listing, about and the trade offer.
+import type { Locale } from './copy';
+import { COPY } from './copy';
+import Inventory from './Inventory.astro';
+import Market from './Market.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const t = COPY[lang];
+const jobs = lang === 'ru' ? '/ru/job-hunt' : '/en/job-hunt';
+const locale = lang === 'ru' ? 'ru-RU' : 'en-GB';
+---
+
+<div class="bgband">
+  <div class="w">
+    <div class="ph">
+      <div class="frame"><img src="/me.jpg" alt={t.name} width="158" height="158" /></div>
+      <div class="phead">
+        <h1 class="pname">{t.name}</h1>
+        <p class="pname-sub">{t.place}</p>
+      </div>
+      <div class="psum"><p>{t.sum[0]}</p><p>{t.sum[1]}</p></div>
+      <aside class="side" aria-label={t.side.aria}>
+        <div class="lvl-row"><b>{t.side.level}</b><span class="lvl"><span>5</span></span></div>
+        <p class="cap small">{t.side.levelCap}</p>
+        <div class="badge"><div class="b-ico"><span>3</span></div><div><b>{t.side.badge}</b><span>{t.side.badgeCap}</span></div></div>
+        <div
+          class="status"
+          data-status
+          data-locale={locale}
+          data-online={t.side.online}
+          data-asleep={t.side.asleep}
+          data-until={JSON.stringify(t.side.until)}
+          data-back={JSON.stringify(t.side.back)}
+        >
+          <b>{t.side.online}</b><span>{t.side.open}</span><span data-hours></span>
+        </div>
+        <a class="btn buy" href="#trade"><span>{t.side.offer}</span></a>
+      </aside>
+    </div>
+    <nav class="tabs" aria-label={t.tabs.aria}>
+      <a href="#job" class="on">{t.tabs.show}</a>
+      <a href="#inventory">{t.tabs.inv}</a>
+      <a href="#market">{t.tabs.market}</a>
+      <a href="#about">{t.tabs.about}</a>
+      <a href="#trade">{t.tabs.trade}</a>
+    </nav>
+  </div>
+</div>
+
+<main class="w">
+  <section id="job">
+    <div class="sh"><h2>{t.show.title}</h2><span>{t.show.sub}</span></div>
+    <div class="panel">
+      <div class="show">
+        {t.show.items.map(([icon, title, text]) => (
+          <div class="ach"><div class="ico"><span>{icon}</span></div><div><b>{title}</b><p class="small">{text}</p></div></div>
+        ))}
+      </div>
+      <p class="job-note">{t.show.note}</p>
+      <div class="show-foot"><span>{t.show.path}</span><div class="track"><i></i></div><span>2020 → 2023</span></div>
+    </div>
+  </section>
+
+  <Inventory lang={lang} />
+
+  <section id="market">
+    <p class="crumbs"><span>{t.market.crumbs[0]}</span><i aria-hidden="true">›</i><a href={jobs}>{t.market.crumbs[1]}</a><i aria-hidden="true">›</i><span class="cur">Senior Backend / Product Engineer</span></p>
+    <Market lang={lang} more={jobs} />
+  </section>
+
+  <section id="about">
+    <div class="sh"><h2>{t.about.title}</h2></div>
+    <div class="panel about">
+      <div><h3>{t.about.pace}</h3><p>{t.about.paceText}</p></div>
+      <div><h3>{t.about.langs}</h3><p>{t.about.langsText}</p></div>
+    </div>
+  </section>
+
+  <section id="trade">
+    <div class="sh"><h2>{t.trade.title}</h2></div>
+    <div class="panel">
+      <div class="trade-h"><img src="/me.jpg" alt="" width="36" height="36" /><p><b>{t.name}</b><span>{t.trade.from}</span></p></div>
+      <div class="tcols">
+        <div class="tcol">
+          <h3 class="tlbl">{t.trade.get}</h3>
+          <div class="tgrid">
+            <div style="--rar:#eb4b4b"><img src="/icons/triptrack.png" alt="TripTrack" width="35" height="35" /></div>
+            <div style="--rar:#d32ce6"><img src="/icons/teachtrack.png" alt="TeachTrack" width="35" height="35" /></div>
+            <div style="--rar:#4b69ff"><img src="/icons/lifetrack.png" alt="LifeTrack" width="35" height="35" /></div>
+          </div>
+          <ul>{t.trade.gets.map((g) => <li>{g}</li>)}</ul>
+        </div>
+        <div class="swap" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"></path></svg>
+        </div>
+        <div class="tcol">
+          <h3 class="tlbl">{t.trade.give}</h3>
+          <div class="tgrid" aria-hidden="true"><div class="q">?</div><div class="q">?</div><div class="q">?</div><div class="q">?</div></div>
+          <ul>{t.trade.gives.map((g) => <li>{g}</li>)}</ul>
+        </div>
+      </div>
+      <div class="tmsg"><p class="small">{t.trade.msgLabel}</p><p>{t.trade.msg}</p></div>
+      <div class="tfoot">
+        <a class="btn buy" href="https://t.me/onezee23"><span>{t.trade.accept}</span></a>
+        <a class="btn dark" href="mailto:onezeecsgo@gmail.com"><span>{t.trade.email}</span></a>
+        <a class="btn dark" href="/cv.pdf"><span>{t.trade.cv}</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Profile tabs follow the scroll.
+  const tabs = [...document.querySelectorAll<HTMLAnchorElement>('.tabs a')];
+  const spy = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        tabs.forEach((a) => {
+          const on = a.getAttribute('href') === `#${e.target.id}`;
+          a.classList.toggle('on', on);
+          if (on) a.setAttribute('aria-current', 'true');
+          else a.removeAttribute('aria-current');
+        });
+      }),
+    { rootMargin: '-35% 0px -60% 0px' },
+  );
+  tabs.forEach((a) => {
+    const target = document.querySelector(a.getAttribute('href')!);
+    if (target) spy.observe(target);
+  });
+</script>

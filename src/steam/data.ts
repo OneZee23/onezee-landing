@@ -9,9 +9,14 @@ import { COPY, LOCALE, counted } from './copy';
 /** The chart starts here: day-by-day applications are logged from September. */
 export const CHART_FROM = '2026-09-01';
 
-/** LinkedIn restriction periods, shaded on the chart. The open one runs to the last day. */
+/**
+ * LinkedIn restriction periods, shaded on the chart. A day is shaded if the account was
+ * restricted for any part of it: restricted on 3 Sep in the evening, lifted on 5 Oct at
+ * 05:51 MSK (support email), restricted again on 15 Oct at about 16:00 MSK. The open one
+ * runs to the last day.
+ */
 export const BANS: [string, string | null][] = [
-  ['2026-09-03', '2026-10-02'],
+  ['2026-09-03', '2026-10-05'],
   ['2026-10-15', null],
 ];
 

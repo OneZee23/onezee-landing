@@ -4,7 +4,7 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-10-26",
+    "updated": "2026-10-30",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 11,
-    "applied": 610,
+    "applied": 616,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 610
+      "n": 616
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 48,
-    "boards": 556,
+    "boards": 562,
     "referral": 6
   },
   "outcomes": {
-    "rejected": 146,
+    "rejected": 153,
     "rejectedIsFloor": true,
-    "awaiting": 464
+    "awaiting": 463
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 610
+      "applied": 616
     }
   ],
   "gap": {
@@ -407,6 +407,16 @@
       "offer": 1,
       "rejected": 1,
       "reply": 1
+    },
+    {
+      "date": "2026-10-27",
+      "msg": 1,
+      "rejected": 5
+    },
+    {
+      "date": "2026-10-28",
+      "applied": 6,
+      "rejected": 2
     }
   ],
   "method": {
@@ -442,13 +452,13 @@
       "key": "hh",
       "applied": 159,
       "call1": 4,
-      "rejected": 47
+      "rejected": 49
     },
     {
       "key": "ashby",
       "applied": 73,
       "call1": 0,
-      "rejected": 27
+      "rejected": 28
     },
     {
       "key": "linkedin",
@@ -472,7 +482,7 @@
       "key": "application",
       "applied": 45,
       "call1": 0,
-      "rejected": 7
+      "rejected": 8
     },
     {
       "key": "не записано",
@@ -482,7 +492,7 @@
     },
     {
       "key": "telegram",
-      "applied": 24,
+      "applied": 25,
       "call1": 0,
       "rejected": 2
     },
@@ -490,13 +500,13 @@
       "key": "email",
       "applied": 21,
       "call1": 0,
-      "rejected": 0
+      "rejected": 1
     },
     {
       "key": "greenhouse",
       "applied": 21,
       "call1": 0,
-      "rejected": 5
+      "rejected": 6
     },
     {
       "key": "personio",
@@ -509,6 +519,12 @@
       "applied": 10,
       "call1": 0,
       "rejected": 3
+    },
+    {
+      "key": "hirify",
+      "applied": 8,
+      "call1": 2,
+      "rejected": 1
     },
     {
       "key": "referral",
@@ -553,16 +569,10 @@
       "rejected": 2
     },
     {
-      "key": "hirify",
-      "applied": 3,
-      "call1": 2,
-      "rejected": 1
-    },
-    {
       "key": "tg",
       "applied": 3,
       "call1": 2,
-      "rejected": 1
+      "rejected": 2
     },
     {
       "key": "company-site",
@@ -652,7 +662,7 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 450,
+      "applied": 456,
       "call1": 5
     },
     {

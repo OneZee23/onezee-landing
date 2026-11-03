@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-10-20T06:33:21.800Z",
+  "updatedAt": "2026-11-03T13:02:30.020Z",
   "teachtrack": {
-    "teachers": 470,
-    "teachersSeen7d": 150,
-    "students": 1775,
-    "lessonsCompleted": 7260,
+    "teachers": 599,
+    "teachersSeen7d": 160,
+    "students": 2349,
+    "lessonsCompleted": 11069,
     "source": "https://stats.teachtrack.ru/d/public-stats"
   },
   "triptrack": {
-    "users": 144,
-    "activeUsers7d": 35,
-    "trips": 1062,
-    "distanceKm": 68496,
+    "users": 171,
+    "activeUsers7d": 47,
+    "trips": 1393,
+    "distanceKm": 83559,
     "source": "https://stats.trip-track.app/d/triptrack-public-stats"
   },
   "lifetrack": {

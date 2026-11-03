@@ -67,7 +67,7 @@
     }
   },
   "headline": {
-    "calls": 12,
+    "calls": 13,
     "applied": 624,
     "callRatePct": 2
   },
@@ -78,7 +78,7 @@
     },
     {
       "key": "call1",
-      "n": 12
+      "n": 13
     },
     {
       "key": "call2",
@@ -426,7 +426,8 @@
     },
     {
       "date": "2026-11-03",
-      "applied": 4
+      "applied": 4,
+      "call1": 1
     }
   ],
   "method": {
@@ -533,7 +534,7 @@
     {
       "key": "hirify",
       "applied": 9,
-      "call1": 3,
+      "call1": 4,
       "rejected": 1
     },
     {
@@ -679,7 +680,7 @@
     {
       "key": "без письма",
       "applied": 459,
-      "call1": 6
+      "call1": 7
     },
     {
       "key": "с письмом",

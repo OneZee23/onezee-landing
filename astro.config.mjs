@@ -16,4 +16,6 @@ export default defineConfig({
   adapter: node({ mode: 'standalone' }),
   integrations: [react(), sitemap({ filter: (page) => !page.includes('/api/') })],
   trailingSlash: 'ignore',
+  // The Germany page was retired on 03.11.2026; old links land on the job search stats.
+  redirects: { '/germany': '/ru/job-hunt' },
 });

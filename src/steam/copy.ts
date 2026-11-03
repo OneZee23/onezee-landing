@@ -108,7 +108,6 @@ export interface Copy {
       other: string;
       visaChecked: (d: string) => string;
       method: string;
-      germany: string;
     };
     note: {
       start: (d: string) => string;
@@ -247,7 +246,6 @@ export const COPY: Record<Locale, Copy> = {
         other: 'Остальные площадки',
         visaChecked: (d) => `сверено с первоисточниками ${d}`,
         method: 'Как собраны эти цифры',
-        germany: 'Работа в Германии с паспортом РФ: что я проверил',
       },
       note: {
         start: (d) => `График с ${d}.`,
@@ -401,7 +399,6 @@ export const COPY: Record<Locale, Copy> = {
         other: 'Other sources',
         visaChecked: (d) => `checked against primary sources on ${d}`,
         method: 'How these numbers are made',
-        germany: '',
       },
       note: {
         start: (d) => `The chart starts on ${d}.`,

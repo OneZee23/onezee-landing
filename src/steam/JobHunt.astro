@@ -60,7 +60,6 @@ const { visa, method } = jobHunt;
           <p class="lead">{visa.intro[lang]}</p>
           <ul class="facts">{visa.points.map((pt) => <li>{pt[lang]}</li>)}</ul>
           <p class="sub after">{visa.sourcesLabel[lang]}: {visa.sources}. {p.visaChecked(date(visa.checkedAt))}.</p>
-          {lang === 'ru' && p.germany && <p class="after"><a href="/germany">{p.germany} →</a></p>}
         </div>
       </div>
     </section>

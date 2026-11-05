@@ -173,6 +173,7 @@ const ITEM_COPY = {
       rating: (r: string) => `${r} из 5`,
       offline: 'офлайн',
     },
+    roadtrack: { kind: '???', desc: 'Бесконечная idle RPG.' },
     onezee: { kind: 'сайт, open source', desc: 'Этот сайт. Блог из Telegram и открытая статистика поиска работы.', links: ['Исходники'] },
     fraggram: {
       kind: 'закрыт до запуска',
@@ -201,6 +202,7 @@ const ITEM_COPY = {
       rating: (r: string) => `${r} of 5`,
       offline: 'offline',
     },
+    roadtrack: { kind: '???', desc: 'Endless idle RPG game.' },
     onezee: { kind: 'website, open source', desc: 'This website. A blog from Telegram and open job search stats.', links: ['Source code'] },
     fraggram: {
       kind: 'closed before launch',
@@ -243,6 +245,7 @@ export function items(lang: Locale): Item[] {
       source: lt?.source,
       links: rows(c.lifetrack.links, ['https://apps.apple.com/app/id6759284836', 'https://play.google.com/store/apps/details?id=co.onezee.lifetrack']),
     },
+    { name: 'RoadTrack', rarity: 'covert', img: '/icons/roadtrack.png', ...c.roadtrack, tags: [], live: null, links: [] },
     {
       name: 'onezee.dev', rarity: 'milspec', img: '/icons/onezee.png', ...c.onezee,
       tags: ['Astro', 'React', 'Docker'], live: null,

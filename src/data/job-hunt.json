@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 13,
-    "applied": 632,
+    "applied": 642,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 632
+      "n": 642
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 52,
-    "boards": 574,
+    "boards": 584,
     "referral": 6
   },
   "outcomes": {
     "rejected": 155,
     "rejectedIsFloor": true,
-    "awaiting": 477
+    "awaiting": 487
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 632
+      "applied": 642
     }
   ],
   "gap": {
@@ -431,7 +431,7 @@
     },
     {
       "date": "2026-11-05",
-      "applied": 7
+      "applied": 17
     }
   ],
   "method": {
@@ -471,7 +471,7 @@
     },
     {
       "key": "ashby",
-      "applied": 76,
+      "applied": 78,
       "call1": 0,
       "rejected": 28
     },
@@ -507,7 +507,7 @@
     },
     {
       "key": "telegram",
-      "applied": 25,
+      "applied": 26,
       "call1": 0,
       "rejected": 2
     },
@@ -524,15 +524,15 @@
       "rejected": 7
     },
     {
-      "key": "personio",
-      "applied": 13,
-      "call1": 0,
+      "key": "hirify",
+      "applied": 14,
+      "call1": 4,
       "rejected": 1
     },
     {
-      "key": "hirify",
-      "applied": 12,
-      "call1": 4,
+      "key": "personio",
+      "applied": 13,
+      "call1": 0,
       "rejected": 1
     },
     {
@@ -560,6 +560,12 @@
       "rejected": 3
     },
     {
+      "key": "company-site",
+      "applied": 5,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "getmatch",
       "applied": 5,
       "call1": 0,
@@ -582,12 +588,6 @@
       "applied": 4,
       "call1": 0,
       "rejected": 2
-    },
-    {
-      "key": "company-site",
-      "applied": 3,
-      "call1": 0,
-      "rejected": 0
     },
     {
       "key": "tg",
@@ -684,12 +684,30 @@
       "applied": 1,
       "call1": 0,
       "rejected": 0
+    },
+    {
+      "key": "workable",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "jazzhr",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
+      "key": "comeet",
+      "applied": 1,
+      "call1": 0,
+      "rejected": 0
     }
   ],
   "letters": [
     {
       "key": "без письма",
-      "applied": 467,
+      "applied": 477,
       "call1": 7
     },
     {

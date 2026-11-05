@@ -59,7 +59,7 @@ export interface Copy {
     source: string;
     nothing: string;
     hint: string;
-    rarity: Record<'covert' | 'classified' | 'milspec' | 'consumer', string>;
+    rarity: Record<'covert' | 'classified' | 'restricted' | 'milspec' | 'consumer', string>;
   };
   market: {
     crumbs: [string, string];
@@ -186,7 +186,7 @@ export const COPY: Record<Locale, Copy> = {
       source: 'источник',
       nothing: 'По запросу «{q}» ничего нет.',
       hint: 'Попробуйте NestJS, Swift или React.',
-      rarity: { covert: 'Тайное', classified: 'Засекреченное', milspec: 'Армейское качество', consumer: 'Ширпотреб' },
+      rarity: { covert: 'Тайное', classified: 'Засекреченное', restricted: 'Запрещённое', milspec: 'Армейское качество', consumer: 'Ширпотреб' },
     },
     market: {
       crumbs: ['Торговая площадка', 'Поиск работы'],
@@ -340,7 +340,7 @@ export const COPY: Record<Locale, Copy> = {
       source: 'source',
       nothing: 'Nothing found for “{q}”.',
       hint: 'Try NestJS, Swift or React.',
-      rarity: { covert: 'Covert', classified: 'Classified', milspec: 'Mil-Spec Grade', consumer: 'Consumer Grade' },
+      rarity: { covert: 'Covert', classified: 'Classified', restricted: 'Restricted', milspec: 'Mil-Spec Grade', consumer: 'Consumer Grade' },
     },
     market: {
       crumbs: ['Community Market', 'Job search'],

@@ -126,12 +126,13 @@ export const ladder = (): { key: StageKey; n: number }[] =>
 
 /* ---------- inventory ---------- */
 
-export type Rarity = 'covert' | 'classified' | 'milspec' | 'consumer';
+export type Rarity = 'covert' | 'classified' | 'restricted' | 'milspec' | 'consumer';
 
 /** Stripe colours are Steam's; text colours are the same hues lifted to 4.5:1 on the panel. */
 export const RARITY: Record<Rarity, { stripe: string; text: string }> = {
   covert: { stripe: '#eb4b4b', text: '#f07676' },
   classified: { stripe: '#d32ce6', text: '#de5fec' },
+  restricted: { stripe: '#8847ff', text: '#a573ff' },
   milspec: { stripe: '#4b69ff', text: '#768dff' },
   consumer: { stripe: '#b0c3d9', text: '#c3d1e2' },
 };
@@ -245,7 +246,7 @@ export function items(lang: Locale): Item[] {
       source: lt?.source,
       links: rows(c.lifetrack.links, ['https://apps.apple.com/app/id6759284836', 'https://play.google.com/store/apps/details?id=co.onezee.lifetrack']),
     },
-    { name: 'RoadTrack', rarity: 'covert', img: '/icons/roadtrack.png', ...c.roadtrack, tags: [], live: null, links: [] },
+    { name: 'RoadTrack', rarity: 'restricted', img: '/icons/roadtrack.png', ...c.roadtrack, tags: [], live: null, links: [] },
     {
       name: 'onezee.dev', rarity: 'milspec', img: '/icons/onezee.png', ...c.onezee,
       tags: ['Astro', 'React', 'Docker'], live: null,

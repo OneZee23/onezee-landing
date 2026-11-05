@@ -137,6 +137,8 @@ export const RARITY: Record<Rarity, { stripe: string; text: string }> = {
   consumer: { stripe: '#b0c3d9', text: '#c3d1e2' },
 };
 export const STATTRAK = '#db8e63';
+/** Steam order, rarest first: the inventory is sorted by it. */
+const RARITY_ORDER: Rarity[] = ['covert', 'classified', 'restricted', 'milspec', 'consumer'];
 
 export interface Item {
   name: string;
@@ -218,7 +220,7 @@ export function items(lang: Locale): Item[] {
   const num = (n: number | null | undefined) => (n == null ? c.none : nf.format(n));
   const rows = (names: readonly string[], values: string[]) => names.map((n, i) => [n, values[i]] as [string, string]);
   const { triptrack: tt, teachtrack: te, lifetrack: lt } = products;
-  return [
+  const list: Item[] = [
     {
       name: 'TripTrack', rarity: 'covert', stattrak: true, img: '/icons/triptrack.png', ...c.triptrack,
       tags: ['Swift', 'SwiftUI', 'watchOS', 'NestJS', 'PostgreSQL'],
@@ -254,6 +256,7 @@ export function items(lang: Locale): Item[] {
     },
     { name: 'Fraggram', rarity: 'consumer', img: '/icons/fraggram.png', ...c.fraggram, tags: ['NestJS', 'Telegram Stars'], live: null, links: [] },
   ];
+  return list.sort((a, b) => RARITY_ORDER.indexOf(a.rarity) - RARITY_ORDER.indexOf(b.rarity));
 }
 
 export const productsUpdated = (lang: Locale): string =>

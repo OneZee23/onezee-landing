@@ -4,15 +4,15 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-11-05",
+    "updated": "2026-11-09",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
     }
   },
   "network": {
-    "conversations": 69,
-    "referralOffers": 7
+    "conversations": 86,
+    "referralOffers": 8
   },
   "visa": {
     "title": {
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 13,
-    "applied": 643,
+    "applied": 670,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 643
+      "n": 670
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 52,
-    "boards": 585,
-    "referral": 6
+    "boards": 611,
+    "referral": 7
   },
   "outcomes": {
-    "rejected": 157,
+    "rejected": 166,
     "rejectedIsFloor": true,
-    "awaiting": 486
+    "awaiting": 504
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 643
+      "applied": 670
     }
   ],
   "gap": {
@@ -356,7 +356,7 @@
       "applied": 26,
       "call2": 1,
       "msg": 46,
-      "rejected": 12,
+      "rejected": 13,
       "reply": 22
     },
     {
@@ -385,7 +385,8 @@
     },
     {
       "date": "2026-10-18",
-      "applied": 5
+      "applied": 5,
+      "rejected": 1
     },
     {
       "date": "2026-10-19",
@@ -397,8 +398,13 @@
       "applied": 3
     },
     {
+      "date": "2026-10-22",
+      "rejected": 1
+    },
+    {
       "date": "2026-10-23",
-      "applied": 1
+      "applied": 1,
+      "rejected": 1
     },
     {
       "date": "2026-10-26",
@@ -433,6 +439,24 @@
       "date": "2026-11-05",
       "applied": 18,
       "rejected": 2
+    },
+    {
+      "date": "2026-11-06",
+      "applied": 19,
+      "dead": 1,
+      "msg": 40,
+      "ref": 1,
+      "rejected": 3,
+      "reply": 14
+    },
+    {
+      "date": "2026-11-07",
+      "msg": 3,
+      "reply": 3
+    },
+    {
+      "date": "2026-11-08",
+      "rejected": 2
     }
   ],
   "method": {
@@ -466,13 +490,13 @@
   "platforms": [
     {
       "key": "hh",
-      "applied": 159,
+      "applied": 173,
       "call1": 4,
-      "rejected": 49
+      "rejected": 52
     },
     {
       "key": "ashby",
-      "applied": 78,
+      "applied": 79,
       "call1": 0,
       "rejected": 29
     },
@@ -486,13 +510,13 @@
       "key": "direct",
       "applied": 56,
       "call1": 0,
-      "rejected": 12
+      "rejected": 13
     },
     {
       "key": "xing",
-      "applied": 46,
+      "applied": 52,
       "call1": 0,
-      "rejected": 16
+      "rejected": 17
     },
     {
       "key": "application",
@@ -520,7 +544,7 @@
     },
     {
       "key": "greenhouse",
-      "applied": 21,
+      "applied": 22,
       "call1": 0,
       "rejected": 7
     },
@@ -528,7 +552,7 @@
       "key": "hirify",
       "applied": 14,
       "call1": 4,
-      "rejected": 1
+      "rejected": 2
     },
     {
       "key": "personio",
@@ -544,7 +568,7 @@
     },
     {
       "key": "referral",
-      "applied": 6,
+      "applied": 7,
       "call1": 1,
       "rejected": 5
     },
@@ -555,16 +579,16 @@
       "rejected": 3
     },
     {
+      "key": "company-site",
+      "applied": 6,
+      "call1": 0,
+      "rejected": 1
+    },
+    {
       "key": "stepstone",
       "applied": 6,
       "call1": 0,
       "rejected": 3
-    },
-    {
-      "key": "company-site",
-      "applied": 5,
-      "call1": 0,
-      "rejected": 0
     },
     {
       "key": "getmatch",
@@ -591,22 +615,22 @@
       "rejected": 2
     },
     {
-      "key": "tg",
-      "applied": 3,
-      "call1": 2,
-      "rejected": 2
-    },
-    {
       "key": "recruitee",
-      "applied": 2,
+      "applied": 3,
       "call1": 0,
       "rejected": 1
     },
     {
       "key": "smartrecruiters",
-      "applied": 2,
+      "applied": 3,
       "call1": 0,
       "rejected": 0
+    },
+    {
+      "key": "tg",
+      "applied": 3,
+      "call1": 2,
+      "rejected": 2
     },
     {
       "key": "eightfold",
@@ -690,7 +714,7 @@
       "key": "workable",
       "applied": 1,
       "call1": 0,
-      "rejected": 0
+      "rejected": 1
     },
     {
       "key": "jazzhr",
@@ -702,18 +726,24 @@
       "key": "comeet",
       "applied": 1,
       "call1": 0,
+      "rejected": 1
+    },
+    {
+      "key": "teambase",
+      "applied": 1,
+      "call1": 0,
       "rejected": 0
     }
   ],
   "letters": [
     {
       "key": "без письма",
-      "applied": 478,
+      "applied": 503,
       "call1": 7
     },
     {
       "key": "с письмом",
-      "applied": 127,
+      "applied": 129,
       "call1": 3
     }
   ],

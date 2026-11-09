@@ -87,9 +87,6 @@ export interface Copy {
     method: string;
     sent: string;
     calls: string;
-    tg: string;
-    forms: string;
-    noticedNote: string;
     weekly: string;
     week: string;
     all: string;
@@ -220,9 +217,6 @@ export const COPY: Record<Locale, Copy> = {
       method: 'Способ',
       sent: 'Отправлено',
       calls: 'Созвоны',
-      tg: 'Telegram, напрямую человеку',
-      forms: 'Формы на сайтах через агента',
-      noticedNote: 'Одна компания из форм прислала анкету, созвона пока не было.',
       weekly: 'Таблица по неделям',
       week: 'Неделя',
       all: 'Вся статистика поиска',
@@ -240,7 +234,7 @@ export const COPY: Record<Locale, Copy> = {
           hh: 'hh.ru', ashby: 'Ashby', linkedin: 'LinkedIn', direct: 'Сайты компаний', xing: 'XING',
           application: 'Формы откликов', 'не записано': 'Не записано', email: 'Почта', greenhouse: 'Greenhouse',
           telegram: 'Telegram', personio: 'Personio', recruiter: 'Входящий рекрутер', referral: 'Реферал',
-          tg: 'Telegram', vacancy: 'Telegram', hirify: 'Hirify',
+          hirify: 'Hirify',
         },
         platformsNote: 'Ответ идёт от одной до трёх недель, поэтому ноль у свежей площадки это задержка, а не приговор.',
         other: 'Остальные площадки',
@@ -373,9 +367,6 @@ export const COPY: Record<Locale, Copy> = {
       method: 'Channel',
       sent: 'Sent',
       calls: 'Calls',
-      tg: 'Telegram, directly to a person',
-      forms: 'Website forms via an AI agent',
-      noticedNote: 'One company from the forms sent me a questionnaire. No call yet.',
       weekly: 'Weekly table',
       week: 'Week',
       all: 'All job search stats',
@@ -393,7 +384,7 @@ export const COPY: Record<Locale, Copy> = {
           hh: 'hh.ru', ashby: 'Ashby', linkedin: 'LinkedIn', direct: 'Company websites', xing: 'XING',
           application: 'Application forms', 'не записано': 'Not recorded', email: 'Email', greenhouse: 'Greenhouse',
           telegram: 'Telegram', personio: 'Personio', recruiter: 'Inbound recruiter', referral: 'Referral',
-          tg: 'Telegram', vacancy: 'Telegram', hirify: 'Hirify',
+          hirify: 'Hirify',
         },
         platformsNote: 'A reply takes one to three weeks, so a zero on a new source is a lag, not a verdict.',
         other: 'Other sources',

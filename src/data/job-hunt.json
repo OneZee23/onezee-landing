@@ -495,22 +495,40 @@
       "rejected": 52
     },
     {
+      "key": "telegram",
+      "applied": 37,
+      "call1": 4,
+      "rejected": 4
+    },
+    {
+      "key": "hirify",
+      "applied": 14,
+      "call1": 4,
+      "rejected": 2
+    },
+    {
+      "key": "referral",
+      "applied": 7,
+      "call1": 1,
+      "rejected": 5
+    },
+    {
       "key": "ashby",
       "applied": 79,
       "call1": 0,
       "rejected": 29
     },
     {
+      "key": "direct",
+      "applied": 62,
+      "call1": 0,
+      "rejected": 14
+    },
+    {
       "key": "linkedin",
       "applied": 57,
       "call1": 0,
       "rejected": 4
-    },
-    {
-      "key": "direct",
-      "applied": 56,
-      "call1": 0,
-      "rejected": 13
     },
     {
       "key": "xing",
@@ -531,12 +549,6 @@
       "rejected": 7
     },
     {
-      "key": "telegram",
-      "applied": 27,
-      "call1": 0,
-      "rejected": 2
-    },
-    {
       "key": "email",
       "applied": 23,
       "call1": 0,
@@ -549,14 +561,8 @@
       "rejected": 7
     },
     {
-      "key": "hirify",
-      "applied": 14,
-      "call1": 4,
-      "rejected": 2
-    },
-    {
       "key": "personio",
-      "applied": 13,
+      "applied": 14,
       "call1": 0,
       "rejected": 1
     },
@@ -567,22 +573,10 @@
       "rejected": 3
     },
     {
-      "key": "referral",
-      "applied": 7,
-      "call1": 1,
-      "rejected": 5
-    },
-    {
       "key": "teamtailor",
       "applied": 6,
       "call1": 0,
       "rejected": 3
-    },
-    {
-      "key": "company-site",
-      "applied": 6,
-      "call1": 0,
-      "rejected": 1
     },
     {
       "key": "stepstone",
@@ -594,12 +588,6 @@
       "key": "getmatch",
       "applied": 5,
       "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "vacancy",
-      "applied": 5,
-      "call1": 2,
       "rejected": 0
     },
     {
@@ -627,12 +615,6 @@
       "rejected": 0
     },
     {
-      "key": "tg",
-      "applied": 3,
-      "call1": 2,
-      "rejected": 2
-    },
-    {
       "key": "eightfold",
       "applied": 1,
       "call1": 0,
@@ -651,12 +633,6 @@
       "rejected": 0
     },
     {
-      "key": "personio/email",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
       "key": "opento_dev",
       "applied": 1,
       "call1": 0,
@@ -664,12 +640,6 @@
     },
     {
       "key": "wantapply",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "nodejs_jobs+CryptoBlockchainJobs",
       "applied": 1,
       "call1": 0,
       "rejected": 0
@@ -694,12 +664,6 @@
     },
     {
       "key": "workday",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "telegram (@wntddev/2024, тот же пост на hirify 1322953 только со ссылкой на LinkedIn)",
       "applied": 1,
       "call1": 0,
       "rejected": 0

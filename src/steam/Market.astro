@@ -4,7 +4,7 @@
 // Used on the homepage and on /ru/job-hunt, /en/job-hunt.
 import type { Locale } from './copy';
 import { COPY, LOCALE } from './copy';
-import { STAGES, STAGE_COLOR, chartData, chartNote, dayRange, ladder, months, totals, weeks } from './data';
+import { STAGES, STAGE_COLOR, chartData, chartNote, dayRange, ladder, months, noticed, totals, weeks } from './data';
 
 interface Props {
   lang: Locale;
@@ -15,6 +15,7 @@ const { lang, more } = Astro.props;
 const t = COPY[lang].market;
 const nf = new Intl.NumberFormat(LOCALE[lang]);
 const stageName = (k: (typeof STAGES)[number]) => t.stages[k][0];
+const sources = noticed();
 const glyph = (k: string) =>
   k === 'applied' ? '<i class="k line"></i>' : `<i class="k dot" style="--k:${STAGE_COLOR[k as keyof typeof STAGE_COLOR]}"></i>`;
 const chart = {
@@ -83,11 +84,12 @@ const chart = {
       <table>
         <thead><tr><th>{t.method}</th><th>{t.sent}</th><th>{t.calls}</th></tr></thead>
         <tbody>
-          <tr><td>{t.tg}</td><td>~30</td><td><b>5</b></td></tr>
-          <tr><td>{t.forms}</td><td>~230</td><td><b>0</b></td></tr>
+          {sources.named.map((p) => (
+            <tr><td>{t.page.platformNames[p.key] ?? p.key}</td><td>{nf.format(p.applied)}</td><td><b>{p.call1}</b></td></tr>
+          ))}
+          <tr><td>{t.page.other} <span class="small">({sources.quiet.count})</span></td><td>{nf.format(sources.quiet.applied)}</td><td class="z"><b>0</b></td></tr>
         </tbody>
       </table>
-      <p class="sub after">{t.noticedNote}</p>
     </div>
   </div>
   <details>

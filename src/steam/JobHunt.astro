@@ -18,7 +18,8 @@ const nf = new Intl.NumberFormat(LOCALE[lang]);
 const date = (iso: string) => new Intl.DateTimeFormat(LOCALE[lang], { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${iso}T12:00Z`)).replace(/\s?г\.$/, '');
 const home = lang === 'ru' ? '/ru/' : '/';
 
-// The biggest sources by name; the long tail of one-off boards folds into one row.
+// Sources come ordered by first calls, then applications: what worked is on top,
+// and the long tail of zero-call boards folds into one row.
 const TOP = 8;
 const named = jobHunt.platforms.slice(0, TOP);
 const rest = jobHunt.platforms.slice(TOP);

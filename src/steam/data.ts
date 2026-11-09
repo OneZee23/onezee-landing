@@ -2,7 +2,7 @@
 // Job hunt: src/data/job-hunt.json (generated from the funnel, never by hand).
 // Products: src/data/product-stats.json (scripts/fetch-product-stats.mjs).
 import type { Locale } from './copy';
-import { jobHunt, type StageKey } from '../content/job-hunt';
+import { jobHunt, type Platform, type StageKey } from '../content/job-hunt';
 import products from '../data/product-stats.json';
 import { COPY, LOCALE, counted } from './copy';
 
@@ -123,6 +123,18 @@ export function weeks(): Week[] {
 
 export const ladder = (): { key: StageKey; n: number }[] =>
   (['applied', 'call1', 'call2', 'final', 'offer'] as StageKey[]).map((key) => ({ key, n: ladderOf(key) }));
+
+/**
+ * Where first calls came from. The generator orders platforms by first calls, so the
+ * block and the full sources table can never disagree; zero-call sources fold into one row.
+ */
+export function noticed(): { named: Platform[]; quiet: { count: number; applied: number } } {
+  const quiet = jobHunt.platforms.filter((p) => p.call1 === 0);
+  return {
+    named: jobHunt.platforms.filter((p) => p.call1 > 0),
+    quiet: { count: quiet.length, applied: quiet.reduce((sum, p) => sum + p.applied, 0) },
+  };
+}
 
 /* ---------- inventory ---------- */
 

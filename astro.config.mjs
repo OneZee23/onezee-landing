@@ -14,7 +14,9 @@ export default defineConfig({
   // rendering with `export const prerender = false` (the likes API + health).
   output: 'static',
   adapter: node({ mode: 'standalone' }),
-  integrations: [react(), sitemap({ filter: (page) => !page.includes('/api/') })],
+  // /job-hunt only answers with a 301 to /en/job-hunt, and Search Console reports a
+  // redirect listed in the sitemap as a page it can't index.
+  integrations: [react(), sitemap({ filter: (page) => !page.includes('/api/') && new URL(page).pathname.replace(/\/$/, '') !== '/job-hunt' })],
   trailingSlash: 'ignore',
   // The Germany page was retired on 03.11.2026; old links land on the job search stats.
   redirects: { '/germany': '/ru/job-hunt' },

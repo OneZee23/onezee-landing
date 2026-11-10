@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 13,
-    "applied": 670,
+    "applied": 671,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 670
+      "n": 671
     },
     {
       "key": "call1",
@@ -96,12 +96,12 @@
   "channels": {
     "hh": 52,
     "boards": 611,
-    "referral": 7
+    "referral": 8
   },
   "outcomes": {
     "rejected": 168,
     "rejectedIsFloor": true,
-    "awaiting": 502
+    "awaiting": 503
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 670
+      "applied": 671
     }
   ],
   "gap": {
@@ -517,7 +517,7 @@
     },
     {
       "key": "referral",
-      "applied": 7,
+      "applied": 8,
       "call1": 1,
       "rejected": 5
     },
@@ -711,7 +711,7 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 503,
+      "applied": 504,
       "call1": 7
     },
     {

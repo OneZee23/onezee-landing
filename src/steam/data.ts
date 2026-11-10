@@ -188,6 +188,10 @@ const ITEM_COPY = {
       rating: (r: string) => `${r} из 5`,
       offline: 'офлайн',
     },
+    worttrack: {
+      kind: 'личное iOS-приложение',
+      desc: 'Тренажёр немецких слов к моим занятиям. Берёт наборы из Quizlet и делает из них задания на предложениях уровня A2, которые пишет Claude. Пока стоит только на моём iPhone.',
+    },
     roadtrack: { kind: '???', desc: 'Бесконечная idle RPG.' },
     onezee: { kind: 'сайт, open source', desc: 'Этот сайт. Блог из Telegram и открытая статистика поиска работы.', links: ['Исходники'] },
     fraggram: {
@@ -216,6 +220,10 @@ const ITEM_COPY = {
       links: ['App Store', 'Google Play'],
       rating: (r: string) => `${r} of 5`,
       offline: 'offline',
+    },
+    worttrack: {
+      kind: 'personal iOS app',
+      desc: 'A German vocabulary trainer for my classes. It takes Quizlet sets and turns them into tasks on A2-level sentences written by Claude. For now it runs only on my iPhone.',
     },
     roadtrack: { kind: '???', desc: 'Endless idle RPG game.' },
     onezee: { kind: 'website, open source', desc: 'This website. A blog from Telegram and open job search stats.', links: ['Source code'] },
@@ -260,6 +268,7 @@ export function items(lang: Locale): Item[] {
       source: lt?.source,
       links: rows(c.lifetrack.links, ['https://apps.apple.com/app/id6759284836', 'https://play.google.com/store/apps/details?id=co.onezee.lifetrack']),
     },
+    { name: 'WortTrack', rarity: 'milspec', img: '/icons/worttrack.png', ...c.worttrack, tags: ['React', 'TypeScript', 'Capacitor', 'FSRS', 'Claude'], live: null, links: [] },
     { name: 'RoadTrack', rarity: 'restricted', img: '/icons/roadtrack.png', ...c.roadtrack, tags: [], live: null, links: [] },
     {
       name: 'onezee.dev', rarity: 'milspec', img: '/icons/onezee.png', ...c.onezee,

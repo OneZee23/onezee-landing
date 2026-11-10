@@ -4,14 +4,14 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-11-09",
+    "updated": "2026-11-10",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
     }
   },
   "network": {
-    "conversations": 86,
+    "conversations": 87,
     "referralOffers": 8
   },
   "visa": {
@@ -460,7 +460,12 @@
     },
     {
       "date": "2026-11-09",
+      "msg": 1,
       "rejected": 2
+    },
+    {
+      "date": "2026-11-10",
+      "reply": 1
     }
   ],
   "method": {

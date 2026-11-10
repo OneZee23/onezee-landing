@@ -99,9 +99,9 @@
     "referral": 7
   },
   "outcomes": {
-    "rejected": 166,
+    "rejected": 168,
     "rejectedIsFloor": true,
-    "awaiting": 504
+    "awaiting": 502
   },
   "timeline": [
     {
@@ -457,6 +457,10 @@
     {
       "date": "2026-11-08",
       "rejected": 2
+    },
+    {
+      "date": "2026-11-09",
+      "rejected": 2
     }
   ],
   "method": {
@@ -516,7 +520,7 @@
       "key": "ashby",
       "applied": 79,
       "call1": 0,
-      "rejected": 29
+      "rejected": 30
     },
     {
       "key": "direct",
@@ -534,7 +538,7 @@
       "key": "xing",
       "applied": 52,
       "call1": 0,
-      "rejected": 17
+      "rejected": 18
     },
     {
       "key": "application",

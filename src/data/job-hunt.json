@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 14,
-    "applied": 673,
+    "applied": 674,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 673
+      "n": 674
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 52,
-    "boards": 613,
+    "boards": 614,
     "referral": 8
   },
   "outcomes": {
     "rejected": 168,
     "rejectedIsFloor": true,
-    "awaiting": 505
+    "awaiting": 506
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 673
+      "applied": 674
     }
   ],
   "gap": {
@@ -469,7 +469,7 @@
     },
     {
       "date": "2026-11-12",
-      "applied": 2,
+      "applied": 3,
       "call1": 1
     }
   ],
@@ -617,6 +617,12 @@
       "rejected": 2
     },
     {
+      "key": "join",
+      "applied": 3,
+      "call1": 0,
+      "rejected": 0
+    },
+    {
       "key": "recruitee",
       "applied": 3,
       "call1": 0,
@@ -625,12 +631,6 @@
     {
       "key": "smartrecruiters",
       "applied": 3,
-      "call1": 0,
-      "rejected": 0
-    },
-    {
-      "key": "join",
-      "applied": 2,
       "call1": 0,
       "rejected": 0
     },
@@ -722,7 +722,7 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 506,
+      "applied": 507,
       "call1": 8
     },
     {

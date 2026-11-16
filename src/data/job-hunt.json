@@ -4,7 +4,7 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 14,
-    "applied": 676,
+    "applied": 679,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 676
+      "n": 679
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 52,
-    "boards": 616,
+    "boards": 619,
     "referral": 8
   },
   "outcomes": {
     "rejected": 168,
     "rejectedIsFloor": true,
-    "awaiting": 508
+    "awaiting": 511
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 676
+      "applied": 679
     }
   ],
   "gap": {
@@ -471,6 +471,10 @@
       "date": "2026-11-12",
       "applied": 5,
       "call1": 1
+    },
+    {
+      "date": "2026-11-16",
+      "applied": 3
     }
   ],
   "method": {
@@ -528,13 +532,13 @@
     },
     {
       "key": "ashby",
-      "applied": 79,
+      "applied": 80,
       "call1": 0,
       "rejected": 30
     },
     {
       "key": "direct",
-      "applied": 62,
+      "applied": 63,
       "call1": 0,
       "rejected": 14
     },
@@ -635,6 +639,12 @@
       "rejected": 0
     },
     {
+      "key": "comeet",
+      "applied": 2,
+      "call1": 0,
+      "rejected": 1
+    },
+    {
       "key": "eightfold",
       "applied": 1,
       "call1": 0,
@@ -701,12 +711,6 @@
       "rejected": 0
     },
     {
-      "key": "comeet",
-      "applied": 1,
-      "call1": 0,
-      "rejected": 1
-    },
-    {
       "key": "teambase",
       "applied": 1,
       "call1": 0,
@@ -722,7 +726,7 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 509,
+      "applied": 512,
       "call1": 8
     },
     {

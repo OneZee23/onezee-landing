@@ -99,9 +99,9 @@
     "referral": 8
   },
   "outcomes": {
-    "rejected": 168,
+    "rejected": 170,
     "rejectedIsFloor": true,
-    "awaiting": 511
+    "awaiting": 509
   },
   "timeline": [
     {
@@ -372,6 +372,7 @@
       "date": "2026-10-14",
       "applied": 4,
       "msg": 10,
+      "rejected": 2,
       "reply": 1
     },
     {
@@ -558,7 +559,7 @@
       "key": "application",
       "applied": 45,
       "call1": 0,
-      "rejected": 8
+      "rejected": 9
     },
     {
       "key": "не записано",
@@ -582,7 +583,7 @@
       "key": "personio",
       "applied": 14,
       "call1": 0,
-      "rejected": 1
+      "rejected": 2
     },
     {
       "key": "recruiter",

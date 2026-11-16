@@ -192,7 +192,11 @@ const ITEM_COPY = {
       kind: 'личное iOS-приложение',
       desc: 'Тренажёр немецких слов к моим занятиям. Берёт наборы из Quizlet и делает из них задания на предложениях уровня A2, которые пишет Claude. Пока стоит только на моём iPhone.',
     },
-    roadtrack: { kind: '???', desc: 'Бесконечная idle RPG.' },
+    roadtrack: {
+      kind: 'игра для iOS и Android',
+      desc: 'Спокойная бесконечная поездка по настоящим дорогам 36 стран, километр в игре равен километру в жизни. Машина едет сама, а если сесть за руль, заносы и обгоны приносят монеты.',
+      links: ['App Store'],
+    },
     onezee: { kind: 'сайт, open source', desc: 'Этот сайт. Блог из Telegram и открытая статистика поиска работы.', links: ['Исходники'] },
     fraggram: {
       kind: 'закрыт до запуска',
@@ -225,7 +229,11 @@ const ITEM_COPY = {
       kind: 'personal iOS app',
       desc: 'A German vocabulary trainer for my classes. It takes Quizlet sets and turns them into tasks on A2-level sentences written by Claude. For now it runs only on my iPhone.',
     },
-    roadtrack: { kind: '???', desc: 'Endless idle RPG game.' },
+    roadtrack: {
+      kind: 'iOS and Android game',
+      desc: 'A calm, endless drive on real roads through 36 countries, where a kilometre in the game is a kilometre in real life. The car drives itself, and if you take the wheel, slides and overtakes earn coins.',
+      links: ['App Store'],
+    },
     onezee: { kind: 'website, open source', desc: 'This website. A blog from Telegram and open job search stats.', links: ['Source code'] },
     fraggram: {
       kind: 'closed before launch',
@@ -269,7 +277,11 @@ export function items(lang: Locale): Item[] {
       links: rows(c.lifetrack.links, ['https://apps.apple.com/app/id6759284836', 'https://play.google.com/store/apps/details?id=co.onezee.lifetrack']),
     },
     { name: 'WortTrack', rarity: 'milspec', img: '/icons/worttrack.png', ...c.worttrack, tags: ['React', 'TypeScript', 'Capacitor', 'FSRS', 'Claude'], live: null, links: [] },
-    { name: 'RoadTrack', rarity: 'restricted', img: '/icons/roadtrack.png', ...c.roadtrack, tags: [], live: null, links: [] },
+    {
+      name: 'RoadTrack', rarity: 'restricted', img: '/icons/roadtrack.png', ...c.roadtrack,
+      tags: ['three.js', 'TypeScript', 'Capacitor', 'OpenStreetMap'], live: null,
+      links: rows(c.roadtrack.links, ['https://apps.apple.com/app/id6826273392']),
+    },
     {
       name: 'onezee.dev', rarity: 'milspec', img: '/icons/onezee.png', ...c.onezee,
       tags: ['Astro', 'React', 'Docker'], live: null,

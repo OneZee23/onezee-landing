@@ -99,9 +99,9 @@
     "referral": 8
   },
   "outcomes": {
-    "rejected": 173,
+    "rejected": 174,
     "rejectedIsFloor": true,
-    "awaiting": 514
+    "awaiting": 513
   },
   "timeline": [
     {
@@ -485,7 +485,8 @@
     },
     {
       "date": "2026-11-18",
-      "applied": 1
+      "applied": 1,
+      "rejected": 1
     }
   ],
   "method": {
@@ -587,7 +588,7 @@
       "key": "greenhouse",
       "applied": 23,
       "call1": 0,
-      "rejected": 7
+      "rejected": 8
     },
     {
       "key": "personio",

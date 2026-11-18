@@ -4,7 +4,7 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-11-17",
+    "updated": "2026-11-18",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 14,
-    "applied": 686,
+    "applied": 687,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 686
+      "n": 687
     },
     {
       "key": "call1",
@@ -95,11 +95,11 @@
   ],
   "channels": {
     "hh": 52,
-    "boards": 626,
+    "boards": 627,
     "referral": 8
   },
   "outcomes": {
-    "rejected": 172,
+    "rejected": 173,
     "rejectedIsFloor": true,
     "awaiting": 514
   },
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 686
+      "applied": 687
     }
   ],
   "gap": {
@@ -480,7 +480,12 @@
     },
     {
       "date": "2026-11-17",
-      "applied": 4
+      "applied": 4,
+      "rejected": 1
+    },
+    {
+      "date": "2026-11-18",
+      "applied": 1
     }
   ],
   "method": {
@@ -526,7 +531,7 @@
     },
     {
       "key": "hirify",
-      "applied": 15,
+      "applied": 16,
       "call1": 4,
       "rejected": 2
     },
@@ -546,7 +551,7 @@
       "key": "direct",
       "applied": 63,
       "call1": 0,
-      "rejected": 14
+      "rejected": 15
     },
     {
       "key": "linkedin",
@@ -732,7 +737,7 @@
   "letters": [
     {
       "key": "без письма",
-      "applied": 518,
+      "applied": 519,
       "call1": 8
     },
     {

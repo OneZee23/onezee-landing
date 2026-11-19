@@ -99,9 +99,9 @@
     "referral": 8
   },
   "outcomes": {
-    "rejected": 175,
+    "rejected": 177,
     "rejectedIsFloor": true,
-    "awaiting": 512
+    "awaiting": 510
   },
   "timeline": [
     {
@@ -490,7 +490,7 @@
     },
     {
       "date": "2026-11-19",
-      "rejected": 1
+      "rejected": 3
     }
   ],
   "method": {
@@ -532,7 +532,7 @@
       "key": "telegram",
       "applied": 39,
       "call1": 4,
-      "rejected": 4
+      "rejected": 5
     },
     {
       "key": "hirify",
@@ -556,7 +556,7 @@
       "key": "direct",
       "applied": 63,
       "call1": 0,
-      "rejected": 15
+      "rejected": 16
     },
     {
       "key": "linkedin",

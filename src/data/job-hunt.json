@@ -67,7 +67,7 @@
     }
   },
   "headline": {
-    "calls": 14,
+    "calls": 15,
     "applied": 687,
     "callRatePct": 2
   },
@@ -78,7 +78,7 @@
     },
     {
       "key": "call1",
-      "n": 14
+      "n": 15
     },
     {
       "key": "call2",
@@ -490,6 +490,7 @@
     },
     {
       "date": "2026-11-19",
+      "call1": 1,
       "rejected": 3
     }
   ],
@@ -523,16 +524,16 @@
   },
   "platforms": [
     {
+      "key": "telegram",
+      "applied": 39,
+      "call1": 5,
+      "rejected": 5
+    },
+    {
       "key": "hh",
       "applied": 173,
       "call1": 4,
       "rejected": 52
-    },
-    {
-      "key": "telegram",
-      "applied": 39,
-      "call1": 4,
-      "rejected": 5
     },
     {
       "key": "hirify",
@@ -743,7 +744,7 @@
     {
       "key": "без письма",
       "applied": 519,
-      "call1": 8
+      "call1": 9
     },
     {
       "key": "с письмом",

@@ -4,7 +4,7 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-11-19",
+    "updated": "2026-11-20",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
@@ -99,9 +99,9 @@
     "referral": 8
   },
   "outcomes": {
-    "rejected": 177,
+    "rejected": 182,
     "rejectedIsFloor": true,
-    "awaiting": 510
+    "awaiting": 505
   },
   "timeline": [
     {
@@ -294,7 +294,7 @@
     {
       "date": "2026-09-29",
       "applied": 1,
-      "rejected": 2,
+      "rejected": 3,
       "reply": 1
     },
     {
@@ -486,12 +486,12 @@
     {
       "date": "2026-11-18",
       "applied": 1,
-      "rejected": 1
+      "rejected": 4
     },
     {
       "date": "2026-11-19",
       "call1": 1,
-      "rejected": 3
+      "rejected": 4
     }
   ],
   "method": {
@@ -551,7 +551,7 @@
       "key": "ashby",
       "applied": 82,
       "call1": 0,
-      "rejected": 30
+      "rejected": 32
     },
     {
       "key": "direct",
@@ -575,7 +575,7 @@
       "key": "application",
       "applied": 45,
       "call1": 0,
-      "rejected": 9
+      "rejected": 10
     },
     {
       "key": "не записано",
@@ -599,7 +599,7 @@
       "key": "personio",
       "applied": 15,
       "call1": 0,
-      "rejected": 2
+      "rejected": 3
     },
     {
       "key": "recruiter",
@@ -659,7 +659,7 @@
       "key": "comeet",
       "applied": 3,
       "call1": 0,
-      "rejected": 1
+      "rejected": 2
     },
     {
       "key": "eightfold",

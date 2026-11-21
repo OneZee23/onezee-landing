@@ -90,7 +90,7 @@
     },
     {
       "key": "offer",
-      "n": 2
+      "n": 3
     }
   ],
   "channels": {
@@ -496,6 +496,7 @@
     {
       "date": "2026-11-20",
       "applied": 8,
+      "offer": 1,
       "rejected": 2
     }
   ],

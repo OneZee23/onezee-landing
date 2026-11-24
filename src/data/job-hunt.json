@@ -4,7 +4,7 @@
     "role": "Senior Backend Engineer · NestJS / Node / TS",
     "target": "Germany (EU Blue Card) · remote · CIS product teams",
     "startDate": "2026-06-02",
-    "updated": "2026-11-23",
+    "updated": "2026-11-24",
     "thesis": {
       "en": "I am looking for a backend job in Germany and publishing every number as it is. The zeros are real: I have not reached those stages yet.",
       "ru": "Ищу работу бэкенд-инженером в Германии и публикую все цифры как есть. Нули настоящие: до этих стадий я пока не дошёл."
@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 15,
-    "applied": 696,
+    "applied": 698,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 696
+      "n": 698
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 52,
-    "boards": 636,
+    "boards": 638,
     "referral": 8
   },
   "outcomes": {
     "rejected": 186,
     "rejectedIsFloor": true,
-    "awaiting": 510
+    "awaiting": 512
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 696
+      "applied": 698
     }
   ],
   "gap": {
@@ -502,6 +502,10 @@
     {
       "date": "2026-11-23",
       "rejected": 1
+    },
+    {
+      "date": "2026-11-24",
+      "applied": 2
     }
   ],
   "method": {
@@ -565,7 +569,7 @@
     },
     {
       "key": "direct",
-      "applied": 63,
+      "applied": 64,
       "call1": 0,
       "rejected": 17
     },
@@ -642,6 +646,12 @@
       "rejected": 2
     },
     {
+      "key": "smartrecruiters",
+      "applied": 4,
+      "call1": 0,
+      "rejected": 1
+    },
+    {
       "key": "hirehi",
       "applied": 4,
       "call1": 0,
@@ -655,12 +665,6 @@
     },
     {
       "key": "recruitee",
-      "applied": 3,
-      "call1": 0,
-      "rejected": 1
-    },
-    {
-      "key": "smartrecruiters",
       "applied": 3,
       "call1": 0,
       "rejected": 1
@@ -764,7 +768,7 @@
     },
     {
       "key": "с письмом",
-      "applied": 136,
+      "applied": 138,
       "call1": 3
     }
   ],

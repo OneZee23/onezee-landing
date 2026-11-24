@@ -68,13 +68,13 @@
   },
   "headline": {
     "calls": 15,
-    "applied": 698,
+    "applied": 699,
     "callRatePct": 2
   },
   "ladder": [
     {
       "key": "applied",
-      "n": 698
+      "n": 699
     },
     {
       "key": "call1",
@@ -95,13 +95,13 @@
   ],
   "channels": {
     "hh": 52,
-    "boards": 638,
+    "boards": 639,
     "referral": 8
   },
   "outcomes": {
     "rejected": 186,
     "rejectedIsFloor": true,
-    "awaiting": 512
+    "awaiting": 513
   },
   "timeline": [
     {
@@ -114,7 +114,7 @@
     },
     {
       "date": "2026-09-02",
-      "applied": 698
+      "applied": 699
     }
   ],
   "gap": {
@@ -505,7 +505,7 @@
     },
     {
       "date": "2026-11-24",
-      "applied": 2
+      "applied": 3
     }
   ],
   "method": {
@@ -551,7 +551,7 @@
     },
     {
       "key": "hirify",
-      "applied": 16,
+      "applied": 17,
       "call1": 4,
       "rejected": 2
     },
@@ -768,7 +768,7 @@
     },
     {
       "key": "с письмом",
-      "applied": 138,
+      "applied": 139,
       "call1": 3
     }
   ],
